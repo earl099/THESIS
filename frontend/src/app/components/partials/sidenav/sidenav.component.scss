@@ -1,0 +1,81 @@
+.logo{
+  text-align: center;
+  padding: 2.6rem 1rem;
+  img{
+    width: 200px;
+  }
+}
+
+.mat-icon{
+  vertical-align: center;
+  margin-right: 1rem;
+}
+
+.mat-divider{
+  border-top-width: 2px;
+  border-color: white;
+}
+
+.mat-list-item {
+  height: 44px !important;
+  font-size: 0.8rem;
+  color: whitesmoke;
+  margin-bottom: 4px;
+  ::ng-deep{
+
+    .mat-list-item-content{
+      border-radius: 5px;
+      margin: 0.8rem;
+      &:hover{
+        background: #1e5a30 !important;
+      }
+    }
+  }
+}
+
+.list-item-active{
+  color: #f2f5f7 !important;
+  ::ng-deep{
+    .mat-list-item-content{
+      background: #1e5a30 !important;
+      &:hover{
+        background: #1e5a30 !important;
+      }
+    }
+  }
+}
+
+.mat-subheader{
+  color: whitesmoke;
+  font-size: 0.6rem;
+  letter-spacing: 1px;
+}
+
+.mat-accordion{
+  height: 44px !important;
+  font-size: 0.8rem;
+  color: whitesmoke;
+  margin-bottom: 4px;
+  background-color: #1B651B !important;
+  ::ng-deep{
+    .mat-expansion-panel{
+      border-radius: 5px;
+      margin: 0.8rem;
+      background: #1B651B;
+      &:hover{
+        background: #1e5a30 !important;
+      }
+    }
+  }
+}
+
+.mat-expansion-panel-header{
+  background: #1B651B;
+  font-size: 0.8rem;
+  .mat-panel-title, .mat-icon, p{
+    color: whitesmoke !important;
+  }
+  p{
+    margin-bottom: 0;
+  }
+}

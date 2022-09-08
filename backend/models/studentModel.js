@@ -1,28 +1,23 @@
 "use strict"
 
 module.exports = (sequelize, DataTypes) => {
-    let user = sequelize.define('enrollstudentinformation', {
+    let student = sequelize.define('enrollstudentinformation', {
         studentNumber: {
-            type: DataTypes.STRING,
-            allowNull: false,
+            type: DataTypes.STRING(15),
             unique: true,
-            primaryKey: true,
-            autoIncrement: true
         },
         firstName: {
             type: DataTypes.STRING,
-            allowNull: false,
         },
         lastName: {
             type: DataTypes.STRING,
-            allowNull: false,
         },
         middleName: {
             type: DataTypes.STRING,
             allowNull: false,
         },
         suffix: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(100),
             allowNull: false,
         },
         street: {
@@ -42,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
         gender: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(6),
             allowNull: false,
         },
         religion: {
@@ -50,11 +45,11 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
         citizenship: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(50),
             allowNull: false,
         },
         status: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(20),
             allowNull: false,
         },
         guardian: {
@@ -62,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
         mobilePhone: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(20),
             allowNull: false
         },
         email: {
@@ -70,34 +65,45 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         yearAdmitted: {
-            type: DataTypes.STRING,
-            allowNull: false
+            type: DataTypes.STRING(25)
         },
         semesterAdmitted: {
-            type: DataTypes.STRING,
-            allowNull: false
+            type: DataTypes.STRING(25)
         },
         course: {
-            type: DataTypes.STRING,
-            allowNull: false
+            type: DataTypes.STRING
         },
         cardNumber: {
-            type: DataTypes.STRING,
-            allowNull: false
+            type: DataTypes.STRING(100),
         },
-        mobilePhone: {
-            type: DataTypes.STRING,
-            allowNull: false
+        studentincrement: {
+            type: DataTypes.INTEGER(15),
+            allowNull: false,
+            primaryKey: true,
+            autoIncrement: true
         },
+        lastupdate: {
+            type: DataTypes.STRING(5)
+        },
+        highschool: {
+            type: DataTypes.STRING
+        },
+        curriculumid: {
+            type: DataTypes.INTEGER(5),
+            defaultValue: 0
+        },
+        lrn: {
+            type: DataTypes.INTEGER(15)
+        }
     }, {
         freezeTableName: true,
         timestamps: false,
         createdAt: false,
         updatedAt: false,
         classMethods: {
-
+            
         }
     })
 
-    return user;
+    return student;
 }

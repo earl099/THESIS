@@ -6,6 +6,7 @@ const userModel = db.user;
 const generalConfig = require('../config/generalConfig');
 const { Sequelize } = require('../config/sequelize');
 
+//--- ADD USER ---//
 const addAccount = async (req, res, next) => {
     const { collegeID, username, email, password, isAdmin } = req.body;
     let passwordHash = generalConfig.encryptPassword(password);
@@ -28,6 +29,7 @@ const addAccount = async (req, res, next) => {
     }
 }
 
+//--- USER LOGIN ---//
 const userLogin = async (req, res, next) => {
     const { username, password } = req.body;
 
@@ -36,6 +38,7 @@ const userLogin = async (req, res, next) => {
         let Op = Sequelize.Op;
         const user = await userModel.findOne({
             attributes: [
+                'collegeID',
                 'username',
                 'password'
             ],
@@ -57,6 +60,7 @@ const userLogin = async (req, res, next) => {
     }
 }
 
+//--- ADMIN LOGIN ---//
 const adminLogin = async (req, res, next) => {
     const { username, password } = req.body;
 
@@ -66,6 +70,7 @@ const adminLogin = async (req, res, next) => {
         try{
             const user = await userModel.findOne({
                 attributes: [
+                    'collegeID',
                     'username',
                     'password'
                 ],
@@ -81,6 +86,7 @@ const adminLogin = async (req, res, next) => {
             }
             else if(passwordMatchFlag) {
                 const jwToken = jwt.sign({ username: user.username, collegeID: user.collegeID }, process.env.JWT_PRIVATE_KEY, { expiresIn: '30m' });
+                user.password = undefined;
                 return res.status(200).send({ message: 'Logged in successfully', user, jwToken, expirationDuration: 1800 });
             }
             else {
@@ -96,8 +102,83 @@ const adminLogin = async (req, res, next) => {
     }
 }
 
+//--- EDIT USER ---//
+const editUser = async (req, res) => {
+    const collegeID = req.params.collegeID;
+    const { username, password, email } = req.body;
+    const user = {
+        username, password, email
+    }
+    const updatedUser = await userModel.update(user, {where: {collegeID: collegeID}});
+
+    if(updatedUser[0] > 0) {
+        res.status(200).send({ message: 'User updated successfully.', updatedUser: updatedUser });
+    }
+    else {
+        res.status(404).send({ message: 'Could not update user.' });
+    }
+}
+
+//--- GET ALL USERS ---//
+const getUsers = async (req, res, next) => {
+    if(!req.query.size || !req.query.page) { return res.status(500).send({ message: 'Page number and page size required.' }); }
+    
+    let pageSize = +req.query.size;
+    if(pageSize > 100) {
+        pageSize = 100;
+    }
+
+    let pageOffset = ((+req.query.page - 1) * +req.query.size);
+
+    const users = await userModel.findAll({
+        attributes: [ 'collegeID', 'username', 'password', 'email' ],
+        offset: pageOffset,
+        limit: pageSize
+    });
+
+    if(users.length > 0) {
+        res.status(200).send({ message: 'Users found.', users: users })
+    }
+    else {
+        res.status(404).send({ message: 'Users not found.' });
+    }
+}
+
+//--- GET A USER ---//
+const getUser = async (req, res, next) => {
+    const collegeID = req.params.collegeID;
+    const user = await userModel.findOne({
+        attributes: [ 'collegeID', 'username', 'password', 'email' ],
+        where: { collegeID: collegeID }
+    });
+
+    if(user) {
+        res.status(200).send({ message: 'User found.', user: user });
+    }
+    else {
+        res.status(404).send({ message: 'User not found.' });
+    }
+}
+
+//--- DELETE USER ---//
+const deleteUser = async (req, res) => {
+    const collegeID = req.params.collegeID;
+    const deletedUser = await userModel.destroy({ where: { collegeID: collegeID } });
+
+    if(deletedUser) {
+        res.status(200).send({ message: 'User deleted successfully.', deletedUser: deletedUser })
+    }
+    else {
+        res.status(404).send({ message: 'User not deleted.' });
+    }
+}
+
 module.exports = {
     addAccount,
     userLogin,
-    adminLogin
+    adminLogin,
+    editUser,
+    getUsers,
+    getUser,
+    deleteUser
 }
