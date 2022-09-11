@@ -18,7 +18,7 @@ export class SidenavComponent implements OnInit {
     this.sidebarStatus.emit();
     this.sidebarStatus.subscribe(status => this.changeState(status, this.dataService.getToken()));
     if(this.dataService.isLoggedIn()){
-      if(this.dataService.getToken() == 'admin'){
+      if(this.dataService.getToken() == 'UNIV'){
         this.loginBtn = false;
         this.adminLogoutBtn = true;
         this.logoutBtn = true;

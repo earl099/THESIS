@@ -106,8 +106,9 @@ const adminLogin = async (req, res, next) => {
 const editUser = async (req, res) => {
     const collegeID = req.params.collegeID;
     const { username, password, email } = req.body;
+    let passwordHash = generalConfig.encryptPassword(password);
     const user = {
-        username, password, email
+        username, passwordHash, email
     }
     const updatedUser = await userModel.update(user, {where: {collegeID: collegeID}});
 
@@ -131,7 +132,7 @@ const getUsers = async (req, res, next) => {
     let pageOffset = ((+req.query.page - 1) * +req.query.size);
 
     const users = await userModel.findAll({
-        attributes: [ 'collegeID', 'username', 'password', 'email' ],
+        attributes: [ 'collegeID', 'username', 'email', 'isAdmin' ],
         offset: pageOffset,
         limit: pageSize
     });
@@ -148,7 +149,7 @@ const getUsers = async (req, res, next) => {
 const getUser = async (req, res, next) => {
     const collegeID = req.params.collegeID;
     const user = await userModel.findOne({
-        attributes: [ 'collegeID', 'username', 'password', 'email' ],
+        attributes: [ 'collegeID', 'username', 'password', 'email', 'isAdmin' ],
         where: { collegeID: collegeID }
     });
 

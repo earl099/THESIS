@@ -48,13 +48,12 @@ const routes: Routes = [
   /*--- ADMIN SUBMENU ---*/
   //ACCOUNT LIST
   { path: 'account/list', component: UserListComponent },
-  { path: 'account/search/:searchTerm', component: UserListComponent },
 
   //ADD ACCOUNT PAGE
   { path: 'account/add', component: AddUserComponent },
 
   //EDIT ACCOUNT PAGE
-  { path: 'account/edit', component: EditUserComponent },
+  { path: 'account/edit/:collegeID', component: EditUserComponent },
 
   //USER PAGE
   { path: 'account/profile/:collegeID', component: UserPageComponent },

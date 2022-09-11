@@ -1,7 +1,6 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { sample_users } from 'src/data';
 import { User } from '../shared/models/User';
 import { environment } from 'src/environments/environment';
 import { ToastrService } from 'ngx-toastr';
@@ -40,12 +39,29 @@ export class UserService {
     .pipe(catchError(this.handleError<any>("User Login")));
   }
 
-
+  //--- GET USERS ---//
   getAllUsers(): Observable<any> {
-    return this.httpClient.get(`${this.baseUrl}/`)
+    return this.httpClient.get(`${this.baseUrl}/admin/user/list`, { params: { page: 1, size: 50 } })
+    .pipe(catchError(this.handleError<any>('Get Users')))
   }
 
-  //ERROR HANDLERS
+  getUser(collegeID: string): Observable<any> {
+    return this.httpClient.get(`${this.baseUrl}/admin/user/${collegeID}`, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Get User')));
+  }
+
+  //--- EDIT USER ---//
+  editUser(user: any): Observable<any> {
+    return this.httpClient.put(`${this.baseUrl}/admin/user/edit/${user.collegeID}`, user, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Edit User')));
+  }
+
+  //--- DELETE USER ---//
+  deleteUser(collegeID: string): Observable<any> {
+    return this.httpClient.delete(`${this.baseUrl}/admin/user/delete/${collegeID}`)
+  }
+
+  //--- ERROR HANDLERS ---//
   private handleError<T>(operation = 'operation', result?: T) {
     return (): Observable<T> => {
       this.toastr.error(`${operation} failed !`);

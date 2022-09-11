@@ -36,6 +36,7 @@ db.sequelize = sequelize;
 db.user = require('../models/userModel')(sequelize, DataTypes);
 db.student = require('../models/studentModel')(sequelize, DataTypes);
 
+db.student.sync({ alter: true });
 db.sequelize.sync({ force: false })
 .then(() => {
     console.log('Re-sync done.');

@@ -6,10 +6,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./edit-user.component.scss']
 })
 export class EditUserComponent implements OnInit {
+  angForm: any;
+
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  editForm(angForm:any) {
+    
+  }
 }

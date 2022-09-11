@@ -4,17 +4,41 @@
     <div class="page__content-data position-absolute text-center">
       <div class="container">
         <div class="details">
+
           <div class="header">
-            <span class="collegeID">{{user.collegeID}}</span>
+            <span>{{identifiers[0]}}: </span>
+            <span>{{user.collegeID}}</span>
           </div>
+          <br>
+
           <div class="username">
+            <span>{{identifiers[1]}}: </span>
             <span class="username">{{user.username}}</span>
           </div>
+          <br>
+
           <div class="password">
-            <span class="password">{{user.password}}</span>
+            <span>{{identifiers[2]}}: </span>
+            <span class="password">{{newPassword}}</span>
           </div>
+          <br>
+
+          <div class="email">
+            <span>{{identifiers[3]}}: </span>
+            <span class="email">{{user.email}}</span>
+          </div>
+          <br>
+
           <div class="isAdmin">
-            <span class="isAdmin">{{user.isAdmin}}</span>
+            <span>{{identifiers[4]}}: </span>
+            <span class="isAdmin" *ngIf="user.isAdmin">Yes</span>
+            <span class="isAdmin" *ngIf="!user.isAdmin">No</span>
+          </div>
+          <br>
+
+          <div>
+            <button mat-raised-button routerLink='/account/edit/{{user.collegeID}}'> Edit </button>
+            <button mat-raised-button (click)="onDeleteUser(user.collegeID)"> Delete </button>
           </div>
         </div>
       </div>

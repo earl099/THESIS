@@ -22,9 +22,9 @@ router.get('/admin/user/list', userController.getUsers);
 router.get('/admin/user/:collegeID', userController.getUser);
 
 //--- EDIT FUNCTION ---//
-router.put('/admin/edit/:collegeID', userController.editUser);
+router.put('/admin/user/edit/:collegeID', userController.editUser);
 
 //--- DELETE FUNCTION ---//
-router.delete('//admin/delete/:collegeID', userController.deleteUser);
+router.delete('/admin/user/delete/:collegeID', userController.deleteUser);
 
 module.exports = router;

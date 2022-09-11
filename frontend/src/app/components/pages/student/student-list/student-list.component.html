@@ -7,7 +7,7 @@
       <app-search-student></app-search-student>
 
       <div class="container">
-        <table mat-table [dataSource]="students" class="mat-elevation-z8" matSort>
+        <table mat-table [dataSource]="students" class="mat-elevation-z8">
           <ng-container [matColumnDef]="column" *ngFor="let column of columns">
             <th mat-header-cell *matHeaderCellDef>
               {{column}}

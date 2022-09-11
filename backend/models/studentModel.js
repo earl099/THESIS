@@ -24,6 +24,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
+        barangay: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
         municipality: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -67,7 +71,7 @@ module.exports = (sequelize, DataTypes) => {
         yearAdmitted: {
             type: DataTypes.STRING(25)
         },
-        semesterAdmitted: {
+        SemesterAdmitted: {
             type: DataTypes.STRING(25)
         },
         course: {

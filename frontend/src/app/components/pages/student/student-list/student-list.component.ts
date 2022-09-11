@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StudentService } from 'src/app/services/student.service';
 import { Student } from 'src/app/shared/models/Student';
@@ -32,7 +32,7 @@ export class StudentListComponent implements OnInit {
   students: Student[] = [];
 
   constructor(private studentService: StudentService, activatedRoute: ActivatedRoute, private router: Router) {
-
+    
   }
 
   ngOnInit(): void {

@@ -21,6 +21,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 
 //BACKEND IMPORTS
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -77,6 +79,9 @@ import { ShifteeAddComponent } from './components/pages/reports/shiftee/shiftee-
 import { GradesComponent } from './components/pages/student/grades/grades.component';
 import { ToastrModule } from 'ngx-toastr';
 import { AuthInterceptor } from './shared/authguard/auth.interceptor';
+
+
+
 
 
 @NgModule({
@@ -137,6 +142,8 @@ import { AuthInterceptor } from './shared/authguard/auth.interceptor';
     MatButtonModule,
     MatCheckboxModule,
     MatInputModule,
+    MatPaginatorModule,
+    MatSortModule,
 
     //BACKEND IMPORTS
     HttpClientModule,
