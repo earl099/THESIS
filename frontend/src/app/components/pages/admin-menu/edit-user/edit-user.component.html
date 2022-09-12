@@ -2,8 +2,39 @@
   <div class="page__box p-3 mt-2">Edit Account</div>
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
-      <form [formGroup]="angForm" (ngSubmit)="editForm(angForm)">
+      <form [formGroup]="angForm" (ngSubmit)="onEditUser(linkCollegeID, angForm)">
 
+        <mat-form-field appearance="fill">
+          <mat-label>College ID</mat-label>
+          <input matInput type="text" formControlName="collegeID">
+        </mat-form-field>
+        <br>
+
+        <mat-form-field appearance="fill">
+          <mat-label>User Name</mat-label>
+          <input matInput type="text" formControlName="username">
+        </mat-form-field>
+        <br>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password">
+        </mat-form-field>
+        <br>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Email</mat-label>
+          <input matInput type="text" formControlName="email">
+        </mat-form-field>
+        <br>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Admin Account</mat-label>
+          <input matInput type="text" formControlName="isAdmin">
+        </mat-form-field>
+        <br>
+
+        <button mat-button type="submit" class="btn btn-success">Edit User</button>
       </form>
     </div>
   </div>

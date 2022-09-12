@@ -108,12 +108,14 @@ const editUser = async (req, res) => {
     const { username, password, email } = req.body;
     let passwordHash = generalConfig.encryptPassword(password);
     const user = {
-        username, passwordHash, email
+        username, 
+        password: passwordHash, 
+        email
     }
     const updatedUser = await userModel.update(user, {where: {collegeID: collegeID}});
 
     if(updatedUser[0] > 0) {
-        res.status(200).send({ message: 'User updated successfully.', updatedUser: updatedUser });
+        res.status(200).send({ message: 'User updated successfully.', updatedUser: updatedUser, user: user });
     }
     else {
         res.status(404).send({ message: 'Could not update user.' });
@@ -121,7 +123,7 @@ const editUser = async (req, res) => {
 }
 
 //--- GET ALL USERS ---//
-const getUsers = async (req, res, next) => {
+const getUsers = async (req, res) => {
     if(!req.query.size || !req.query.page) { return res.status(500).send({ message: 'Page number and page size required.' }); }
     
     let pageSize = +req.query.size;

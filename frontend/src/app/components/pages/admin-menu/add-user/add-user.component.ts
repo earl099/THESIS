@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-user',
@@ -14,7 +15,7 @@ export class AddUserComponent implements OnInit {
   hide = true;
   angForm: any;
 
-  constructor(private fb: FormBuilder, private dataService: UserService, private router: Router) {  }
+  constructor(private fb: FormBuilder, private dataService: UserService, private router: Router, private toastr: ToastrService) {  }
 
   ngOnInit(): void {
     this.angForm = this.fb.group({
@@ -27,16 +28,19 @@ export class AddUserComponent implements OnInit {
   }
 
   addForm(angForm:any) {
-    this.dataService.addUser(angForm.value).pipe(first()).subscribe(() => {
-        if(confirm('Are you sure you want to create the user?')) {
-          alert('Account Created.');
-          this.router.navigate(['account/list']);
+    if(confirm('Are you sure you want to create the user?')) {
+      alert('Account Created.');
+      this.router.navigate(['account/list']);
+      this.dataService.addUser(angForm.value).pipe(first()).subscribe((res) => {
+        if(res) {
+          this.toastr.success(res.message);
         }
-        else {
-          window.location.reload();
-        }
-
       });
+    }
+    else {
+      window.location.reload();
+    }
+
   }
 
 }

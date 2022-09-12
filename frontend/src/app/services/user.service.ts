@@ -51,8 +51,8 @@ export class UserService {
   }
 
   //--- EDIT USER ---//
-  editUser(user: any): Observable<any> {
-    return this.httpClient.put(`${this.baseUrl}/admin/user/edit/${user.collegeID}`, user, this.httpOptions)
+  editUser(collegeID: string, userData: any): Observable<any> {
+    return this.httpClient.put(`${this.baseUrl}/admin/user/edit/${collegeID}`, userData, this.httpOptions)
     .pipe(catchError(this.handleError<any>('Edit User')));
   }
 
