@@ -1,7 +1,6 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
-import { catchError, map, Observable, of } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { User } from '../shared/models/User';
 import { environment } from 'src/environments/environment';
 import { ToastrService } from 'ngx-toastr';
 
@@ -46,7 +45,8 @@ export class UserService {
   }
 
   getUser(collegeID: string): Observable<any> {
-    return this.httpClient.get(`${this.baseUrl}/admin/user/${collegeID}`, this.httpOptions)
+    return this.httpClient
+    .get(`${this.baseUrl}/admin/user/${collegeID}`, this.httpOptions)
     .pipe(catchError(this.handleError<any>('Get User')));
   }
 

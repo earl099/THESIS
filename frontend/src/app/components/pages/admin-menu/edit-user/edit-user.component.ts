@@ -35,28 +35,27 @@ export class EditUserComponent implements OnInit {
       email: new FormControl({ value: this.user.email, disabled: false }, [Validators.email, Validators.required]),
       isAdmin: new FormControl({ value: this.setAdminValue(this.user.isAdmin), disabled: true }, Validators.required)
     });
-    this.getUser();
 
+    this.getUser();
   }
 
   onEditUser(collegeID: string, angForm:any) {
     if(confirm('Are you sure you want to update the details of this account?')) {
-      console.log(angForm.value);
+      //console.log(angForm.value);
       this.userService.editUser(collegeID, angForm.value).subscribe((res) => {
         if(res){
           this.toastr.success(res.message);
-          console.log(res.user);
+          //console.log(res.user);
           alert('User updated successfully.');
-          this.router.navigate([`account/profile/${this.linkCollegeID}`]);
+          this.router.navigate([`account/profile/${collegeID}`]);
         }
         else{
           console.log(res);
         }
       });
-
     }
     else {
-      window.location.reload()
+      window.location.reload();
     }
 
   }

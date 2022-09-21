@@ -4,7 +4,7 @@ const { check, body, validationResult } = require('express-validator');
 const userController = require('./../controllers/userController');
 const router = require('express').Router();
 
-//--- ADDING USER FUNCTION ---//
+//--- ADDING USER ROUTER ---//
 router.post('/account/add', 
     [
         check('username').not().isEmpty().withMessage('Input a username.'),
@@ -13,18 +13,18 @@ router.post('/account/add',
     userController.addAccount
 );
 
-//--- LOGIN FUNCTIONS ---//
+//--- LOGIN ROUTERS ---//
 router.post('/login/user', userController.userLogin);
 router.post('/login/admin', userController.adminLogin);
 
-//-- GET FUNCTION ---//
+//-- USER LIST AND PROFILE ROUTER ---//
 router.get('/admin/user/list', userController.getUsers);
 router.get('/admin/user/:collegeID', userController.getUser);
 
-//--- EDIT FUNCTION ---//
+//--- USER EDIT ROUTER ---//
 router.put('/admin/user/edit/:collegeID', userController.editUser);
 
-//--- DELETE FUNCTION ---//
+//--- USER DELETE ROUTER ---//
 router.delete('/admin/user/delete/:collegeID', userController.deleteUser);
 
 module.exports = router;

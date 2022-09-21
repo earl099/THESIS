@@ -31,6 +31,7 @@ import { ChangingComponent } from './components/pages/enrollment/changing/changi
 import { DroppingComponent } from './components/pages/enrollment/dropping/dropping.component';
 import { UserLoginComponent } from './components/pages/login/user-login/user-login.component';
 import { AdminLoginComponent } from './components/pages/login/admin-login/admin-login.component';
+import { EditStudentComponent } from './components/pages/student/edit-student/edit-student.component';
 
 //AUTHGUARD
 import { AuthGuard } from './shared/authguard/auth.guard';
@@ -75,13 +76,16 @@ const routes: Routes = [
   { path: 'student/search/:searchTerm', component: StudentListComponent },
 
   //STUDENT PAGE
-  { path: 'student/profile/:studID', component: StudentProfileComponent },
+  { path: 'student/profile/:studentNumber', component: StudentProfileComponent },
 
   //ADD STUDENT PAGE
   { path: 'student/add', component: AddStudentComponent },
 
   //STUDENT GRADES PAGE
   { path: 'student/grades', component: GradesComponent },
+
+  //EDIT STUDENT PAGE
+  { path: 'student/edit/:studentNumber', component: EditStudentComponent },
 
   /*--- SCHEDULE SUBMENU ---*/
   //ADD SCHEDULE PAGE

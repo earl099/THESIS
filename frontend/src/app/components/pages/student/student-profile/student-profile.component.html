@@ -2,30 +2,87 @@
   <div class="page__box p-3 mt-2">Student Profile</div>
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
+      <div class="container">
+        <span class="label">Basic Information:</span>
+        <br><br>
+
+        <div>
+          <span>{{identifiers[0]}}: </span>
+          <span class="studentNumber"><strong>{{student.studentNumber}}</strong></span>
+        </div>
+
+        <div>
+          <span>{{identifiers[1]}}:</span>
+          <span class="name">
+            {{student.lastName}}, {{student.firstName}} {{student.middleName === '' ? '-' : student.middleName}} {{student.suffix === '' ? '-' : student.suffix }}
+          </span>
+        </div>
+
+        <div>
+          <span>{{identifiers[2]}}: </span>
+          <span>{{student.course}}</span>
+        </div>
+
+        <div>
+          <span>{{identifiers[3]}}: </span>
+          <span>{{student.street}} {{student.barangay}} {{student.municipality}} {{student.province}}</span>
+        </div>
+        <br>
+
+        <span class="label">Other Information:</span>
+        <br><br>
+        <div class="container">
+          <div class="row justify-content-start">
+            <div class="col-4">
+              <span>{{identifiers[4]}}: </span>
+              <span>{{student.gender}}</span>
+            </div>
+
+            <div class="col-6">
+              <span>{{identifiers[5]}}: </span>
+              <span>{{student.dateOfBirth}}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="container">
+          <div class="row justify-content-start">
+            <div class="col">
+              <span>{{identifiers[6]}}: </span>
+              <span>{{student.status}}</span>
+            </div>
+
+            <div class="col-8">
+              <span>{{identifiers[7]}}: </span>
+              <span>{{student.religion}}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="container">
+          <div class="row justify-content-start">
+            <div class="col-7">
+              <span>{{identifiers[8]}}: </span>
+              <span class="fs-6">{{student.email}}</span>
+            </div>
+
+            <div class="col">
+              <span>{{identifiers[9]}}: </span>
+              <span class="fs-6">{{student.mobilePhone}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
 
       <div class="container">
-        <div class="details">
-          <div class="header">
-            <span class="studNum">{{student.studNum}}</span>
+        <div class="row align-items-start">
+          <div class="col">
+            <button mat-raised-button routerLink='/student/edit/{{student.studentNumber}}'> Edit </button>
           </div>
-          <div class="name">
-            <span class="name">
-              {{student.lname}}, {{student.fname}} {{student.mname}}
-            </span>
+          <div class="col">
+            <button mat-raised-button routerLink='/student/list'> Back to List </button>
           </div>
-          <div class="degProg">
-            <span>{{student.degProg}}</span>
-          </div>
-          <div class="yrLvl"><span>{{student.yrLvl}}</span></div>
-          <div class="gender"><span>{{student.gender}}</span></div>
-          <div class="email"><span>{{student.email}}</span></div>
-          <div class="contactNum"><span>{{student.contactNum}}</span></div>
-          <div class="ftStatus"><span>{{student.ftStatus}}</span></div><!--CHECKBOX-->
-          <div class="studClass"><span>{{student.studClass}}</span></div>
-          <div class="enrolledStatus"><span>{{student.enrolledStatus}}</span></div>
-          <div class="isShiftee"><span>{{student.isShiftee}}</span></div><!--CHECKBOX-->
-          <div class="isOnLeave"><span>{{student.isOnLeave}}</span></div><!--CHECKBOX-->
-          <div class="collegeID"><span>{{student.collegeID}}</span></div>
         </div>
       </div>
     </div>

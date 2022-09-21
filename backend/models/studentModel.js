@@ -4,7 +4,6 @@ module.exports = (sequelize, DataTypes) => {
     let student = sequelize.define('enrollstudentinformation', {
         studentNumber: {
             type: DataTypes.STRING(15),
-            unique: true,
         },
         firstName: {
             type: DataTypes.STRING,
@@ -14,59 +13,45 @@ module.exports = (sequelize, DataTypes) => {
         },
         middleName: {
             type: DataTypes.STRING,
-            allowNull: false,
         },
         suffix: {
-            type: DataTypes.STRING(100),
-            allowNull: false,
+            type: DataTypes.STRING(100)
         },
         street: {
-            type: DataTypes.STRING,
-            allowNull: false,
+            type: DataTypes.STRING
         },
         barangay: {
-            type: DataTypes.STRING,
-            allowNull: false,
+            type: DataTypes.STRING
         },
         municipality: {
-            type: DataTypes.STRING,
-            allowNull: false,
+            type: DataTypes.STRING
         },
         province: {
-            type: DataTypes.STRING,
-            allowNull: false,
+            type: DataTypes.STRING
         },
         dateOfBirth: {
-            type: DataTypes.DATEONLY,
-            allowNull: false,
+            type: DataTypes.DATEONLY
         },
         gender: {
-            type: DataTypes.STRING(6),
-            allowNull: false,
+            type: DataTypes.STRING(6)
         },
         religion: {
-            type: DataTypes.STRING,
-            allowNull: false,
+            type: DataTypes.STRING
         },
         citizenship: {
-            type: DataTypes.STRING(50),
-            allowNull: false,
+            type: DataTypes.STRING(50)
         },
         status: {
-            type: DataTypes.STRING(20),
-            allowNull: false,
+            type: DataTypes.STRING(20)
         },
         guardian: {
-            type: DataTypes.STRING,
-            allowNull: false,
+            type: DataTypes.STRING
         },
         mobilePhone: {
-            type: DataTypes.STRING(20),
-            allowNull: false
+            type: DataTypes.STRING(20)
         },
         email: {
-            type: DataTypes.STRING,
-            allowNull: false
+            type: DataTypes.STRING
         },
         yearAdmitted: {
             type: DataTypes.STRING(25)
@@ -84,7 +69,8 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER(15),
             allowNull: false,
             primaryKey: true,
-            autoIncrement: true
+            autoIncrement: true,
+            unique: true
         },
         lastupdate: {
             type: DataTypes.STRING(5)
@@ -95,19 +81,29 @@ module.exports = (sequelize, DataTypes) => {
         curriculumid: {
             type: DataTypes.INTEGER(5),
             defaultValue: 0
-        },
-        lrn: {
-            type: DataTypes.INTEGER(15)
         }
-    }, {
+    },
+    {
         freezeTableName: true,
         timestamps: false,
         createdAt: false,
         updatedAt: false,
-        classMethods: {
+        indexes: [
+            {
+                name: 'PRIMARY',
+                fields: ['studentincrement']
+            },
+            {
+                name: 'StudNumber',
+                fields: ['studentNumber']
+            },
+            {
+                name: 'AdmissionTerm',
+                fields: ['yearAdmitted', 'SemesterAdmitted', 'studentNumber']
+            }
             
-        }
-    })
+        ]
+    });
 
     return student;
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StudentService } from 'src/app/services/student.service';
-import { Student } from 'src/app/shared/models/Student';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-student-list',
@@ -10,35 +10,42 @@ import { Student } from 'src/app/shared/models/Student';
 })
 export class StudentListComponent implements OnInit {
   columns: string[] = [
-    'studNum',
-    'lrn',
-    'fname',
-    'mname',
-    'lname',
-    'degProg',
-    'yrLvl',
-    'gender',
-    'email',
-    'contactNum',
-    'ftStatus',
-    'enrolledStatus',
-    'studClass',
-    'isShiftee',
-    'isOnLeave',
-    'collegeID'
+    'studentNumber',
+    'firstName',
+    'middleName',
+    'lastName',
+    'suffix',
+    'course',
+    'edit'
   ];
 
 
-  students: Student[] = [];
+  students: any = [];
 
-  constructor(private studentService: StudentService, activatedRoute: ActivatedRoute, private router: Router) {
-    
+  constructor(
+    private studentService: StudentService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private toastr: ToastrService
+  ) {
+
   }
 
   ngOnInit(): void {
+    this.getStudents();
   }
 
-  redirectTo(student: Student): void {
-    this.router.navigate(['student/profile/' + student.studNum]);
+  redirectTo(student: any): void {
+    this.router.navigate(['student/profile/' + student.studentNumber]);
+  }
+
+  getStudents() {
+    this.studentService.getAllStudents().subscribe((res) => {
+      if(res) {
+        this.toastr.success(res.message)
+        this.students = res.students;
+        console.log(this.students)
+      }
+    })
   }
 }

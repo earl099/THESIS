@@ -23,7 +23,7 @@ export class AddUserComponent implements OnInit {
       username: ['', Validators.required],
       email: ['', [Validators.email, Validators.required]],
       password: ['', Validators.required],
-      isAdmin: [this.isAdmin, Validators.required]
+      isAdmin: ['', Validators.required]
     })
   }
 

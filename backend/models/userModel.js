@@ -25,7 +25,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        
+        hashedPassword: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
         isAdmin: {
             type: DataTypes.BOOLEAN
         }
@@ -34,9 +37,16 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: false,
         createdAt: false,
         updatedAt: false,
-        classMethods: {
-            
-        }
+        indexes: [
+            {
+                name: 'PRIMARY',
+                fields: ['id']
+            },
+            {
+                name: 'userDetails',
+                fields: ['username', 'password']
+            }
+        ]
     })
 
     return user;

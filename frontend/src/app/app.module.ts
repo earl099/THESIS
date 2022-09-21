@@ -23,6 +23,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 //BACKEND IMPORTS
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -80,7 +82,9 @@ import { GradesComponent } from './components/pages/student/grades/grades.compon
 import { ToastrModule } from 'ngx-toastr';
 import { AuthInterceptor } from './shared/authguard/auth.interceptor';
 
-
+//CSV PARSER MODULE
+import { NgxCsvParserModule } from 'ngx-csv-parser';
+import { EditStudentComponent } from './components/pages/student/edit-student/edit-student.component';
 
 
 
@@ -119,7 +123,8 @@ import { AuthInterceptor } from './shared/authguard/auth.interceptor';
     CurriculumAddComponent,
     CurriculumEditComponent,
     CurriculumListComponent,
-    GradesComponent
+    GradesComponent,
+    EditStudentComponent
   ],
   imports: [
     BrowserModule,
@@ -144,6 +149,8 @@ import { AuthInterceptor } from './shared/authguard/auth.interceptor';
     MatInputModule,
     MatPaginatorModule,
     MatSortModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
 
     //BACKEND IMPORTS
     HttpClientModule,
@@ -153,7 +160,12 @@ import { AuthInterceptor } from './shared/authguard/auth.interceptor';
       timeOut:2000,
       positionClass:'toast-top-right',
       preventDuplicates: true
-    })
+    }),
+
+    //CSV PARSER MODULE
+    NgxCsvParserModule,
+
+    
   ],
   providers: [
     {

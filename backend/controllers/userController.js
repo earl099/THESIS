@@ -7,7 +7,7 @@ const generalConfig = require('../config/generalConfig');
 const { Sequelize } = require('../config/sequelize');
 
 //--- ADD USER ---//
-const addAccount = async (req, res, next) => {
+const addAccount = async (req, res) => {
     const { collegeID, username, email, password, isAdmin } = req.body;
     let passwordHash = generalConfig.encryptPassword(password);
     
@@ -15,13 +15,13 @@ const addAccount = async (req, res, next) => {
         collegeID: collegeID,
         username: username,
         email: email,
-        password: passwordHash,
+        password: password,
+        hashedPassword: passwordHash,
         isAdmin: isAdmin
     }
 
     try {
         const createdUser = await userModel.create(user);
-
         res.status(201).send({ createdUser: createdUser, message: 'Account Added.' });
     }
     catch {
@@ -61,7 +61,7 @@ const userLogin = async (req, res, next) => {
 }
 
 //--- ADMIN LOGIN ---//
-const adminLogin = async (req, res, next) => {
+const adminLogin = async (req, res) => {
     const { username, password } = req.body;
 
     if(username) {
@@ -124,7 +124,7 @@ const editUser = async (req, res) => {
 
 //--- GET ALL USERS ---//
 const getUsers = async (req, res) => {
-    if(!req.query.size || !req.query.page) { return res.status(500).send({ message: 'Page number and page size required.' }); }
+    //if(!req.query.size || !req.query.page) { return res.status(500).send({ message: 'Page number and page size required.' }); }
     
     let pageSize = +req.query.size;
     if(pageSize > 100) {
@@ -135,8 +135,6 @@ const getUsers = async (req, res) => {
 
     const users = await userModel.findAll({
         attributes: [ 'collegeID', 'username', 'email', 'isAdmin' ],
-        offset: pageOffset,
-        limit: pageSize
     });
 
     if(users.length > 0) {
@@ -148,7 +146,7 @@ const getUsers = async (req, res) => {
 }
 
 //--- GET A USER ---//
-const getUser = async (req, res, next) => {
+const getUser = async (req, res) => {
     const collegeID = req.params.collegeID;
     const user = await userModel.findOne({
         attributes: [ 'collegeID', 'username', 'password', 'email', 'isAdmin' ],

@@ -19,8 +19,6 @@ export class UserListComponent implements OnInit {
   columns: string[] = [
     'collegeID',
     'username',
-    'email',
-    'isAdmin',
     'edit',
     'delete'
   ]
@@ -44,7 +42,6 @@ export class UserListComponent implements OnInit {
       if(res) {
         this.toastr.success(res.message);
         this.users = res.users;
-        //console.log(this.users);
       }
     });
   }

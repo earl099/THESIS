@@ -18,11 +18,11 @@ const userRouter = require('./routes/userRoutes');
 app.use('/api', userRouter);
 
 //---STUDENT FUNCTIONS---//
-const studentRouter = require('./routes/studentRouter');
-//app.use('/api', studentRouter);
+const studentRouter = require('./routes/studentRoutes');
+app.use('/api', studentRouter);
 
 //---ENROLLMENT FUNCTIONS---//
-const enrollmentRouter = require('./routes/enrollmentRouter');
+//const enrollmentRouter = require('./routes/enrollmentRouter');
 //app.use('/api', enrollmentRouter);
 
 //---DB CONNECTION---//
