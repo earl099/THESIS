@@ -13,7 +13,7 @@
             <div class="col">
               <mat-form-field appearance="fill">
                 <mat-label>First Name</mat-label>
-                <input matInput type="text" formControlName="firstName">
+                <input matInput type="text" formControlName="firstName" #firstName >
               </mat-form-field>
             </div>
 
@@ -145,6 +145,7 @@
         </div>
 
         <button mat-button type="submit" class="btn btn-success">Edit User</button>
+        <button mat-button routerLink="/student/list">Back to List</button>
       </form>
     </div>
   </div>

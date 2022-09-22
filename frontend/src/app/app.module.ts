@@ -25,6 +25,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatFileUploadModule } from 'angular-material-fileupload';
 
 //BACKEND IMPORTS
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -151,6 +152,7 @@ import { EditStudentComponent } from './components/pages/student/edit-student/ed
     MatSortModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatFileUploadModule,
 
     //BACKEND IMPORTS
     HttpClientModule,
@@ -165,7 +167,7 @@ import { EditStudentComponent } from './components/pages/student/edit-student/ed
     //CSV PARSER MODULE
     NgxCsvParserModule,
 
-    
+
   ],
   providers: [
     {

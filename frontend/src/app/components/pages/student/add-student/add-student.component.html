@@ -3,7 +3,15 @@
   <div class="page__box p-3 mt-2">Import Students</div>
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
-      
+      <div class="container">
+        <label for="singleFile">Upload Student List</label>
+        <br><br>
+        <input mat-input #fileImportInput id="singleFile" type="file" (change)="fileChangeListener($event)" accept=".csv">
+        <br><br>
+        <button mat-button (click)="importStudents(csvRecords)">Import Students</button>
+      </div>
+
+
     </div>
   </div>
 </div>

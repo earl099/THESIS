@@ -6,67 +6,7 @@ form{
 
 }
 
-div.container.name{
-  mat-form-field
-  {
-    &.firstName{
-      width: 115px
-    }
-
-    &.middleName{
-      width: 120px;
-    }
-
-    &.lastName{
-      width: 115px;
-    }
-
-    &.suffix{
-      width: 80px;
-    }
-  }
-}
-
-div.container.address{
-  mat-form-field{
-    &.street{
-      width: 100px;
-    }
-
-    &.barangay{
-      width: 110px;
-    }
-
-    &.municipality{
-      width: 120px;
-    }
-
-    &.province{
-      width: 110px;
-    }
-  }
-}
-
-div.container.other-info{
-  mat-form-field{
-    &.gender{
-      width: 120px;
-    }
-
-    &.dateOfBirth{
-      width: 180px;
-    }
-
-    &.religion{
-      width: 150px;
-    }
-
-    &.citizenship{
-      width: 150px;
-    }
-
-    &.status{
-      width: 110px;
-    }
-  }
+input{
+  font-size: medium;
+  margin-left: 100px;
 }
