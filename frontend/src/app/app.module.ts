@@ -86,6 +86,7 @@ import { AuthInterceptor } from './shared/authguard/auth.interceptor';
 //CSV PARSER MODULE
 import { NgxCsvParserModule } from 'ngx-csv-parser';
 import { EditStudentComponent } from './components/pages/student/edit-student/edit-student.component';
+import { ScheduleProfileComponent } from './components/pages/schedule/schedule-profile/schedule-profile.component';
 
 
 
@@ -125,7 +126,8 @@ import { EditStudentComponent } from './components/pages/student/edit-student/ed
     CurriculumEditComponent,
     CurriculumListComponent,
     GradesComponent,
-    EditStudentComponent
+    EditStudentComponent,
+    ScheduleProfileComponent
   ],
   imports: [
     BrowserModule,

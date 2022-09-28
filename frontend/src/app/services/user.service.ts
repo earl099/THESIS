@@ -1,5 +1,5 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
-import { catchError, Observable, of } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ToastrService } from 'ngx-toastr';
@@ -92,5 +92,10 @@ export class UserService {
     }
   }
 
+  public isLoggedInSub = new BehaviorSubject<boolean>(false);
+  public isLoggedInBehaviorSub = this.isLoggedInSub.asObservable();
 
+  setUserLoginStatus(status: any) {
+    this.isLoggedInSub.next(status);
+  }
 }

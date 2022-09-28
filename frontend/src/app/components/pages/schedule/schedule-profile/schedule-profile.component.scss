@@ -1,5 +1,4 @@
-@import "../../index/home/home.component.scss";
-
+@import '../../index/home/home.component.scss';
 
 //FORMAT GOES HERE
 .container > * {
@@ -9,8 +8,8 @@
   .label{
     font-size: 24px;
   }
+
+  .small{
+    font-size: medium;
+  }
 }
-
-
-
-

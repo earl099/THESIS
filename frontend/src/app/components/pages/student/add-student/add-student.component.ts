@@ -42,7 +42,7 @@ export class AddStudentComponent implements OnInit {
       next: (result): void => {
         //console.log('Result:', result);
         this.csvRecords = result;
-        console.log(this.csvRecords);
+        //console.log(this.csvRecords);
       },
       error: (error: NgxCSVParserError) => {
         console.log('Error:', error)

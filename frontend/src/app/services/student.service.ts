@@ -14,9 +14,12 @@ export class StudentService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
-  constructor(private httpClient: HttpClient, private toastr: ToastrService) { }
+  constructor(
+    private httpClient: HttpClient,
+    private toastr: ToastrService
+  ) { }
 
-  //ADD STUDENT FUNCTION
+  //--- ADD STUDENT FUNCTION ---//
   addStudent(studentData: any): Observable<any> {
     return this.httpClient
     .post(
@@ -27,7 +30,7 @@ export class StudentService {
     );
   }
 
-  //GET STUDENTS FUNCTION
+  //--- GET STUDENTS FUNCTION ---//
   getAllStudents(): Observable<any> {
     return this.httpClient
     .get(
@@ -38,18 +41,19 @@ export class StudentService {
     );
   }
 
-  //STUDENT PROFILE FUNCTION
+  //--- STUDENT PROFILE FUNCTION ---//
   getStudent(studentNumber: number): Observable<any> {
     return this.httpClient
     .get(
-      `${this.baseUrl}/student/profile/${studentNumber}`, this.httpOptions
+      `${this.baseUrl}/student/profile/${studentNumber}`,
+      this.httpOptions
     )
     .pipe(
       catchError(this.handleError<any>('Get Student'))
     );
   }
 
-  //STUDENT MODIFICATION FUNCTION
+  //--- STUDENT MODIFICATION FUNCTION ---//
   editStudent(studentNumber: number, studentData: any): Observable<any> {
     return this.httpClient
     .put(
@@ -62,6 +66,7 @@ export class StudentService {
     );
   }
 
+  //--- ERROR HANDLING ---//
   private handleError<T>(operation = 'operation', result?: T) {
     return (): Observable<T> => {
       this.toastr.error(`${operation} failed !`);

@@ -19,6 +19,7 @@ import { GradesComponent } from './components/pages/student/grades/grades.compon
 import { AddScheduleComponent } from './components/pages/schedule/add-schedule/add-schedule.component';
 import { EditScheduleComponent } from './components/pages/schedule/edit-schedule/edit-schedule.component';
 import { ListScheduleComponent } from './components/pages/schedule/list-schedule/list-schedule.component';
+import { ScheduleProfileComponent } from './components/pages/schedule/schedule-profile/schedule-profile.component';
 import { GenerateReportComponent } from './components/pages/reports/generate-report/generate-report.component';
 import { LoaAddComponent } from './components/pages/reports/loa/loa-add/loa-add.component';
 import { LoaListComponent } from './components/pages/reports/loa/loa-list/loa-list.component';
@@ -35,6 +36,7 @@ import { EditStudentComponent } from './components/pages/student/edit-student/ed
 
 //AUTHGUARD
 import { AuthGuard } from './shared/authguard/auth.guard';
+
 
 const routes: Routes = [
   //REDIRECT TO HOME
@@ -92,10 +94,13 @@ const routes: Routes = [
   { path: 'schedule/add', component: AddScheduleComponent },
 
   //EDIT SCHEDULE PAGE
-  { path: 'schedule/edit', component: EditScheduleComponent },
+  { path: 'schedule/edit/:schedcode', component: EditScheduleComponent },
 
   //SCHEDULE LIST PAGE
   { path: 'schedule/list', component: ListScheduleComponent },
+
+  //SCHEDULE PROFILE PAGE
+  { path: 'schedule/:schedcode', component: ScheduleProfileComponent },
 
   /*--- ENROLLMENT SUBMENU ---*/
   //ASSESSMENT PAGE

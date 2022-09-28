@@ -30,7 +30,7 @@ const addAccount = async (req, res) => {
 }
 
 //--- USER LOGIN ---//
-const userLogin = async (req, res, next) => {
+const userLogin = async (req, res) => {
     const { username, password } = req.body;
 
     if(username) {
@@ -40,13 +40,14 @@ const userLogin = async (req, res, next) => {
             attributes: [
                 'collegeID',
                 'username',
-                'password'
+                'password',
+                'hashedPassword'
             ],
             where: { [Op.not]: [{ collegeID: 'UNIV' }] , isAdmin: 0 }
         });
 
         if(user) {
-            passwordMatchFlag = generalConfig.comparePassword(password, user.password);
+            passwordMatchFlag = generalConfig.comparePassword(password, user.hashedPassword);
         }
 
         if(passwordMatchFlag) {
@@ -72,13 +73,14 @@ const adminLogin = async (req, res) => {
                 attributes: [
                     'collegeID',
                     'username',
-                    'password'
+                    'password',
+                    'hashedPassword'
                 ],
                 where: { collegeID: 'UNIV', isAdmin: 1 }
             });
             
             if(user) {
-                passwordMatchFlag = generalConfig.comparePassword(password, user.password);
+                passwordMatchFlag = generalConfig.comparePassword(password, user.hashedPassword);
             }
             
             if(!user) {

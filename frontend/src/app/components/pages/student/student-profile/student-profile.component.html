@@ -8,12 +8,12 @@
 
         <div>
           <span>{{identifiers[0]}}: </span>
-          <span class="studentNumber"><strong>{{student.studentNumber}}</strong></span>
+          <span><strong>{{student.studentNumber}}</strong></span>
         </div>
 
         <div>
           <span>{{identifiers[1]}}:</span>
-          <span class="name">
+          <span>
             {{student.lastName}}, {{student.firstName}} {{student.middleName === '' ? '-' : student.middleName}} {{student.suffix === '' ? '-' : student.suffix }}
           </span>
         </div>

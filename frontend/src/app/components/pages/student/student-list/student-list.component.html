@@ -6,7 +6,7 @@
 
       <mat-form-field appearance="standard">
         <mat-label>Filter</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Enter a filter" #input>
       </mat-form-field>
 
       <div class="container">
@@ -50,17 +50,13 @@
 
           <tr mat-header-row *matHeaderRowDef="columns"></tr>
           <tr mat-row *matRowDef="let studentRow; columns: columns"></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+          </tr>
         </table>
         <mat-paginator [pageSizeOptions]="[5]" aria-label="Select page of users"></mat-paginator>
       </div>
-
-
-      <app-not-found
-        [visible]="!students.length"
-        notFoundMessage="No Students found."
-        resetLinkText="Reset Search"
-        resetLinkRoute="/student/list"
-      ></app-not-found>
     </div>
   </div>
 </div>

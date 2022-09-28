@@ -22,8 +22,6 @@ export class StudentProfileComponent implements OnInit {
     'Email',
     'Number',
     'Guardian',
-
-
   ];
   studentNumber: number
   constructor(

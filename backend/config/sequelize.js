@@ -35,14 +35,20 @@ db.sequelize = sequelize;
 
 db.user = require('../models/userModel')(sequelize, DataTypes);
 db.student = require('../models/studentModel')(sequelize, DataTypes);
+db.schedule = require('../models/scheduleModel')(sequelize, DataTypes);
 
 try{
+    //--- SYNC DB ---//
     db.student.sync({ alter: true }).catch(err  => {
         console.log(err);
     });
     db.user.sync({ alter: true }).catch(err => {
         console.log(err);
     });
+    db.schedule.sync({ alter: true }).catch(err => {
+        console.log(err);
+    })
+
     db.sequelize.sync({ force: false })
     .then(() => {
         console.log('Re-sync done.');

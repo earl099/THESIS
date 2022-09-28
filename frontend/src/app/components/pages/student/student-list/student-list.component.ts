@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { StudentService } from 'src/app/services/student.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatTableDataSource } from '@angular/material/table';
@@ -31,7 +31,6 @@ export class StudentListComponent implements OnInit {
 
   constructor(
     private studentService: StudentService,
-    private activatedRoute: ActivatedRoute,
     private router: Router,
     private toastr: ToastrService,
     private _liveAnnouncer: LiveAnnouncer
@@ -41,12 +40,10 @@ export class StudentListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getStudents();
-
-
   }
 
   redirectTo(student: any): void {
-    this.router.navigate(['student/profile/' + student.studentNumber]);
+    this.router.navigate([`student/profile/${student.studentNumber}`]);
   }
 
   getStudents() {
@@ -57,7 +54,7 @@ export class StudentListComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.students);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-        console.log(this.students)
+        //console.log(this.students)
       }
     })
   }

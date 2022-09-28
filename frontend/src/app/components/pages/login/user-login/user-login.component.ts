@@ -1,12 +1,7 @@
-import { Token } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject } from 'rxjs';
-
-import { first } from 'rxjs/operators';
-import { SubjectsService } from 'src/app/services/subjects.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -16,14 +11,14 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class UserLoginComponent implements OnInit {
   loginForm: any;
-  constructor(private dataService: UserService,
+  constructor(private userService: UserService,
     private router: Router,
-    private toastr: ToastrService,
-    private subjectsService: SubjectsService) { }
+    private toastr: ToastrService
+  ) { }
 
   userLogin() {
     if(this.loginForm.invalid) { return; }
-    this.dataService.userLogin(this.loginForm.value)
+    this.userService.userLogin(this.loginForm.value)
     .subscribe({
       next: (res) => {
         console.log(res);
@@ -33,7 +28,7 @@ export class UserLoginComponent implements OnInit {
           localStorage.setItem('expirationDuration', res.expirationDuration);
 
           const expiration: number = +localStorage.getItem('expirationDuration')!;
-          this.subjectsService.setUserLoginStatus(true);
+          this.userService.setUserLoginStatus(true);
           this.toastr.success(res.message);
           setTimeout(() => {
             localStorage.clear();

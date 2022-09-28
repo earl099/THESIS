@@ -1,0 +1,127 @@
+<div class="container-fluid page">
+  <div class="page__box p-3 mt-2">Schedule Profile</div>
+  <div class="page__content shadow p-3 position-relative">
+    <div class="page__content-data position-absolute text-center">
+      <div class="container">
+        <span class="label">Schedule Information:</span>
+        <br><br>
+
+        <div class="row justify-content-start">
+          <div class="col-6">
+            <span>{{identifiers[0]}}: </span>
+            <span class="small"><strong>{{schedule.schedcode}}</strong></span>
+          </div>
+          <div class="col-5">
+            <span>{{identifiers[1]}}: </span>
+            <span class="small"><strong>{{schedule.subjectCode}}</strong></span>
+          </div>
+        </div>
+        <br>
+
+        <div class="row justify-content-start">
+          <div class="col-5">
+            <span>{{identifiers[2]}}: </span>
+            <span class="small"><strong>{{schedule.semester}}</strong></span>
+          </div>
+          <div class="col-7">
+            <span>{{identifiers[3]}}: </span>
+            <span>{{schedule.schoolyear}}</span>
+          </div>
+        </div>
+        <br>
+
+        <div class="row justify-content-start">
+          <div class="col">
+            <span>{{identifiers[4]}}: </span>
+            <span>{{schedule.slots}}</span>
+          </div>
+          <div class="col-7">
+            <span>{{identifiers[5]}}: </span>
+            <span>{{schedule.subjectype}}</span>
+          </div>
+        </div>
+        <br>
+
+        <div class="row justify-content-start">
+          <div class="col-6">
+            <span>{{identifiers[6]}}: </span>
+            <span>{{schedule.section}}</span>
+          </div>
+          <div class="col-4">
+            <span>{{identifiers[7]}}: </span>
+            <span>{{schedule.graded === 'N' ? 'No' : 'Yes'}}</span>
+          </div>
+        </div>
+        <br>
+
+        <div>
+          <span>{{identifiers[8]}}: </span>
+          <span>{{schedule.gradeddate}}</span>
+        </div>
+        <br>
+
+        <div class="row justify-content-start">
+          <div class="col-6">
+            <span>{{identifiers[9]}}: </span>
+            <span>{{schedule.timein1}}</span>
+          </div>
+          <div class="col-6">
+            <span>{{identifiers[10]}}: </span>
+            <span>{{schedule.timeout1}}</span>
+          </div>
+        </div>
+        <br>
+
+        <div class="row justify-content-start">
+          <div class="col-6">
+            <span>{{identifiers[11]}}: </span>
+            <span>{{schedule.day1}}</span>
+          </div>
+          <div class="col-6">
+            <span>{{identifiers[12]}}: </span>
+            <span>{{schedule.room1}}</span>
+          </div>
+        </div>
+        <br>
+
+        <div class="row justify-content-start">
+          <div class="col-6">
+            <span>{{identifiers[13]}}: </span>
+            <span>{{schedule.timein2}}</span>
+          </div>
+          <div class="col-6">
+            <span>{{identifiers[14]}}: </span>
+            <span>{{schedule.timeout2}}</span>
+          </div>
+        </div>
+        <br>
+
+        <div class="row justify-content-start">
+          <div class="col-6">
+            <span>{{identifiers[15]}}: </span>
+            <span>{{schedule.day2}}</span>
+          </div>
+          <div class="col-6">
+            <span>{{identifiers[16]}}: </span>
+            <span>{{schedule.room2}}</span>
+          </div>
+        </div>
+        <br>
+
+        <div class="container">
+          <div class="row align-items-start">
+            <div class="col">
+              <button mat-raised-button routerLink='/schedule/edit/{{schedule.schedcode}}'> Edit </button>
+            </div>
+            <div class="col">
+              <button mat-raised-button routerLink='/schedule/list'> Back to List </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+    </div>
+  </div>
+</div>
+
+

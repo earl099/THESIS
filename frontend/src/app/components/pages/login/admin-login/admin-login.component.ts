@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { SubjectsService } from 'src/app/services/subjects.service';
 import { UserService } from 'src/app/services/user.service';
 
 
@@ -15,25 +14,24 @@ export class AdminLoginComponent implements OnInit {
   loginForm: any;
 
   constructor(
-    private dataService: UserService,
+    private userService: UserService,
     private router: Router,
-    private toastr: ToastrService,
-    private subjectsService: SubjectsService
+    private toastr: ToastrService
   ) { }
 
   adminLogin() {
 
-    this.dataService.adminLogin(this.loginForm.value)
+    this.userService.adminLogin(this.loginForm.value)
     .subscribe({
       next: (res) => {
         console.log(res);
         if(res) {
           localStorage.setItem('user', JSON.stringify(res.user));
-          this.dataService.setToken(res.user.collegeID);
+          this.userService.setToken(res.user.collegeID);
           localStorage.setItem('expirationDuration', res.expirationDuration);
 
           const expiration: number = +localStorage.getItem('expirationDuration')!;
-          this.subjectsService.setUserLoginStatus(true);
+          this.userService.setUserLoginStatus(true);
           this.toastr.success(res.message);
           setTimeout(() => {
             localStorage.clear();

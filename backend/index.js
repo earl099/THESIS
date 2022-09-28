@@ -21,9 +21,9 @@ app.use('/api', userRouter);
 const studentRouter = require('./routes/studentRoutes');
 app.use('/api', studentRouter);
 
-//---ENROLLMENT FUNCTIONS---//
-//const enrollmentRouter = require('./routes/enrollmentRouter');
-//app.use('/api', enrollmentRouter);
+//---SCHEDULE FUNCTIONS---//
+const scheduleRouter = require('./routes/scheduleRoutes');
+app.use('/api', scheduleRouter);
 
 //---DB CONNECTION---//
 // const db = mysql.createConnection({

@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent {
   title = 'enrollmentSystem-frontend';
-
+  
   sidebarOpen = false;
 
   ngOnInit(){}

@@ -64,13 +64,13 @@ module.exports = (sequelize, DataTypes) => {
         },
         cardNumber: {
             type: DataTypes.STRING(100),
+            defaultValue: 'N/A'
         },
         studentincrement: {
+            primaryKey: true,
             type: DataTypes.INTEGER(15),
             allowNull: false,
-            primaryKey: true,
-            autoIncrement: true,
-            unique: true
+            autoIncrement: true
         },
         lastupdate: {
             type: DataTypes.STRING(5)

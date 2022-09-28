@@ -2,12 +2,10 @@
 
 const db = require('../config/sequelize');
 const studentModel = db.student;
-const { Sequelize } = require('../config/sequelize');
 
 //--- ADD STUDENT ---//
-const addStudent = async (req, res, next) => {
+const addStudent = async (req, res) => {
     const {
-        lrn,
         studentNumber,
         firstName,
         lastName,
@@ -35,7 +33,6 @@ const addStudent = async (req, res, next) => {
     } = req.body;
 
     const student = {
-        lrn: lrn,
         studentNumber: studentNumber,
         firstName: firstName,
         lastName: lastName,
@@ -132,12 +129,11 @@ const editStudent = async (req, res) => {
 const getStudents = async (req, res) => {
     //if(!req.query.size || !req.query.page) { return res.status(500).send({ message: 'Page number and page size required.' }); }
     
-    let pageSize = +req.query.size;
-    if(pageSize > 100) {
-        pageSize = 100;
-    }
+    // let pageSize = +req.query.size;
+    // if(pageSize > 100) {
+    //     pageSize = 100;
+    // }
 
-    let pageOffset = ((+req.query.page - 1) * +req.query.size);
 
     const students = await studentModel.findAll({
         attributes: [

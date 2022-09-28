@@ -1,8 +1,12 @@
 @import "../../index/home/home.component.scss";
 
+mat-form-field {
+  font-size: medium;
+}
+
 table {
   position: relative;
-  width: 75%;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
 }

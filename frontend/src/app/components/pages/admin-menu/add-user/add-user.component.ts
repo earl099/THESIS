@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
@@ -15,15 +15,20 @@ export class AddUserComponent implements OnInit {
   hide = true;
   angForm: any;
 
-  constructor(private fb: FormBuilder, private dataService: UserService, private router: Router, private toastr: ToastrService) {  }
+  constructor(
+    private fb: FormBuilder,
+    private dataService: UserService,
+    private router: Router,
+    private toastr: ToastrService
+  ) { }
 
   ngOnInit(): void {
     this.angForm = this.fb.group({
-      collegeID: ['', Validators.required],
-      username: ['', Validators.required],
-      email: ['', [Validators.email, Validators.required]],
-      password: ['', Validators.required],
-      isAdmin: ['', Validators.required]
+      collegeID: new FormControl('', Validators.required),
+      username: new FormControl('', Validators.required),
+      email: new FormControl('', [Validators.email, Validators.required]),
+      password: new FormControl('', Validators.required),
+      isAdmin: new FormControl('', Validators.required)
     })
   }
 
