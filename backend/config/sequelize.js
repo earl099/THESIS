@@ -36,6 +36,7 @@ db.sequelize = sequelize;
 db.user = require('../models/userModel')(sequelize, DataTypes);
 db.student = require('../models/studentModel')(sequelize, DataTypes);
 db.schedule = require('../models/scheduleModel')(sequelize, DataTypes);
+db.legend = require('../models/legendModel')(sequelize, DataTypes);
 
 try{
     //--- SYNC DB ---//
@@ -48,7 +49,9 @@ try{
     db.schedule.sync({ alter: true }).catch(err => {
         console.log(err);
     })
-
+    db.legend.sync({ alter: true }).catch(err => {
+        console.log(err)
+    })
     db.sequelize.sync({ force: false })
     .then(() => {
         console.log('Re-sync done.');

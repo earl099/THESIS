@@ -26,6 +26,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFileUploadModule } from 'angular-material-fileupload';
+import { MatStepperModule } from '@angular/material/stepper'
 
 //BACKEND IMPORTS
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -87,6 +88,8 @@ import { AuthInterceptor } from './shared/authguard/auth.interceptor';
 import { NgxCsvParserModule } from 'ngx-csv-parser';
 import { EditStudentComponent } from './components/pages/student/edit-student/edit-student.component';
 import { ScheduleProfileComponent } from './components/pages/schedule/schedule-profile/schedule-profile.component';
+import { VariableEditComponent } from './components/pages/admin-menu/variable-edit/variable-edit.component';
+import { InstallPageComponent } from './components/pages/admin-menu/install-page/install-page.component';
 
 
 
@@ -127,7 +130,9 @@ import { ScheduleProfileComponent } from './components/pages/schedule/schedule-p
     CurriculumListComponent,
     GradesComponent,
     EditStudentComponent,
-    ScheduleProfileComponent
+    ScheduleProfileComponent,
+    VariableEditComponent,
+    InstallPageComponent
   ],
   imports: [
     BrowserModule,
@@ -155,6 +160,7 @@ import { ScheduleProfileComponent } from './components/pages/schedule/schedule-p
     MatDatepickerModule,
     MatNativeDateModule,
     MatFileUploadModule,
+    MatStepperModule,
 
     //BACKEND IMPORTS
     HttpClientModule,

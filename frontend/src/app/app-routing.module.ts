@@ -10,11 +10,13 @@ import { UserListComponent } from './components/pages/admin-menu/user-list/user-
 import { UserPageComponent } from './components/pages/admin-menu/user-page/user-page.component';
 import { DashboardComponent } from './components/pages/index/dashboard/dashboard.component';
 import { HomeComponent } from './components/pages/index/home/home.component';
+import { InstallPageComponent } from './components/pages/admin-menu/install-page/install-page.component';
 import { AddUserComponent } from './components/pages/admin-menu/add-user/add-user.component';
 import { EditUserComponent } from './components/pages/admin-menu/edit-user/edit-user.component';
 import { CurriculumListComponent } from './components/pages/admin-menu/curriculum-list/curriculum-list.component';
 import { CurriculumAddComponent } from './components/pages/admin-menu/curriculum-add/curriculum-add.component';
 import { CurriculumEditComponent } from './components/pages/admin-menu/curriculum-edit/curriculum-edit.component';
+import { VariableEditComponent } from './components/pages/admin-menu/variable-edit/variable-edit.component';
 import { GradesComponent } from './components/pages/student/grades/grades.component';
 import { AddScheduleComponent } from './components/pages/schedule/add-schedule/add-schedule.component';
 import { EditScheduleComponent } from './components/pages/schedule/edit-schedule/edit-schedule.component';
@@ -38,6 +40,7 @@ import { EditStudentComponent } from './components/pages/student/edit-student/ed
 import { AuthGuard } from './shared/authguard/auth.guard';
 
 
+
 const routes: Routes = [
   //REDIRECT TO HOME
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -50,94 +53,99 @@ const routes: Routes = [
 
   /*--- ADMIN SUBMENU ---*/
   //ACCOUNT LIST
-  { path: 'account/list', component: UserListComponent },
+  { path: 'account/list', component: UserListComponent, canActivate: [AuthGuard] },
 
   //ADD ACCOUNT PAGE
-  { path: 'account/add', component: AddUserComponent },
+  { path: 'account/add', component: AddUserComponent, canActivate: [AuthGuard]},
 
   //EDIT ACCOUNT PAGE
-  { path: 'account/edit/:collegeID', component: EditUserComponent },
+  { path: 'account/edit/:collegeID', component: EditUserComponent, canActivate: [AuthGuard] },
 
   //USER PAGE
-  { path: 'account/profile/:collegeID', component: UserPageComponent },
+  { path: 'account/profile/:collegeID', component: UserPageComponent, canActivate: [AuthGuard] },
 
   //CURRICULUM LIST PAGE
-  { path: 'curriculum/list', component: CurriculumListComponent},
+  { path: 'curriculum/list', component: CurriculumListComponent, canActivate: [AuthGuard] },
 
   //ADD CURRICULUM PAGE
-  { path: 'curriculum/add', component: CurriculumAddComponent },
+  { path: 'curriculum/add', component: CurriculumAddComponent, canActivate: [AuthGuard] },
 
   //EDIT CURRICULUM PAGE
-  { path: 'curriculum/edit', component: CurriculumEditComponent },
+  { path: 'curriculum/edit/:refid', component: CurriculumEditComponent, canActivate: [AuthGuard] },
 
-
+  //GLOBAL VARIABLES PAGE
+  { path: 'variables/edit', component: VariableEditComponent, canActivate: [AuthGuard] },
 
   /*--- STUDENT SUBMENU ---*/
   //STUDENT LIST PAGE
-  { path: 'student/list', component: StudentListComponent },
-  { path: 'student/search/:searchTerm', component: StudentListComponent },
+  { path: 'student/list', component: StudentListComponent, canActivate: [AuthGuard] },
+  { path: 'student/search/:searchTerm', component: StudentListComponent, canActivate: [AuthGuard] },
 
   //STUDENT PAGE
-  { path: 'student/profile/:studentNumber', component: StudentProfileComponent },
+  { path: 'student/profile/:studentNumber', component: StudentProfileComponent, canActivate: [AuthGuard] },
 
   //ADD STUDENT PAGE
-  { path: 'student/add', component: AddStudentComponent },
+  { path: 'student/add', component: AddStudentComponent, canActivate: [AuthGuard] },
 
   //STUDENT GRADES PAGE
-  { path: 'student/grades', component: GradesComponent },
+  { path: 'student/grades', component: GradesComponent, canActivate: [AuthGuard] },
 
   //EDIT STUDENT PAGE
-  { path: 'student/edit/:studentNumber', component: EditStudentComponent },
+  { path: 'student/edit/:studentNumber', component: EditStudentComponent, canActivate: [AuthGuard] },
 
   /*--- SCHEDULE SUBMENU ---*/
   //ADD SCHEDULE PAGE
-  { path: 'schedule/add', component: AddScheduleComponent },
+  { path: 'schedule/add', component: AddScheduleComponent, canActivate: [AuthGuard] },
 
   //EDIT SCHEDULE PAGE
-  { path: 'schedule/edit/:schedcode', component: EditScheduleComponent },
+  { path: 'schedule/edit/:schedcode', component: EditScheduleComponent, canActivate: [AuthGuard] },
 
   //SCHEDULE LIST PAGE
-  { path: 'schedule/list', component: ListScheduleComponent },
+  { path: 'schedule/list', component: ListScheduleComponent, canActivate: [AuthGuard] },
 
   //SCHEDULE PROFILE PAGE
-  { path: 'schedule/:schedcode', component: ScheduleProfileComponent },
+  { path: 'schedule/:schedcode', component: ScheduleProfileComponent, canActivate: [AuthGuard] },
 
   /*--- ENROLLMENT SUBMENU ---*/
   //ASSESSMENT PAGE
-  { path: 'enrollment/assessment', component: AssessmentComponent },
+  { path: 'enrollment/assessment', component: AssessmentComponent, canActivate: [AuthGuard] },
 
   //VALIDATION PAGE
-  { path: 'enrollment/validation', component: ValidationComponent },
+  { path: 'enrollment/validation', component: ValidationComponent, canActivate: [AuthGuard] },
 
   //ADDING PAGE
-  { path: 'enrollment/adding', component: AddingComponent },
+  { path: 'enrollment/adding', component: AddingComponent, canActivate: [AuthGuard] },
 
   //DROPPING PAGE
-  { path: 'enrollment/dropping', component: DroppingComponent },
+  { path: 'enrollment/dropping', component: DroppingComponent, canActivate: [AuthGuard] },
 
   //CHANGING PAGE
-  { path: 'enrollment/changing', component: ChangingComponent },
+  { path: 'enrollment/changing', component: ChangingComponent, canActivate: [AuthGuard] },
 
   /*--- REPORTS SUBMENU ---*/
   //GENERATE REPORTS PAGE
-  { path: 'report/generate', component: GenerateReportComponent },
+  { path: 'report/generate', component: GenerateReportComponent, canActivate: [AuthGuard] },
 
   //ADD LOA PAGE
-  { path: 'report/loa/add', component: LoaAddComponent },
+  { path: 'report/loa/add', component: LoaAddComponent, canActivate: [AuthGuard] },
 
   //LOA LIST PAGE
-  { path: 'report/loa/list', component: LoaListComponent },
+  { path: 'report/loa/list', component: LoaListComponent, canActivate: [AuthGuard] },
 
   //ADD SHIFTEE PAGE
-  { path: 'report/shiftee/add', component: ShifteeAddComponent },
+  { path: 'report/shiftee/add', component: ShifteeAddComponent, canActivate: [AuthGuard] },
 
   //SHIFTEE LIST PAGE
-  { path: 'report/shiftee/list', component: ShifteeListComponent },
+  { path: 'report/shiftee/list', component: ShifteeListComponent, canActivate: [AuthGuard] },
 
   /*--- LOGIN SECTION ---*/
   { path: 'login/user', component: UserLoginComponent },
 
   { path: 'login/admin', component: AdminLoginComponent },
+
+  //INSTALLATION PAGE
+  { path: 'install', component: InstallPageComponent, canActivate: [AuthGuard] },
+
 
 ];
 

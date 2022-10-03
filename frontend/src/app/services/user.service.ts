@@ -1,5 +1,5 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
-import { BehaviorSubject, catchError, Observable, of } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, of, map } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ToastrService } from 'ngx-toastr';
@@ -11,7 +11,7 @@ export class UserService {
   redirectUrl!: string;
   baseUrl = environment.apiBaseUrl;
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({ 'Content-Type' : 'application/json' })
   };
 
   @Output() getLoggedInName: EventEmitter<any> = new EventEmitter();
@@ -40,7 +40,7 @@ export class UserService {
 
   //--- GET USERS ---//
   getAllUsers(): Observable<any> {
-    return this.httpClient.get(`${this.baseUrl}/admin/user/list`, { params: { page: 1, size: 50 } })
+    return this.httpClient.get(`${this.baseUrl}/admin/user/list`)
     .pipe(catchError(this.handleError<any>('Get Users')))
   }
 

@@ -1,0 +1,98 @@
+<div class="container-fluid page">
+  <div class="page__box p-3 mt-2">Installation</div>
+  <div class="page__content shadow p-3 position-relative">
+    <div class="page__content-data position-absolute text-center">
+      <div class="container">
+        <form [formGroup]="legend" (ngSubmit)="addLegend(legend)" autocomplete="off">
+          <div class="row align-items-start">
+            <div class="col">
+              <mat-form-field appearance="fill">
+                <mat-label>Semester</mat-label>
+                <mat-select formControlName="semester" required>
+                  <mat-option value="FIRST">FIRST</mat-option>
+                  <mat-option value="SECOND">SECOND</mat-option>
+                  <mat-option value="SUMMER">SUMMER</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <br>
+            </div>
+
+            <div class="col">
+              <mat-form-field appearance="fill">
+                <mat-label>School Year</mat-label>
+                <input matInput type="text" formControlName="schoolyear" required>
+              </mat-form-field>
+              <br>
+            </div>
+
+            <div class="col">
+              <mat-form-field appearance="fill">
+                <mat-label>Campus</mat-label>
+                <input matInput type="text" formControlName="mycampus" required>
+              </mat-form-field>
+              <br>
+            </div>
+          </div>
+
+          <div class="row align-items-start">
+            <div class="col">
+              <mat-form-field appearance="fill">
+                <mat-label>HRMO Head</mat-label>
+                <input matInput type="text" formControlName="hrmohead">
+              </mat-form-field>
+              <br>
+            </div>
+
+            <div class="col">
+              <mat-form-field appearance="fill">
+                <mat-label>HRMO Designation</mat-label>
+                <input matInput type="text" formControlName="hrmodesignation">
+              </mat-form-field>
+              <br>
+            </div>
+          </div>
+
+          <div class="row align-items-start">
+            <div class="col">
+              <mat-form-field appearance="fill">
+                <mat-label>Registrar</mat-label>
+                <input matInput type="text" formControlName="registrar">
+              </mat-form-field>
+              <br>
+            </div>
+
+            <div class="col">
+              <mat-form-field appearance="fill">
+                <mat-label>Registrar Designation</mat-label>
+                <input matInput type="text" formControlName="registrar_designation">
+              </mat-form-field>
+              <br>
+            </div>
+          </div>
+
+          <div class="row align-items-start">
+            <div class="col">
+              <mat-form-field appearance="fill">
+                <mat-label>Limit Units</mat-label>
+                <input matInput type="text" formControlName="limitunits">
+              </mat-form-field>
+              <br>
+            </div>
+
+            <div class="col">
+              <mat-form-field appearance="fill">
+                <mat-label>Internet Payment</mat-label>
+                <mat-select formControlName="internetpayment">
+                  <mat-option [value]="1">Yes</mat-option>
+                  <mat-option [value]="0">No</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <br>
+            </div>
+          </div>
+          <button mat-button type="submit" class="btn btn-success">Confirm Setup</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

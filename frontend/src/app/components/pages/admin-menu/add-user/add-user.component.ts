@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { ToastrService } from 'ngx-toastr';
+import { Observable, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-add-user',
@@ -14,11 +14,11 @@ export class AddUserComponent implements OnInit {
   isAdmin: boolean = true;
   hide = true;
   angForm: any;
+  userCount: any;
 
   constructor(
     private fb: FormBuilder,
-    private dataService: UserService,
-    private router: Router,
+    private userService: UserService,
     private toastr: ToastrService
   ) { }
 
@@ -32,15 +32,30 @@ export class AddUserComponent implements OnInit {
     })
   }
 
-  addForm(angForm:any) {
+  addForm(angForm: any) {
     if(confirm('Are you sure you want to create the user?')) {
       alert('Account Created.');
-      this.router.navigate(['account/list']);
-      this.dataService.addUser(angForm.value).pipe(first()).subscribe((res) => {
+
+
+      this.userService.addUser(angForm.value).pipe(first()).subscribe((res) => {
         if(res) {
           this.toastr.success(res.message);
         }
       });
+      this.userCount = this.getUsers();
+
+      if(this.userCount.length == 1) {
+        window.location.href = 'home'
+      }
+      else {
+        const auth = this.userService.getToken()
+        if(auth == null) {
+          window.location.href = 'home'
+        }
+        else {
+          window.location.href = 'account/list'
+        }
+      }
     }
     else {
       window.location.reload();
@@ -48,4 +63,17 @@ export class AddUserComponent implements OnInit {
 
   }
 
+
+  getUsers(): Observable<any> {
+    let users: any
+    var subject = new Subject<any>();
+
+    this.userService.getAllUsers().subscribe((res) => {
+      users = res.users;
+      //console.log(users)
+      subject.next(users)
+    })
+
+    return subject.asObservable();
+  }
 }

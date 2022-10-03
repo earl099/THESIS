@@ -13,17 +13,24 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 const port = process.env.port || 3000;
 
-//---USER FUNCTIONS---//
+//--- USER FUNCTIONS ---//
 const userRouter = require('./routes/userRoutes');
 app.use('/api', userRouter);
 
-//---STUDENT FUNCTIONS---//
+//--- STUDENT FUNCTIONS ---//
 const studentRouter = require('./routes/studentRoutes');
 app.use('/api', studentRouter);
 
-//---SCHEDULE FUNCTIONS---//
+//--- SCHEDULE FUNCTIONS ---//
 const scheduleRouter = require('./routes/scheduleRoutes');
 app.use('/api', scheduleRouter);
+
+//--- LEGEND FUNCTIONS ---//
+const legendRouter = require('./routes/legendRoutes');
+app.use('/api', legendRouter);
+
+//--- LEGEND FUNCTIONS ---//
+
 
 //---DB CONNECTION---//
 // const db = mysql.createConnection({

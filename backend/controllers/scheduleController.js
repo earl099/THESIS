@@ -90,11 +90,11 @@ const addSchedule = async (req, res) => {
         if(schedule.day2 != null || ""){
             scheduleModel.ok2 = 'Y';
         }
-        if(schedule.day1 != null || ""){
-            scheduleModel.ok1 = 'Y';
+        if(schedule.day3 != null || ""){
+            scheduleModel.ok3 = 'Y';
         }
-        if(schedule.day1 != null || ""){
-            scheduleModel.ok1 = 'Y';
+        if(schedule.day4 != null || ""){
+            scheduleModel.ok4 = 'Y';
         }
         const createdSchedule = await scheduleModel.create(schedule);
         res.status(201).send({createdSchedule: createdSchedule, message: 'Schedule Added.'});

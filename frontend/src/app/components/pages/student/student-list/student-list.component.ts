@@ -35,7 +35,7 @@ export class StudentListComponent implements OnInit {
     private toastr: ToastrService,
     private _liveAnnouncer: LiveAnnouncer
   ) {
-
+    
   }
 
   ngOnInit(): void {

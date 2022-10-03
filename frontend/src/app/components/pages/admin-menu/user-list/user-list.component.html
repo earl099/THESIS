@@ -9,6 +9,11 @@
       </div>
       <br>
 
+      <mat-form-field appearance="standard">
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Enter a filter" #input>
+      </mat-form-field>
+
       <div class="container table table-responsive">
         <table mat-table [dataSource]="users">
           <ng-container matColumnDef="collegeID">
@@ -37,14 +42,13 @@
 
           <tr mat-header-row *matHeaderRowDef="columns"></tr>
           <tr mat-row *matRowDef="let row; columns: columns;" ></tr>
-        </table>
-      </div>
 
-      <app-not-found
-        notFoundMessage="No User found."
-        resetLinkText="Reset Search"
-        resetLinkRoute="/user-list"
-      ></app-not-found>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+          </tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5]" aria-label="Select page of users"></mat-paginator>
+      </div>
     </div>
   </div>
 </div>
