@@ -23,12 +23,19 @@ export class VariableService {
   addLegend(legend: any): Observable<any> {
     return this.httpClient
     .post(`${this.baseUrl}/legend/add`, legend, this.httpOptions)
-    .pipe(catchError(this.handleError<any>('Adding Global Variables')))
+    .pipe(catchError(this.handleError<any>('Add Global Variables')))
   }
 
+  //--- GET GLOBAL VARIABLE ---//
   getLegend(): Observable<any> {
     return this.httpClient.get(`${this.baseUrl}/legend/list`)
-    .pipe(catchError(this.handleError<any>('Getting Global Variables')))
+    .pipe(catchError(this.handleError<any>('Get Global Variables')))
+  }
+
+  //--- EDIT GLOBAL VARIABLE ---//
+  editLegend(legend: any): Observable<any> {
+    return this.httpClient.put(`${this.baseUrl}/legend/edit`, legend, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Edit Global Variables')))
   }
 
   //--- ERROR HANDLERS ---//

@@ -2,8 +2,101 @@
   <div class="page__box p-3 mt-2">Edit Global Variables</div>
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
-      <div class="container"><p>Edit Global Variables Here</p></div>
+      <div class="container">
+        <form [formGroup]="angForm">
 
+          <div class="row align-items-start">
+            <div class="col">
+              <mat-form-field appearance="fill">
+                <mat-label>Semester</mat-label>
+                <input matInput type="text" formControlName="semester" readonly>
+              </mat-form-field>
+            </div>
+
+            <div class="col">
+              <mat-form-field appearance="fill">
+                <mat-label>School Year</mat-label>
+                <input matInput type="text" formControlName="schoolyear" readonly>
+              </mat-form-field>
+            </div>
+
+            <div class="col">
+              <mat-form-field appearance="fill">
+                <mat-label>Campus</mat-label>
+                <input matInput type="text" formControlName="mycampus" readonly>
+              </mat-form-field>
+            </div>
+          </div>
+          <br>
+
+          <div class="row align-items-start">
+            <div class="col">
+              <mat-form-field appearance="fill">
+                <mat-label>Previous Semester</mat-label>
+                <input matInput type="text" formControlName="ksemester" readonly>
+              </mat-form-field>
+            </div>
+
+            <div class="col">
+              <mat-form-field appearance="fill">
+                <mat-label>Previous School Year</mat-label>
+                <input matInput type="text" formControlName="kschoolyear" readonly>
+              </mat-form-field>
+            </div>
+          </div>
+          <br>
+
+          <div class="row align-items-start">
+            <div class="col">
+              <mat-form-field appearance="fill">
+                <mat-label>HRMO Head</mat-label>
+                <input matInput type="text" formControlName="hrmohead" class="uppercase">
+              </mat-form-field>
+            </div>
+
+            <div class="col">
+              <mat-form-field appearance="fill">
+                <mat-label>HRMO DESIGNATION</mat-label>
+                <input matInput type="text" formControlName="hrmodesignation" class="uppercase">
+              </mat-form-field>
+            </div>
+          </div>
+          <br>
+
+          <div class="row align-items-start">
+            <div class="col">
+              <mat-form-field appearance="fill">
+                <mat-label>Registrar</mat-label>
+                <input matInput type="text" formControlName="registrar" class="uppercase">
+              </mat-form-field>
+            </div>
+
+            <div class="col">
+              <mat-form-field appearance="fill">
+                <mat-label>Registrar Designation</mat-label>
+                <input matInput type="text" formControlName="registrar_designation" class="uppercase">
+              </mat-form-field>
+            </div>
+          </div>
+          <br>
+
+          <div class="container">
+            <div class="row align-items-start">
+              <div class="col">
+                <button mat-button type="submit" class="btn btn-success" (click)="onEditVariables(angForm)">Edit Global Variables</button>
+              </div>
+
+              <div class="col">
+                <button mat-button type="submit" class="btn btn-success" (click)="newSemester(angForm)">New Semester</button>
+              </div>
+
+              <div class="col">
+                <button mat-button routerLink="/dashboard">Back to Dashboard</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </div>

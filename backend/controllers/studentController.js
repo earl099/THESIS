@@ -115,7 +115,7 @@ const editStudent = async (req, res) => {
         highschool
     }
 
-    const updatedStudent = await studentModel.update(student, {where: {studentNumber: studentNumber}})
+    const updatedStudent = await studentModel.update(student, { where: { studentNumber: studentNumber }})
 
     if(updatedStudent[0] > 0) {
         res.status(200).send({ message: 'Student updated successfully.', updatedStudent: updatedStudent })

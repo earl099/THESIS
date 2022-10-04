@@ -1,1 +1,7 @@
 @import '../../index/home/home.component.scss';
+
+mat-form-field {
+  input.uppercase{
+    text-transform: uppercase;
+  }
+}

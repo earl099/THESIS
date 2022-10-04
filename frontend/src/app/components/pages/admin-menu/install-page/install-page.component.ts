@@ -52,8 +52,6 @@ export class InstallPageComponent implements OnInit {
 
 
   addLegend(legend: any) {
-
-
     //FOR GETTING THE PREVIOUS SEMESTER
     switch(legend.get('semester').value) {
       case 'FIRST':
