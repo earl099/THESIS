@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement: true,
             allowNull: false,
-            type: DataTypes.STRING(10)
+            type: DataTypes.INTEGER(10)
         },
         course: {
             type: DataTypes.STRING(25),
