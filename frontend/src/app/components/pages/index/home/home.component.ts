@@ -36,8 +36,6 @@ export class HomeComponent implements OnInit {
       // CHECKS IF THERE IS A LOGGED USER
       this.router.navigate(['/dashboard']);
     }
-
-    this.installCheck();
   }
 
   installCheck() {
