@@ -28,4 +28,17 @@ form{
 
 mat-form-field {
   font-size: medium;
+  align-items: center;
+}
+
+table {
+  position: relative;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mat-row:hover {
+  background-color: #E8EAF6;
+  cursor: pointer;
 }

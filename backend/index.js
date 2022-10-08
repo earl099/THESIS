@@ -29,8 +29,13 @@ app.use('/api', scheduleRouter);
 const legendRouter = require('./routes/legendRoutes');
 app.use('/api', legendRouter);
 
-//--- LEGEND FUNCTIONS ---//
+//--- CURRICULUM FUNCTIONS ---//
+const curriculumRouter = require('./routes/curriculumRoutes');
+app.use('/api', curriculumRouter);
 
+//--- CURRICULUM CONTENT FUNCTIONS ---//
+const currContentRouter = require('./routes/currContentRoutes');
+app.use('/api', currContentRouter)
 
 //---DB CONNECTION---//
 // const db = mysql.createConnection({

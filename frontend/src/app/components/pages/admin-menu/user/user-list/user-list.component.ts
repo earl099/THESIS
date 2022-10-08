@@ -6,7 +6,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from 'src/app/services/user.service';
-import { User } from 'src/app/shared/models/User';
 
 
 @Component({
@@ -94,7 +93,7 @@ export class UserListComponent implements OnInit {
     }
   }
 
-  redirectTo(user: User): void {
+  redirectTo(user: any): void {
     this.router.navigate(['account/profile/' + user.collegeID]);
   }
 }

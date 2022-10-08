@@ -58,7 +58,7 @@ export class VariableEditComponent implements OnInit {
           break;
         case 'SUMMER':
           angForm.get('semester').setValue(semIdentifiers[0]);
-          angForm.get('ksemester').setValue(semIdentifiers[1]);
+          angForm.get('ksemester').setValue(semIdentifiers[2]);
 
           //--- CHANGING SCHOOL YEAR ---//
           let schoolyear = [

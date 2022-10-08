@@ -1,0 +1,41 @@
+<div class="container-fluid page">
+  <div class="page__box p-3 mt-2">Curriculum Profile</div>
+  <div class="page__content shadow p-3 position-relative">
+    <div class="page__content-data position-absolute text-center">
+      <div class="container"><p>Curriculum Profile</p></div>
+      <div class="container">
+        <div class="details">
+
+          <div >
+            <span>{{identifiers[0]}}: </span>
+            <span>{{curriculum.course}}</span>
+          </div>
+          <br>
+
+          <div>
+            <span>{{identifiers[1]}}: </span>
+            <span>{{curriculum.coursemajor}}</span>
+          </div>
+          <br>
+
+          <div>
+            <span>{{identifiers[2]}}: </span>
+            <span>{{curriculum.schoolyear}}</span>
+          </div>
+          <br>
+
+          <div>
+            <span>{{identifiers[3]}}: </span>
+            <span>{{curriculum.active === 0 ? 'No' : 'Yes'}}</span>
+          </div>
+          <br>
+
+          <div>
+            <button mat-raised-button routerLink='/curriculum/edit/{{curriculum.id}}'> Edit </button>
+            <button mat-raised-button routerLink='/curriculum/list'> Back to List </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

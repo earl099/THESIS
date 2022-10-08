@@ -27,7 +27,7 @@ export class EditStudentComponent implements OnInit {
 
   ngOnInit(): void {
     this.angForm = this.fb.group({
-      studentNumber: new FormControl({ value: this.student.studentNumber, disabled: true }),
+      studentNumber: new FormControl({ value: this.student.studentNumber, disabled: false }),
       firstName: new FormControl({ value: this.student.firstName, disabled: false }, Validators.required),
       middleName: new FormControl({ value: this.student.middleName, disabled: false }),
       lastName: new FormControl({ value: this.student.lastName, disabled: false }, Validators.required),
@@ -57,7 +57,7 @@ export class EditStudentComponent implements OnInit {
         console.log(res.student)
         this.student = res.student;
         this.angForm = this.fb.group({
-          studentNumber: new FormControl({ value: this.student.studentNumber, disabled: true }),
+          studentNumber: new FormControl({ value: this.student.studentNumber, disabled: false }),
           firstName: new FormControl({ value: this.student.firstName, disabled: false }, Validators.required),
           middleName: new FormControl({ value: this.student.middleName, disabled: false }),
           lastName: new FormControl({ value: this.student.lastName, disabled: false }, Validators.required),

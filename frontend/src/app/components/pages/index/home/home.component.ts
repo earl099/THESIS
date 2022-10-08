@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
     private httpClient: HttpClient,
     private toastr: ToastrService
   ) {
-    this.installCheck()
+    this.installCheck();
   }
 
   ngOnInit(): void {
@@ -36,6 +36,8 @@ export class HomeComponent implements OnInit {
       // CHECKS IF THERE IS A LOGGED USER
       this.router.navigate(['/dashboard']);
     }
+
+    this.installCheck();
   }
 
   installCheck() {

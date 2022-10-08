@@ -1,7 +1,6 @@
 "use strict"
 
 const db = require('../config/sequelize');
-const scheduleModel = require('../models/scheduleModel');
 const legendModel = db.legend;
 
 //--- ADDING GLOBAL VARIABLES FOR INSTALLATION ---//

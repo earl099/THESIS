@@ -1,0 +1,48 @@
+<div class="container-fluid page">
+  <div class="page__box p-3 mt-2">Edit Curriculum</div>
+  <div class="page__content shadow p-3 position-relative">
+    <div class="page__content-data position-absolute text-center">
+      <form [formGroup]="angForm">
+
+        <mat-form-field appearance="fill">
+          <mat-label>Course</mat-label>
+          <input matInput type="text" formControlName="course">
+        </mat-form-field>
+        <br>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Major</mat-label>
+          <input matInput type="text" formControlName="coursemajor">
+        </mat-form-field>
+        <br>
+
+        <mat-form-field appearance="fill">
+          <mat-label>School Year</mat-label>
+          <input matInput type="text" formControlName="schoolyear" readonly>
+        </mat-form-field>
+        <br>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Active Curriculum</mat-label>
+          <mat-select formControlName="activecurriculum">
+            <mat-option value="Yes">Yes</mat-option>
+            <mat-option value="No">No</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <br>
+
+        <div class="container">
+          <div class="row align-items-start">
+            <div class="col">
+              <button mat-button type="submit" class="btn btn-success" (click)="onEditCurriculum(id, angForm)">Edit User</button>
+            </div>
+
+            <div class="col">
+              <button mat-button routerLink="/curriculum/list">Back to List</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

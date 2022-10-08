@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from 'src/app/services/user.service';
 
@@ -21,7 +21,11 @@ export class UserPageComponent implements OnInit {
   user: any = [];
   newPassword = '';
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private userService: UserService, private toastr: ToastrService) {
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private userService: UserService,
+    private toastr: ToastrService
+  ) {
     this.collegeID = this.activatedRoute.snapshot.url.toString().split(',').splice(-1).toString();
     //console.log(this.collegeID);
   }

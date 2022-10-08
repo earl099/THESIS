@@ -24,3 +24,18 @@ a{
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+table{
+  width: 750px;
+}
+
+td , th {
+  text-align: center;
+  white-space: normal;
+  word-wrap: break-word;
+  max-width: 200px;
+}
+
+th.mat-header-cell{
+  text-align: center !important;
+}

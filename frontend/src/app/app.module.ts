@@ -50,13 +50,13 @@ import { StudentProfileComponent } from './components/pages/student/student-prof
 
 
 //ADMIN MENU COMPONENTS
-import { AddUserComponent } from './components/pages/admin-menu/add-user/add-user.component';
-import { UserPageComponent } from './components/pages/admin-menu/user-page/user-page.component';
-import { UserListComponent } from './components/pages/admin-menu/user-list/user-list.component';
-import { EditUserComponent } from './components/pages/admin-menu/edit-user/edit-user.component';
-import { CurriculumAddComponent } from './components/pages/admin-menu/curriculum-add/curriculum-add.component';
-import { CurriculumEditComponent } from './components/pages/admin-menu/curriculum-edit/curriculum-edit.component';
-import { CurriculumListComponent } from './components/pages/admin-menu/curriculum-list/curriculum-list.component';
+import { AddUserComponent } from './components/pages/admin-menu/user/add-user/add-user.component';
+import { UserPageComponent } from './components/pages/admin-menu/user/user-page/user-page.component';
+import { UserListComponent } from './components/pages/admin-menu/user/user-list/user-list.component';
+import { EditUserComponent } from './components/pages/admin-menu/user/edit-user/edit-user.component';
+import { CurriculumAddComponent } from './components/pages/admin-menu/curriculum/curriculum-add/curriculum-add.component';
+import { CurriculumEditComponent } from './components/pages/admin-menu/curriculum/curriculum-edit/curriculum-edit.component';
+import { CurriculumListComponent } from './components/pages/admin-menu/curriculum/curriculum-list/curriculum-list.component';
 
 //ENROLLMENT COMPONENTS
 import { AssessmentComponent } from './components/pages/enrollment/assessment/assessment.component';
@@ -90,6 +90,7 @@ import { EditStudentComponent } from './components/pages/student/edit-student/ed
 import { ScheduleProfileComponent } from './components/pages/schedule/schedule-profile/schedule-profile.component';
 import { VariableEditComponent } from './components/pages/admin-menu/variable-edit/variable-edit.component';
 import { InstallPageComponent } from './components/pages/admin-menu/install-page/install-page.component';
+import { CurriculumPageComponent } from './components/pages/admin-menu/curriculum/curriculum-page/curriculum-page.component';
 
 
 
@@ -132,7 +133,8 @@ import { InstallPageComponent } from './components/pages/admin-menu/install-page
     EditStudentComponent,
     ScheduleProfileComponent,
     VariableEditComponent,
-    InstallPageComponent
+    InstallPageComponent,
+    CurriculumPageComponent
   ],
   imports: [
     BrowserModule,

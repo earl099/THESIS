@@ -15,7 +15,7 @@
       </mat-form-field>
 
       <div class="container table table-responsive">
-        <table mat-table [dataSource]="users">
+        <table mat-table [dataSource]="dataSource">
           <ng-container matColumnDef="collegeID">
             <th mat-header-cell *matHeaderCellDef> College ID </th>
             <td mat-cell *matCellDef="let user" (click)="redirectTo(user)"> {{user.collegeID}} </td>

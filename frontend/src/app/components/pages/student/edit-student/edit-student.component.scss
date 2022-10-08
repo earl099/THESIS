@@ -4,4 +4,7 @@ mat-form-field {
   input.uppercase{
     text-transform: uppercase;
   }
+  input:read-only {
+    color: gray;
+  }
 }

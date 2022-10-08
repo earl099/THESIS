@@ -6,16 +6,16 @@ import { RouterModule, Routes } from '@angular/router';
 import { AddStudentComponent } from './components/pages/student/add-student/add-student.component';
 import { StudentListComponent } from './components/pages/student/student-list/student-list.component';
 import { StudentProfileComponent } from './components/pages/student/student-profile/student-profile.component';
-import { UserListComponent } from './components/pages/admin-menu/user-list/user-list.component';
-import { UserPageComponent } from './components/pages/admin-menu/user-page/user-page.component';
+import { UserListComponent } from './components/pages/admin-menu/user/user-list/user-list.component';
+import { UserPageComponent } from './components/pages/admin-menu/user/user-page/user-page.component';
 import { DashboardComponent } from './components/pages/index/dashboard/dashboard.component';
 import { HomeComponent } from './components/pages/index/home/home.component';
 import { InstallPageComponent } from './components/pages/admin-menu/install-page/install-page.component';
-import { AddUserComponent } from './components/pages/admin-menu/add-user/add-user.component';
-import { EditUserComponent } from './components/pages/admin-menu/edit-user/edit-user.component';
-import { CurriculumListComponent } from './components/pages/admin-menu/curriculum-list/curriculum-list.component';
-import { CurriculumAddComponent } from './components/pages/admin-menu/curriculum-add/curriculum-add.component';
-import { CurriculumEditComponent } from './components/pages/admin-menu/curriculum-edit/curriculum-edit.component';
+import { AddUserComponent } from './components/pages/admin-menu/user/add-user/add-user.component';
+import { EditUserComponent } from './components/pages/admin-menu/user/edit-user/edit-user.component';
+import { CurriculumListComponent } from './components/pages/admin-menu/curriculum/curriculum-list/curriculum-list.component';
+import { CurriculumAddComponent } from './components/pages/admin-menu/curriculum/curriculum-add/curriculum-add.component';
+import { CurriculumEditComponent } from './components/pages/admin-menu/curriculum/curriculum-edit/curriculum-edit.component';
 import { VariableEditComponent } from './components/pages/admin-menu/variable-edit/variable-edit.component';
 import { GradesComponent } from './components/pages/student/grades/grades.component';
 import { AddScheduleComponent } from './components/pages/schedule/add-schedule/add-schedule.component';
@@ -38,6 +38,7 @@ import { EditStudentComponent } from './components/pages/student/edit-student/ed
 
 //AUTHGUARD
 import { AuthGuard } from './shared/authguard/auth.guard';
+import { CurriculumPageComponent } from './components/pages/admin-menu/curriculum/curriculum-page/curriculum-page.component';
 
 
 
@@ -71,7 +72,10 @@ const routes: Routes = [
   { path: 'curriculum/add', component: CurriculumAddComponent, canActivate: [AuthGuard] },
 
   //EDIT CURRICULUM PAGE
-  { path: 'curriculum/edit/:refid', component: CurriculumEditComponent, canActivate: [AuthGuard] },
+  { path: 'curriculum/edit/:id', component: CurriculumEditComponent, canActivate: [AuthGuard] },
+
+  //CURRICULUM PROFILE PAGE
+  { path: 'curriculum/profile/:id', component: CurriculumPageComponent, canActivate: [AuthGuard] },
 
   //GLOBAL VARIABLES PAGE
   { path: 'variables/edit', component: VariableEditComponent, canActivate: [AuthGuard] },
@@ -144,7 +148,7 @@ const routes: Routes = [
   { path: 'login/admin', component: AdminLoginComponent },
 
   //INSTALLATION PAGE
-  { path: 'install', component: InstallPageComponent, canActivate: [AuthGuard] },
+  { path: 'install', component: InstallPageComponent },
 
 
 ];
