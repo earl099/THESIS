@@ -2,7 +2,7 @@
   <div class="page__box p-3 mt-2">Add Account</div>
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
-      <form [formGroup]="angForm" (ngSubmit)="addForm(angForm)" autocomplete="off">
+      <form [formGroup]="angForm" (ngSubmit)="addUser(angForm)" autocomplete="off">
         <mat-form-field appearance="fill">
           <mat-label>College ID</mat-label>
           <mat-select formControlName="collegeID" required >

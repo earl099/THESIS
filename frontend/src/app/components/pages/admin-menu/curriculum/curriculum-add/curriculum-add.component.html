@@ -2,7 +2,34 @@
   <div class="page__box p-3 mt-2">Add Curriculum</div>
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
-      <div class="container"><p>Add Curriculum Content Here</p></div>
+      <form [formGroup]="angForm"  autocomplete="off">
+
+        <mat-form-field appearance="fill">
+          <mat-label>Course</mat-label>
+          <input matInput type="text" formControlName="course" required>
+        </mat-form-field>
+        <br>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Major</mat-label>
+          <input matInput type="text" formControlName="coursemajor" required>
+        </mat-form-field>
+        <br>
+
+        <mat-form-field appearance="fill">
+          <mat-label>School Year Implemented</mat-label>
+          <input matInput type="text" formControlName="schoolyear" required readonly>
+        </mat-form-field>
+        <br>
+
+        <label for="singleFile">Upload List of Curricula</label>
+        <br><br>
+        <input mat-input #fileImportInput id="singleFile" type="file" (change)="fileChangeListener($event)" accept=".csv">
+        <br><br>
+        <button mat-button type="submit" class="btn btn-success" (click)="addCurriculum(angForm)">Add Curriculum</button>
+        <button mat-button class="btn btn-success" (click)="importCurriculum()">Import Curricula</button>
+        <button mat-button class="btn btn-success" routerLink="/curriculum/list">Back to List</button>
+      </form>
 
     </div>
   </div>

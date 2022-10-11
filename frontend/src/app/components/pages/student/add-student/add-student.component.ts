@@ -50,7 +50,7 @@ export class AddStudentComponent implements OnInit {
     })
   }
 
-  importStudents(studentData: any) {
+  importStudents() {
     if(confirm("Are you sure you want to import this data?")) {
       if(this.csvRecords == null) {
         alert("No data imported.");

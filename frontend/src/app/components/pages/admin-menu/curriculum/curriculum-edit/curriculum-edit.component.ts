@@ -25,13 +25,14 @@ export class CurriculumEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getCurriculum();
     this.angForm = this.fb.group({
       course: new FormControl({ value: '', disabled: false }, Validators.required),
       coursemajor: new FormControl({ value: '', disabled: false }, Validators.required),
       schoolyear: new FormControl({ value: '', disabled: false }),
-      activecurriculum: new FormControl({ value: this.activeCurriculumValue(this.curriculum.activecurriculum), disabled: false })
+      activecurriculum: new FormControl({ value: '', disabled: false })
     })
-    this.getCurriculum();
+
   }
 
   getCurriculum() {
@@ -39,22 +40,32 @@ export class CurriculumEditComponent implements OnInit {
       if(res) {
         this.toastr.success(res.message);
         this.curriculum = res.curriculum;
+        console.log(this.curriculum)
         this.angForm = this.fb.group({
           course: new FormControl({ value: this.curriculum.course, disabled: false }, Validators.required),
           coursemajor: new FormControl({ value: this.curriculum.coursemajor, disabled: false }, Validators.required),
           schoolyear: new FormControl({ value: this.curriculum.schoolyear, disabled: false }),
           activecurriculum: new FormControl({ value: this.activeCurriculumValue(this.curriculum.activecurriculum), disabled: false })
         })
-        console.log(this.curriculum)
+
       }
     })
   }
 
   onEditCurriculum(id: string, angForm: any) {
     if(confirm('Are you sure you want to change this curriculum?')) {
-      
-      this.curriculumService.editCurriculum(Number(id), angForm.value).subscribe((res) => {
+      angForm.get('activecurriculum').setValue(this.setActiveCurriculumValue(angForm.get('activecurriculum').value));
 
+      this.curriculumService.editCurriculum(Number(id), angForm.value).subscribe((res) => {
+        if(res){
+          this.toastr.success(res.message);
+          //console.log(res.user);
+          alert('User updated successfully.');
+          this.router.navigate([`curriculum/profile/${id}`]);
+        }
+        else{
+          console.log(res);
+        }
       })
     }
     else {

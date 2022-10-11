@@ -3,7 +3,9 @@
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
       <div class="container"><p>Curriculum List</p></div>
-
+      <button mat-button class="btn btn-success" routerLink="/curriculum/add">Add Curriculum</button>
+      <br>
+      
       <mat-form-field appearance="standard">
         <mat-label>Filter</mat-label>
         <input matInput (keyup)="applyFilter($event)" placeholder="Enter a filter" #input>

@@ -91,6 +91,10 @@ import { ScheduleProfileComponent } from './components/pages/schedule/schedule-p
 import { VariableEditComponent } from './components/pages/admin-menu/variable-edit/variable-edit.component';
 import { InstallPageComponent } from './components/pages/admin-menu/install-page/install-page.component';
 import { CurriculumPageComponent } from './components/pages/admin-menu/curriculum/curriculum-page/curriculum-page.component';
+import { ContentAddComponent } from './components/pages/admin-menu/curriculum/content-curriculum/content-add/content-add.component';
+import { ContentEditComponent } from './components/pages/admin-menu/curriculum/content-curriculum/content-edit/content-edit.component';
+import { ContentListComponent } from './components/pages/admin-menu/curriculum/content-curriculum/content-list/content-list.component';
+import { ContentPageComponent } from './components/pages/admin-menu/curriculum/content-curriculum/content-page/content-page.component';
 
 
 
@@ -134,7 +138,11 @@ import { CurriculumPageComponent } from './components/pages/admin-menu/curriculu
     ScheduleProfileComponent,
     VariableEditComponent,
     InstallPageComponent,
-    CurriculumPageComponent
+    CurriculumPageComponent,
+    ContentAddComponent,
+    ContentEditComponent,
+    ContentListComponent,
+    ContentPageComponent
   ],
   imports: [
     BrowserModule,

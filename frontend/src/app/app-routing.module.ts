@@ -57,7 +57,7 @@ const routes: Routes = [
   { path: 'account/list', component: UserListComponent, canActivate: [AuthGuard] },
 
   //ADD ACCOUNT PAGE
-  { path: 'account/add', component: AddUserComponent, canActivate: [AuthGuard]},
+  { path: 'account/add', component: AddUserComponent },
 
   //EDIT ACCOUNT PAGE
   { path: 'account/edit/:collegeID', component: EditUserComponent, canActivate: [AuthGuard] },

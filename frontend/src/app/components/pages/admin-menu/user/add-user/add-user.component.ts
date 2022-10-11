@@ -32,7 +32,7 @@ export class AddUserComponent implements OnInit {
     })
   }
 
-  addForm(angForm: any) {
+  addUser(angForm: any) {
     if(confirm('Are you sure you want to create the user?')) {
       alert('Account Created.');
 
