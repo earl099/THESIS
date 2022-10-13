@@ -1,1 +1,445 @@
-<p>content-list works!</p>
+<div class="container-fluid page">
+  <div class="page__box p-3 mt-2">Curriculum Content List</div>
+  <div class="page__content shadow p-3 position-relative">
+    <div class="page__content-data position-absolute text-center">
+      <div class="container">
+        <p>Select a Year Level</p>
+        <mat-select #input>
+          <mat-option [value]='yearLevel[0]'>First Year</mat-option>
+          <mat-option [value]='yearLevel[1]'>Second Year</mat-option>
+          <mat-option [value]='yearLevel[2]'>Third Year</mat-option>
+          <mat-option [value]='yearLevel[3]'>Fourth Year</mat-option>
+        </mat-select>
+      </div>
+      <br><br>
+
+      <!-- FIRST YEAR SUBJECTS LIST -->
+      <div class="container" *ngIf="input.value == yearLevel[0]">
+        <p>First Year</p>
+        <div class="row align-items-start">
+          <div class="col">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <p>{{ yearLevel[0] }}</p>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="container table table-responsive">
+                <table mat-table [dataSource]="FiYearFiSem">
+                  <ng-container matColumnDef="subjectcode">
+                    <th mat-header-cell *matHeaderCellDef> Subject Code </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ccontent.subjectcode }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="prerequisite">
+                    <th mat-header-cell *matHeaderCellDef> Prerequisite </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.prerequisite }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="semester">
+                    <th mat-header-cell *matHeaderCellDef> Semester </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.semester }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="yearlevel">
+                    <th mat-header-cell *matHeaderCellDef> Yearl Level </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.yearlevel }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="edit">
+                    <th mat-header-cell *matHeaderCellDef> Edit </th>
+                    <td mat-cell *matCellDef="let curriculum">
+                      <button mat-raised-button routerLink='/curriculum/content/{{curriculum.refid}}/{{curriculum.id}}/edit'> Edit </button>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: columns;" ></tr>
+
+                </table>
+                <mat-paginator [pageSizeOptions]="[5]" aria-label="Select page of users"></mat-paginator>
+              </div>
+            </mat-expansion-panel>
+          </div>
+
+          <div class="col">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <p>Second Semester</p>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="container table table-responsive">
+                <table mat-table [dataSource]="FiYearSeSem">
+                  <ng-container matColumnDef="subjectcode">
+                    <th mat-header-cell *matHeaderCellDef> Subject Code </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ccontent.subjectcode }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="prerequisite">
+                    <th mat-header-cell *matHeaderCellDef> Prerequisite </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.prerequisite }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="semester">
+                    <th mat-header-cell *matHeaderCellDef> Semester </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.semester }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="yearlevel">
+                    <th mat-header-cell *matHeaderCellDef> Yearl Level </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.yearlevel }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="edit">
+                    <th mat-header-cell *matHeaderCellDef> Edit </th>
+                    <td mat-cell *matCellDef="let curriculum">
+                      <button mat-raised-button routerLink='/curriculum/content/{{curriculum.refid}}/{{curriculum.id}}/edit'> Edit </button>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: columns;" ></tr>
+
+                </table>
+                <mat-paginator [pageSizeOptions]="[5]" aria-label="Select page of users"></mat-paginator>
+              </div>
+            </mat-expansion-panel>
+          </div>
+        </div>
+      </div>
+      <br>
+
+      <!-- SECOND YEAR SUBJECTS LIST -->
+      <div class="container" *ngIf="input.value == yearLevel[1]">
+        <p>{{ yearLevel[1] }}</p>
+        <div class="row align-items-start">
+          <div class="col">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <p>First Semester</p>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="container table table-responsive">
+                <table mat-table [dataSource]="SeYearFiSem">
+                  <ng-container matColumnDef="subjectcode">
+                    <th mat-header-cell *matHeaderCellDef> Subject Code </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ccontent.subjectcode }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="prerequisite">
+                    <th mat-header-cell *matHeaderCellDef> Prerequisite </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.prerequisite }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="semester">
+                    <th mat-header-cell *matHeaderCellDef> Semester </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.semester }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="yearlevel">
+                    <th mat-header-cell *matHeaderCellDef> Yearl Level </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.yearlevel }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="edit">
+                    <th mat-header-cell *matHeaderCellDef> Edit </th>
+                    <td mat-cell *matCellDef="let curriculum">
+                      <button mat-raised-button routerLink='/curriculum/content/{{curriculum.refid}}/{{curriculum.id}}/edit'> Edit </button>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: columns;" ></tr>
+
+                </table>
+              </div>
+            </mat-expansion-panel>
+          </div>
+
+          <div class="col">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <p>Second Semester</p>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="container table table-responsive">
+                <table mat-table [dataSource]="SeYearSeSem">
+                  <ng-container matColumnDef="subjectcode">
+                    <th mat-header-cell *matHeaderCellDef> Subject Code </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ccontent.subjectcode }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="prerequisite">
+                    <th mat-header-cell *matHeaderCellDef> Prerequisite </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.prerequisite }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="semester">
+                    <th mat-header-cell *matHeaderCellDef> Semester </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.semester }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="yearlevel">
+                    <th mat-header-cell *matHeaderCellDef> Yearl Level </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.yearlevel }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="edit">
+                    <th mat-header-cell *matHeaderCellDef> Edit </th>
+                    <td mat-cell *matCellDef="let curriculum">
+                      <button mat-raised-button routerLink='/curriculum/content/{{curriculum.refid}}/{{curriculum.id}}/edit'> Edit </button>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: columns;" ></tr>
+                </table>
+              </div>
+            </mat-expansion-panel>
+          </div>
+        </div>
+      </div>
+      <br>
+
+      <!-- THIRD YEAR SUBJECTS LIST -->
+      <div class="container" *ngIf="input.value == yearLevel[2]">
+        <p>{{ yearLevel[2] }}</p>
+        <div class="row align-items-start">
+          <div class="col">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <p>First Semester</p>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="container table table-responsive">
+                <table mat-table [dataSource]="ThYearFiSem">
+                  <ng-container matColumnDef="subjectcode">
+                    <th mat-header-cell *matHeaderCellDef> Subject Code </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ccontent.subjectcode }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="prerequisite">
+                    <th mat-header-cell *matHeaderCellDef> Prerequisite </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.prerequisite }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="semester">
+                    <th mat-header-cell *matHeaderCellDef> Semester </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.semester }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="yearlevel">
+                    <th mat-header-cell *matHeaderCellDef> Yearl Level </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.yearlevel }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="edit">
+                    <th mat-header-cell *matHeaderCellDef> Edit </th>
+                    <td mat-cell *matCellDef="let curriculum">
+                      <button mat-raised-button routerLink='/curriculum/content/{{curriculum.refid}}/{{curriculum.id}}/edit'> Edit </button>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: columns;" ></tr>
+
+                </table>
+              </div>
+            </mat-expansion-panel>
+          </div>
+
+          <div class="col">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <p>Second Semester</p>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="container table table-responsive">
+                <table mat-table [dataSource]="ThYearSeSem">
+                  <ng-container matColumnDef="subjectcode">
+                    <th mat-header-cell *matHeaderCellDef> Subject Code </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ccontent.subjectcode }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="prerequisite">
+                    <th mat-header-cell *matHeaderCellDef> Prerequisite </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.prerequisite }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="semester">
+                    <th mat-header-cell *matHeaderCellDef> Semester </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.semester }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="yearlevel">
+                    <th mat-header-cell *matHeaderCellDef> Yearl Level </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.yearlevel }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="edit">
+                    <th mat-header-cell *matHeaderCellDef> Edit </th>
+                    <td mat-cell *matCellDef="let curriculum">
+                      <button mat-raised-button routerLink='/curriculum/content/{{curriculum.refid}}/{{curriculum.id}}/edit'> Edit </button>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: columns;" ></tr>
+                </table>
+              </div>
+            </mat-expansion-panel>
+          </div>
+        </div>
+        <br>
+
+        <div class="row align-items-start">
+          <div class="col">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <p>Summer Semester</p>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="container table table-responsive">
+                <table mat-table [dataSource]="ThYearSuSem">
+                  <ng-container matColumnDef="subjectcode">
+                    <th mat-header-cell *matHeaderCellDef> Subject Code </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ccontent.subjectcode }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="prerequisite">
+                    <th mat-header-cell *matHeaderCellDef> Prerequisite </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.prerequisite }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="semester">
+                    <th mat-header-cell *matHeaderCellDef> Semester </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.semester }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="yearlevel">
+                    <th mat-header-cell *matHeaderCellDef> Yearl Level </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.yearlevel }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="edit">
+                    <th mat-header-cell *matHeaderCellDef> Edit </th>
+                    <td mat-cell *matCellDef="let curriculum">
+                      <button mat-raised-button routerLink='/curriculum/content/{{curriculum.refid}}/{{curriculum.id}}/edit'> Edit </button>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: columns;" ></tr>
+                </table>
+              </div>
+            </mat-expansion-panel>
+          </div>
+        </div>
+      </div>
+      <br>
+
+      <!-- FOURTH YEAR SUBJECTS LIST -->
+      <div class="container" *ngIf="input.value == yearLevel[3]">
+        <p>{{ yearLevel[3] }}</p>
+        <div class="row align-items-start">
+          <div class="col">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <p>First Semester</p>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="container table table-responsive">
+                <table mat-table [dataSource]="FoYearFiSem">
+                  <ng-container matColumnDef="subjectcode">
+                    <th mat-header-cell *matHeaderCellDef> Subject Code </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ccontent.subjectcode }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="prerequisite">
+                    <th mat-header-cell *matHeaderCellDef> Prerequisite </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.prerequisite }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="semester">
+                    <th mat-header-cell *matHeaderCellDef> Semester </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.semester }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="yearlevel">
+                    <th mat-header-cell *matHeaderCellDef> Yearl Level </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.yearlevel }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="edit">
+                    <th mat-header-cell *matHeaderCellDef> Edit </th>
+                    <td mat-cell *matCellDef="let curriculum">
+                      <button mat-raised-button routerLink='/curriculum/content/{{curriculum.refid}}/{{curriculum.id}}/edit'> Edit </button>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: columns;" ></tr>
+
+                </table>
+              </div>
+            </mat-expansion-panel>
+          </div>
+
+          <div class="col">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <p>Second Semester</p>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="container table table-responsive">
+                <table mat-table [dataSource]="FoYearSeSem">
+                  <ng-container matColumnDef="subjectcode">
+                    <th mat-header-cell *matHeaderCellDef> Subject Code </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ccontent.subjectcode }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="prerequisite">
+                    <th mat-header-cell *matHeaderCellDef> Prerequisite </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.prerequisite }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="semester">
+                    <th mat-header-cell *matHeaderCellDef> Semester </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.semester }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="yearlevel">
+                    <th mat-header-cell *matHeaderCellDef> Yearl Level </th>
+                    <td mat-cell *matCellDef="let ccontent" (click)="redirectTo(ccontent)"> {{ ccontent.yearlevel }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="edit">
+                    <th mat-header-cell *matHeaderCellDef> Edit </th>
+                    <td mat-cell *matCellDef="let curriculum">
+                      <button mat-raised-button routerLink='/curriculum/content/{{curriculum.refid}}/{{curriculum.id}}/edit'> Edit </button>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: columns;" ></tr>
+
+                  <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="4">No data.</td>
+                  </tr>
+                </table>
+              </div>
+            </mat-expansion-panel>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

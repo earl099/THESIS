@@ -39,6 +39,10 @@ import { EditStudentComponent } from './components/pages/student/edit-student/ed
 //AUTHGUARD
 import { AuthGuard } from './shared/authguard/auth.guard';
 import { CurriculumPageComponent } from './components/pages/admin-menu/curriculum/curriculum-page/curriculum-page.component';
+import { ContentListComponent } from './components/pages/admin-menu/curriculum/content-curriculum/content-list/content-list.component';
+import { ContentAddComponent } from './components/pages/admin-menu/curriculum/content-curriculum/content-add/content-add.component';
+import { ContentPageComponent } from './components/pages/admin-menu/curriculum/content-curriculum/content-page/content-page.component';
+import { ContentEditComponent } from './components/pages/admin-menu/curriculum/content-curriculum/content-edit/content-edit.component';
 
 
 
@@ -76,6 +80,18 @@ const routes: Routes = [
 
   //CURRICULUM PROFILE PAGE
   { path: 'curriculum/profile/:id', component: CurriculumPageComponent, canActivate: [AuthGuard] },
+
+  //CURRICULUM CONTENT LIST PAGE
+  { path: 'curriculum/content/:refid', component: ContentListComponent, canActivate: [AuthGuard] },
+
+  //CURRICULUM CONTENT ADD PAGE
+  { path: 'curriculum/content/:refid/add', component: ContentAddComponent, canActivate: [AuthGuard] },
+
+  //CURRICULUM CONTENT PROFILE PAGE
+  { path: 'curriculum/content/:refid/:id', component: ContentPageComponent, canActivate: [AuthGuard] },
+
+  //CURRICULUM CONTENT EDIT PAGE
+  { path: 'curriculum/content/:refid/:id/edit', component: ContentEditComponent, canActivate: [AuthGuard] },
 
   //GLOBAL VARIABLES PAGE
   { path: 'variables/edit', component: VariableEditComponent, canActivate: [AuthGuard] },

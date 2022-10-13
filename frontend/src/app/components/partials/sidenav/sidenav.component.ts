@@ -54,10 +54,6 @@ export class SidenavComponent implements OnInit {
     }
   }
 
-  login(){
-
-  }
-
   logout() {
     this.dataService.deleteToken();
     window.location.href = window.location.href;
