@@ -40,14 +40,13 @@ export class CurriculumEditComponent implements OnInit {
       if(res) {
         this.toastr.success(res.message);
         this.curriculum = res.curriculum;
-        console.log(this.curriculum)
+        //console.log(this.curriculum)
         this.angForm = this.fb.group({
           course: new FormControl({ value: this.curriculum.course, disabled: false }, Validators.required),
           coursemajor: new FormControl({ value: this.curriculum.coursemajor, disabled: false }, Validators.required),
           schoolyear: new FormControl({ value: this.curriculum.schoolyear, disabled: false }),
           activecurriculum: new FormControl({ value: this.activeCurriculumValue(this.curriculum.activecurriculum), disabled: false })
         })
-
       }
     })
   }

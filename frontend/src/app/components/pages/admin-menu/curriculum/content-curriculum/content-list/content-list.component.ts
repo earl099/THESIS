@@ -11,6 +11,8 @@ import { CurriculumService } from 'src/app/services/curriculum.service';
   styleUrls: ['./content-list.component.scss']
 })
 export class ContentListComponent implements OnInit {
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   //YEAR LEVEL
   yearLevel: string[] = [
     'First Year',
@@ -20,6 +22,17 @@ export class ContentListComponent implements OnInit {
   ]
 
   linkRefID: any;
+
+  //DATASOURCE
+  cContent: any = [];
+  cContent1: any;
+  cContent2: any;
+  cContent3: any;
+  cContent4: any;
+  cContent5: any;
+  cContent6: any;
+  cContenT7: any;
+  cContent8: any;
 
   //DATA
   FiYearFiSem!: MatTableDataSource<any>;
@@ -31,8 +44,6 @@ export class ContentListComponent implements OnInit {
   ThYearSuSem!: MatTableDataSource<any>;
   FoYearFiSem!: MatTableDataSource<any>;
   FoYearSeSem!: MatTableDataSource<any>;
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   columns: string[] = [
     'subjectcode',
@@ -66,11 +77,10 @@ export class ContentListComponent implements OnInit {
     //FIRST YEAR FIRST SEM
     this.curriculumService.getCContentList(this.linkRefID, 1, semester[0]).subscribe((res) => {
       if(res){
-        let cContent: any;
         this.toastr.success(res.message);
-        cContent = res.cContent;
-        console.log(cContent);
-        this.FiYearFiSem = new MatTableDataSource(cContent)
+        this.cContent = res.cContent;
+        console.log(this.cContent);
+        this.FiYearFiSem = new MatTableDataSource(this.cContent)
         this.FiYearFiSem.paginator = this.paginator;
       }
 
