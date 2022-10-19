@@ -54,7 +54,7 @@ export class ScheduleService {
   //--- SCHEDULE MODIFICATION FUNCTION ---//
   editSchedule(schedcode: any, scheduleData: any): Observable<any> {
     return this.httpClient.put(
-      `${this.baseUrl}/schedule/edit/:schedcode`,
+      `${this.baseUrl}/schedule/edit/${schedcode}`,
       scheduleData,
       this.httpOptions
     )

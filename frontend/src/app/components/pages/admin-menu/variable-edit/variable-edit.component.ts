@@ -124,17 +124,16 @@ export class VariableEditComponent implements OnInit {
       if(res) {
         this.toastr.success(res.message);
         this.legend = res.legend;
-        this.angForm = this.fb.group({
-          semester: new FormControl({ value: this.legend[0].semester, disabled: false }, Validators.required),
-          schoolyear: new FormControl({ value: this.legend[0].schoolyear, disabled: false }, Validators.required),
-          ksemester: new FormControl({ value: this.legend[0].ksemester, disabled: false }),
-          kschoolyear: new FormControl({ value: this.legend[0].kschoolyear, disabled: false }),
-          mycampus: new FormControl({ value: this.legend[0].mycampus, disabled: false }),
-          hrmohead: new FormControl({ value: this.legend[0].hrmohead, disabled: false }),
-          hrmodesignation: new FormControl({ value: this.legend[0].hrmodesignation, disabled: false }),
-          registrar: new FormControl({ value: this.legend[0].registrar, disabled: false }),
-          registrar_designation: new FormControl({ value: this.legend[0].registrar_designation, disabled: false }),
-        });
+
+        this.angForm.get('semester').setValue(this.legend[0].semester)
+        this.angForm.get('schoolyear').setValue(this.legend[0].schoolyear)
+        this.angForm.get('ksemester').setValue(this.legend[0].ksemester)
+        this.angForm.get('kschoolyear').setValue(this.legend[0].kschoolyear)
+        this.angForm.get('mycampus').setValue(this.legend[0].mycampus)
+        this.angForm.get('hrmohead').setValue(this.legend[0].hrmohead)
+        this.angForm.get('hrmodesignation').setValue(this.legend[0].hrmodesignation)
+        this.angForm.get('registrar').setValue(this.legend[0].registrar)
+        this.angForm.get('registrar_designation').setValue(this.legend[0].registrar_designation)
 
         //console.log(this.legend)
       }

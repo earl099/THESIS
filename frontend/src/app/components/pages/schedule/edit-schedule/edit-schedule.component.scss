@@ -1,3 +1,15 @@
 @import '../../index/home/home.component.scss';
 
 //FORMAT GOES HERE
+mat-form-field.schedcode,
+mat-form-field.subjectCode,
+mat-form-field.slots,
+mat-form-field.semester,
+mat-form-field.schoolyear,
+mat-form-field.units,
+mat-form-field.gradeddate
+{
+  width: 110px;
+}
+
+

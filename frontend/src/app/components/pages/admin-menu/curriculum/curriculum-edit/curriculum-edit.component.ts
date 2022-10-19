@@ -41,19 +41,17 @@ export class CurriculumEditComponent implements OnInit {
         this.toastr.success(res.message);
         this.curriculum = res.curriculum;
         //console.log(this.curriculum)
-        this.angForm = this.fb.group({
-          course: new FormControl({ value: this.curriculum.course, disabled: false }, Validators.required),
-          coursemajor: new FormControl({ value: this.curriculum.coursemajor, disabled: false }, Validators.required),
-          schoolyear: new FormControl({ value: this.curriculum.schoolyear, disabled: false }),
-          activecurriculum: new FormControl({ value: this.activeCurriculumValue(this.curriculum.activecurriculum), disabled: false })
-        })
+        this.angForm.get('course').setValue(this.curriculum.course)
+        this.angForm.get('coursemajor').setValue(this.curriculum.coursemajor)
+        this.angForm.get('schoolyear').setValue(this.curriculum.schoolyear)
+        this.angForm.get('activecurriculum').setValue(this.curriculum.activecurriculum.toString())
       }
     })
   }
 
   onEditCurriculum(id: string, angForm: any) {
     if(confirm('Are you sure you want to change this curriculum?')) {
-      angForm.get('activecurriculum').setValue(this.setActiveCurriculumValue(angForm.get('activecurriculum').value));
+      angForm.get('activecurriculum').setValue(Number(angForm.activecurriculum));
 
       this.curriculumService.editCurriculum(Number(id), angForm.value).subscribe((res) => {
         if(res){
@@ -69,24 +67,6 @@ export class CurriculumEditComponent implements OnInit {
     }
     else {
       window.location.reload()
-    }
-  }
-
-  activeCurriculumValue(activeCurriculum: number): string {
-    if(activeCurriculum == 1) {
-      return 'Yes';
-    }
-    else {
-      return 'No';
-    }
-  }
-
-  setActiveCurriculumValue(status: string): number {
-    if(status == 'Yes') {
-      return 1;
-    }
-    else {
-      return 0;
     }
   }
 }

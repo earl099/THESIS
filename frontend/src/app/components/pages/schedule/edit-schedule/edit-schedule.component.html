@@ -2,8 +2,112 @@
   <div class="page__box p-3 mt-2">Edit Schedule</div>
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
-      <div class="container"><p>Edit Schedule Content Here</p></div>
+      <div class="container">
+        <form [formGroup]="angForm">
+          <div class="container">
+            <div class="row align-items-start">
+              <div class="col">
+                <mat-form-field appearance="fill" class="schedcode">
+                  <mat-label>Schedule Code</mat-label>
+                  <input matInput type="text" formControlName="schedcode" readonly>
+                </mat-form-field>
+              </div>
 
+              <div class="col">
+                <mat-form-field appearance="fill" class="subjectCode">
+                  <mat-label>Subject Code</mat-label>
+                  <input matInput type="text" formControlName="subjectCode" readonly>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <br>
+
+          <div class="container">
+            <div class="row align-items-start">
+              <div class="col">
+                <mat-form-field appearance="fill" class="slots">
+                  <mat-label>Slots</mat-label>
+                  <input matInput type="text" formControlName="slots" readonly>
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field appearance="fill" class="semester">
+                  <mat-label>Semester</mat-label>
+                  <input matInput type="text" formControlName="semester" readonly>
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field appearance="fill" class="schoolyear">
+                  <mat-label>School Year</mat-label>
+                  <input matInput type="text" formControlName="schoolyear" readonly>
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field appearance="fill" class="units">
+                  <mat-label>Units</mat-label>
+                  <input matInput type="text" formControlName="units" readonly>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <br>
+
+          <div class="container">
+            <div class="row align-items-start">
+              <div class="col">
+                <mat-form-field appearance="fill" class="instructor">
+                  <mat-label>Instructor</mat-label>
+                  <input matInput type="text" formControlName="instructor" readonly>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <br>
+
+          <div class="container">
+            <div class="row align-items-start">
+              <div class="col">
+                <p>Subject Graded: </p>
+                <mat-radio-group formControlName="graded">
+                  <mat-radio-button value="Y">Yes</mat-radio-button>&nbsp;
+                  <mat-radio-button value="N">No</mat-radio-button>
+                </mat-radio-group>
+              </div>
+
+              <div class="col">
+                <mat-form-field appearance="fill" class="gradeddate">
+                  <mat-label>Date Graded</mat-label>
+                  <input matInput type="text" formControlName="gradeddate" readonly>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <br>
+
+          <div class="container">
+            <div class="row align-items-start">
+              <div class="col">
+                <mat-form-field appearance="fill" class="oras">
+                  <mat-label>Hours</mat-label>
+                  <input matInput type="text" formControlName="oras" readonly>
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field appearance="fill" class="subjectCode">
+                  <mat-label>Subject Code</mat-label>
+                  <input matInput type="text" formControlName="subjectCode" readonly>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <br>
+        </form>
+      </div>
     </div>
   </div>
 </div>

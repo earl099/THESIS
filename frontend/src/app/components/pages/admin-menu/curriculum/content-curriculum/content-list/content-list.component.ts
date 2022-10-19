@@ -24,7 +24,7 @@ export class ContentListComponent implements OnInit {
   linkRefID: any;
 
   //DATASOURCE
-  cContent: any = [];
+  cContent: any;
   cContent1: any;
   cContent2: any;
   cContent3: any;

@@ -27,6 +27,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFileUploadModule } from 'angular-material-fileupload';
 import { MatStepperModule } from '@angular/material/stepper'
+import { MatRadioModule } from '@angular/material/radio';
 
 //BACKEND IMPORTS
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -47,7 +48,7 @@ import { DashboardComponent } from './components/pages/index/dashboard/dashboard
 import { StudentListComponent } from './components/pages/student/student-list/student-list.component';
 import { AddStudentComponent } from './components/pages/student/add-student/add-student.component';
 import { StudentProfileComponent } from './components/pages/student/student-profile/student-profile.component';
-
+import { EditStudentComponent } from './components/pages/student/edit-student/edit-student.component';
 
 //ADMIN MENU COMPONENTS
 import { AddUserComponent } from './components/pages/admin-menu/user/add-user/add-user.component';
@@ -57,6 +58,15 @@ import { EditUserComponent } from './components/pages/admin-menu/user/edit-user/
 import { CurriculumAddComponent } from './components/pages/admin-menu/curriculum/curriculum-add/curriculum-add.component';
 import { CurriculumEditComponent } from './components/pages/admin-menu/curriculum/curriculum-edit/curriculum-edit.component';
 import { CurriculumListComponent } from './components/pages/admin-menu/curriculum/curriculum-list/curriculum-list.component';
+import { CurriculumPageComponent } from './components/pages/admin-menu/curriculum/curriculum-page/curriculum-page.component';
+import { ContentAddComponent } from './components/pages/admin-menu/curriculum/content-curriculum/content-add/content-add.component';
+import { ContentEditComponent } from './components/pages/admin-menu/curriculum/content-curriculum/content-edit/content-edit.component';
+import { ContentListComponent } from './components/pages/admin-menu/curriculum/content-curriculum/content-list/content-list.component';
+import { ContentPageComponent } from './components/pages/admin-menu/curriculum/content-curriculum/content-page/content-page.component';
+
+//GLOBAL VARIABLES COMPONENT
+import { VariableEditComponent } from './components/pages/admin-menu/variable-edit/variable-edit.component';
+import { InstallPageComponent } from './components/pages/admin-menu/install-page/install-page.component';
 
 //ENROLLMENT COMPONENTS
 import { AssessmentComponent } from './components/pages/enrollment/assessment/assessment.component';
@@ -69,6 +79,7 @@ import { ChangingComponent } from './components/pages/enrollment/changing/changi
 import { AddScheduleComponent } from './components/pages/schedule/add-schedule/add-schedule.component';
 import { EditScheduleComponent } from './components/pages/schedule/edit-schedule/edit-schedule.component';
 import { ListScheduleComponent } from './components/pages/schedule/list-schedule/list-schedule.component';
+import { ScheduleProfileComponent } from './components/pages/schedule/schedule-profile/schedule-profile.component';
 
 //LOGIN COMPONENTS
 import { UserLoginComponent } from './components/pages/login/user-login/user-login.component';
@@ -86,15 +97,6 @@ import { AuthInterceptor } from './shared/authguard/auth.interceptor';
 
 //CSV PARSER MODULE
 import { NgxCsvParserModule } from 'ngx-csv-parser';
-import { EditStudentComponent } from './components/pages/student/edit-student/edit-student.component';
-import { ScheduleProfileComponent } from './components/pages/schedule/schedule-profile/schedule-profile.component';
-import { VariableEditComponent } from './components/pages/admin-menu/variable-edit/variable-edit.component';
-import { InstallPageComponent } from './components/pages/admin-menu/install-page/install-page.component';
-import { CurriculumPageComponent } from './components/pages/admin-menu/curriculum/curriculum-page/curriculum-page.component';
-import { ContentAddComponent } from './components/pages/admin-menu/curriculum/content-curriculum/content-add/content-add.component';
-import { ContentEditComponent } from './components/pages/admin-menu/curriculum/content-curriculum/content-edit/content-edit.component';
-import { ContentListComponent } from './components/pages/admin-menu/curriculum/content-curriculum/content-list/content-list.component';
-import { ContentPageComponent } from './components/pages/admin-menu/curriculum/content-curriculum/content-page/content-page.component';
 
 
 
@@ -171,6 +173,7 @@ import { ContentPageComponent } from './components/pages/admin-menu/curriculum/c
     MatNativeDateModule,
     MatFileUploadModule,
     MatStepperModule,
+    MatRadioModule,
 
     //BACKEND IMPORTS
     HttpClientModule,
@@ -178,7 +181,7 @@ import { ContentPageComponent } from './components/pages/admin-menu/curriculum/c
     //ERROR HANDLING
     ToastrModule.forRoot({
       timeOut:2000,
-      positionClass:'toast-top-right',
+      positionClass:'toast-bottom-right',
       preventDuplicates: true
     }),
 
