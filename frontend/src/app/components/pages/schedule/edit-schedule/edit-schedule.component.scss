@@ -1,15 +1,26 @@
 @import '../../index/home/home.component.scss';
 
 //FORMAT GOES HERE
-mat-form-field.schedcode,
-mat-form-field.subjectCode,
-mat-form-field.slots,
-mat-form-field.semester,
-mat-form-field.schoolyear,
-mat-form-field.units,
-mat-form-field.gradeddate
+mat-form-field.timein1,
+mat-form-field.timeout1,
+mat-form-field.day1,
+mat-form-field.room1,
+mat-form-field.timein2,
+mat-form-field.timeout2,
+mat-form-field.day2,
+mat-form-field.room2,
+mat-form-field.timein3,
+mat-form-field.timeout3,
+mat-form-field.day3,
+mat-form-field.room3,
+mat-form-field.timein4,
+mat-form-field.timeout4,
+mat-form-field.day4,
+mat-form-field.room4
 {
   width: 110px;
 }
 
-
+input.uppercase {
+  text-transform: uppercase;
+}

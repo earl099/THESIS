@@ -154,7 +154,8 @@ const getStudents = async (req, res) => {
             'guardian',
             'mobilePhone',
             'email',
-            'course'
+            'course',
+            'highschool'
         ]
     });
 
@@ -188,7 +189,8 @@ const getStudent = async (req, res) => {
             'guardian',
             'mobilePhone',
             'email',
-            'course'
+            'course',
+            'highschool'
         ],
         where: { studentNumber: studentNumber }
     });

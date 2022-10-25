@@ -178,7 +178,7 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
     //BACKEND IMPORTS
     HttpClientModule,
 
-    //ERROR HANDLING
+    //NOTIFICATION
     ToastrModule.forRoot({
       timeOut:2000,
       positionClass:'toast-bottom-right',

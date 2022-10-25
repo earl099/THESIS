@@ -10,7 +10,6 @@ import { ScheduleService } from 'src/app/services/schedule.service';
   styleUrls: ['./edit-schedule.component.scss']
 })
 export class EditScheduleComponent implements OnInit {
-  counter = 0;
   angForm: any;
   schedcode: any;
   schedule: any;
@@ -21,6 +20,16 @@ export class EditScheduleComponent implements OnInit {
     'N',
   ];
 
+  counter = 0;
+  visibleAddBtn = true;
+  visibleDeleteBtn = false;
+  scheduleFields: boolean[] = [
+    false,
+    false,
+    false
+  ]
+
+
   constructor(
     private fb: FormBuilder,
     private scheduleService: ScheduleService,
@@ -29,22 +38,11 @@ export class EditScheduleComponent implements OnInit {
     private toastr: ToastrService
   ) {
     this.schedcode = this.activatedRoute.snapshot.url.toString().split(',').splice(-1).toString();
+    console.log(this.schedcode)
   }
 
   ngOnInit(): void {
     this.angForm = this.fb.group({
-      schedcode: new FormControl({ value: '', disabled: false }),
-      subjectCode: new FormControl({ value: '', disabled: false }),
-      units: new FormControl({ value: '', disabled: false }),
-      semester: new FormControl({ value: '', disabled: false }),
-      schoolyear: new FormControl({ value: '', disabled: false }),
-      slots: new FormControl({ value: '', disabled: false }),
-      subjectype: new FormControl({ value: '', disabled: false }),
-      section: new FormControl({ value: '', disabled: false }),
-      instructor: new FormControl({ value: '', disabled: false }),
-      tuition: new FormControl({ value: '', disabled: false }),
-      graded: new FormControl({ value: '', disabled: false }),
-      gradeddate: new FormControl({ value: '', disabled: false }),
       timein1: new FormControl({ value: '', disabled: false }),
       timeout1: new FormControl({ value: '', disabled: false }),
       day1: new FormControl({ value: '', disabled: false }),
@@ -66,14 +64,6 @@ export class EditScheduleComponent implements OnInit {
       ok3: new FormControl({ value: '', disabled: false }),
       ok4: new FormControl({ value: '', disabled: false }),
       oras: new FormControl({ value: '', disabled: false }),
-      ojt: new FormControl({ value: '', disabled: false }),
-      petition: new FormControl({ value: '', disabled: false }),
-      thesis: new FormControl({ value: '', disabled: false }),
-      labunits: new FormControl({ value: '', disabled: false }),
-      internet: new FormControl({ value: '', disabled: false }),
-      residency: new FormControl({ value: '', disabled: false }),
-      encodegrade: new FormControl({ value: '', disabled: false }),
-      gradingpart: new FormControl({ value: '', disabled: false })
     })
 
     this.getSchedule();
@@ -85,18 +75,6 @@ export class EditScheduleComponent implements OnInit {
         this.toastr.success(res.message);
         this.schedule = res.schedule;
         console.log(this.schedule)
-        this.angForm.get('schedcode').setValue(this.schedule.schedcode)
-        this.angForm.get('subjectCode').setValue(this.schedule.subjectCode)
-        this.angForm.get('units').setValue(this.schedule.units)
-        this.angForm.get('semester').setValue(this.schedule.semester)
-        this.angForm.get('schoolyear').setValue(this.schedule.schoolyear)
-        this.angForm.get('slots').setValue(this.schedule.slots)
-        this.angForm.get('subjectype').setValue(this.schedule.subjectype)
-        this.angForm.get('section').setValue(this.schedule.section)
-        this.angForm.get('instructor').setValue(this.schedule.instructor)
-        this.angForm.get('tuition').setValue(this.schedule.tuition)
-        this.angForm.get('graded').setValue(this.schedule.graded)
-        this.angForm.get('gradeddate').setValue(this.schedule.gradeddate)
         this.angForm.get('timein1').setValue(this.schedule.timein1)
         this.angForm.get('timeout1').setValue(this.schedule.timeout1)
         this.angForm.get('day1').setValue(this.schedule.day1)
@@ -114,35 +92,144 @@ export class EditScheduleComponent implements OnInit {
         this.angForm.get('day4').setValue(this.schedule.day4)
         this.angForm.get('room4').setValue(this.schedule.room4)
 
-        if(this.angForm.get('timein1').value != 'N/A') {
-          this.scheduleCheckers[0] = 'Y'
-          this.angForm.get('ok1').setValue(this.scheduleCheckers[0])
-        }
-        if(this.angForm.get('timein2').value != 'N/A') {
-          this.scheduleCheckers[1] = 'Y'
-          this.angForm.get('ok2').setValue(this.scheduleCheckers[1])
-        }
-        if(this.angForm.get('timein3').value != 'N/A') {
-          this.scheduleCheckers[2] = 'Y'
-          this.angForm.get('ok3').setValue(this.scheduleCheckers[2])
-        }
-        if(this.angForm.get('timein4').value != 'N/A') {
-          this.scheduleCheckers[3] = 'Y'
-          this.angForm.get('ok4').setValue(this.scheduleCheckers[3])
-        }
+        this.checkerFunction()
 
         this.angForm.get('oras').setValue(this.schedule.oras)
-        this.angForm.get('ojt').setValue(this.schedule.ojt)
-        this.angForm.get('petition').setValue(this.schedule.petition)
-        this.angForm.get('thesis').setValue(this.schedule.thesis)
-        this.angForm.get('labunits').setValue(this.schedule.labunits)
-        this.angForm.get('internet').setValue(this.schedule.internet)
-        this.angForm.get('residency').setValue(this.schedule.residency)
-        this.angForm.get('encodegrade').setValue(this.schedule.encodegrade)
-        this.angForm.get('gradingpart').setValue(this.schedule.gradingpart)
       }
     })
   }
 
+  onAddSchedule() {
 
+    switch(this.counter) {
+      case 0:
+      case 1:
+        this.scheduleFields[this.counter] = true
+        this.counter++;
+        break;
+
+      case 2:
+        this.scheduleFields[this.counter] = true
+        this.visibleAddBtn = false;
+        break;
+    }
+    this.visibleDeleteBtn = true;
+
+    // console.log(this.scheduleFields)
+    // console.log(this.counter)
+  }
+
+  onDeleteSchedule() {
+    if(this.counter != 0) {
+      switch(this.counter) {
+        case 0:
+          this.scheduleFields[this.counter] = false
+          break;
+
+        case 1:
+        case 2:
+          if(this.scheduleFields[this.counter]) {
+            this.scheduleFields[this.counter] = false
+            this.counter--;
+          }
+          else {
+            this.counter--;
+            this.scheduleFields[this.counter] = false
+          }
+
+          break;
+      }
+      this.visibleAddBtn = true
+
+      console.log(this.scheduleFields)
+      console.log(this.counter)
+    }
+    else if(this.counter == 0) {
+      if(this.angForm.get('timein2').value != 'N/A') {
+        this.scheduleFields[this.counter] = true
+        this.visibleAddBtn = true;
+        this.visibleDeleteBtn = false;
+      }
+      else {
+        this.scheduleFields[this.counter] = false
+        this.visibleAddBtn = true;
+        this.visibleDeleteBtn = false;
+      }
+
+    }
+    // console.log(this.scheduleFields)
+    // console.log(this.counter)
+  }
+
+  onEditSchedule(schedcode: number, angForm: any) {
+    console.log(angForm.value)
+    if(confirm('Are you sure you want to edit this schedule?')) {
+      angForm.get('day1').setValue(angForm.get('day1').value.toUpperCase());
+      angForm.get('room1').setValue(angForm.get('room1').value.toUpperCase());
+      angForm.get('day2').setValue(angForm.get('day2').value.toUpperCase());
+      angForm.get('room2').setValue(angForm.get('room2').value.toUpperCase());
+      angForm.get('day3').setValue(angForm.get('day3').value.toUpperCase());
+      angForm.get('room3').setValue(angForm.get('room3').value.toUpperCase());
+      angForm.get('room4').setValue(angForm.get('room4').value.toUpperCase());
+
+      this.checkerFunction()
+
+      this.scheduleService.editSchedule(schedcode, angForm.value).subscribe((res) => {
+        if(res) {
+          this.toastr.success(res.message)
+          this.router.navigate([`schedule/${schedcode}`])
+        }
+      })
+    }
+
+
+  }
+
+  checkerFunction() {
+    if(this.angForm.get('timein1').value != 'N/A') {
+      this.scheduleCheckers[0] = 'Y'
+      this.angForm.get('ok1').setValue(this.scheduleCheckers[0])
+    }
+    else {
+      this.angForm.get('ok1').setValue(this.scheduleCheckers[0])
+    }
+
+    if(this.angForm.get('timein2').value != 'N/A') {
+      this.scheduleCheckers[1] = 'Y'
+      this.angForm.get('ok2').setValue(this.scheduleCheckers[1])
+      this.scheduleFields[0] = true
+    }
+    else {
+      this.angForm.get('ok2').setValue(this.scheduleCheckers[1])
+    }
+
+    if(this.angForm.get('timein3').value != 'N/A') {
+      this.scheduleCheckers[2] = 'Y'
+      this.angForm.get('ok3').setValue(this.scheduleCheckers[2])
+      this.scheduleFields[1] = true
+    }
+    else {
+      this.angForm.get('ok3').setValue(this.scheduleCheckers[2])
+    }
+
+    if(this.angForm.get('timein4').value != 'N/A') {
+      this.scheduleCheckers[3] = 'Y'
+      this.angForm.get('ok4').setValue(this.scheduleCheckers[3])
+      this.scheduleFields[2] = true
+    }
+    else {
+      this.angForm.get('ok4').setValue(this.scheduleCheckers[3])
+    }
+  }
+
+  numberFilter(event: any) {
+    var charCode = (event.which) ? event.which : event.keyCode;
+    // Only Numbers 0-9
+    if ((charCode < 48 || charCode > 57)) {
+      event.preventDefault();
+      return false;
+    } else {
+      return true;
+    }
+  }
 }

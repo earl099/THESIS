@@ -109,17 +109,6 @@ const editSchedule = async (req, res) => {
     const schedCode = req.params.schedcode;
 
     const {
-        subjectCode,
-        units,
-        semester,
-        schoolyear,
-        slots,
-        subjectype,
-        section,
-        instructor,
-        tuition,
-        graded,
-        gradeddate,
         timein1,
         timeout1,
         day1,
@@ -136,28 +125,9 @@ const editSchedule = async (req, res) => {
         timeout4,
         day4,
         room4,
-        ojt,
-        petition,
-        thesis,
-        labunits,
-        internet,
-        residency,
-        encodegrade,
-        gradingpart
     } = req.body
 
     const schedule = {
-        subjectCode,
-        units,
-        semester,
-        schoolyear,
-        slots,
-        subjectype,
-        section,
-        instructor,
-        tuition,
-        graded,
-        gradeddate,
         timein1,
         timeout1,
         day1,
@@ -174,14 +144,6 @@ const editSchedule = async (req, res) => {
         timeout4,
         day4,
         room4,
-        ojt,
-        petition,
-        thesis,
-        labunits,
-        internet,
-        residency,
-        encodegrade,
-        gradingpart
     }
 
     const updatedSchedule = await scheduleModel.update(schedule, { where: { schedCode: schedCode }});
@@ -279,6 +241,7 @@ const getSchedule = async (req, res) => {
             'timeout4',
             'day4',
             'room4',
+            'oras',
             'ojt',
             'petition',
             'thesis',

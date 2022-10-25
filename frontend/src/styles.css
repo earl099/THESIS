@@ -39,3 +39,7 @@ td , th {
 th.mat-header-cell{
   text-align: center !important;
 }
+
+div {
+  overflow: visible;
+}
