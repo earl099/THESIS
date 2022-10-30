@@ -39,24 +39,25 @@ db.schedule = require('../models/scheduleModel')(sequelize, DataTypes);
 db.legend = require('../models/legendModel')(sequelize, DataTypes);
 db.curriculum = require('../models/curriculumModel')(sequelize, DataTypes);
 db.currContent = require('../models/currContentModel')(sequelize, DataTypes);
+db.shiftee = require('../models/shifteeModel')(sequelize, DataTypes)
 
 try{
     //--- SYNC DB ---//
-    db.student.sync({ alter: true }).catch(err  => {
-        console.log(err);
-    });
-    db.user.sync({ alter: true }).catch(err => {
-        console.log(err);
-    });
-    db.schedule.sync({ alter: true }).catch(err => {
-        console.log(err);
-    })
-    db.legend.sync({ alter: true }).catch(err => {
-        console.log(err);
-    })
-    db.curriculum.sync({ alter: true }).catch(err => {
-        console.log(err);
-    })
+    // db.student.sync({ alter: true }).catch(err  => {
+    //     console.log(err);
+    // });
+    // db.user.sync({ alter: true }).catch(err => {
+    //     console.log(err);
+    // });
+    // db.schedule.sync({ alter: true }).catch(err => {
+    //     console.log(err);
+    // })
+    // db.legend.sync({ alter: true }).catch(err => {
+    //     console.log(err);
+    // })
+    // db.curriculum.sync({ alter: true }).catch(err => {
+    //     console.log(err);
+    // })
     
     
     db.sequelize.sync({ alter: true })

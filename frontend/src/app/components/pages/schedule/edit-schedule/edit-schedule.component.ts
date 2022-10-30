@@ -162,7 +162,7 @@ export class EditScheduleComponent implements OnInit {
   }
 
   onEditSchedule(schedcode: number, angForm: any) {
-    console.log(angForm.value)
+    // console.log(angForm.value)
     if(confirm('Are you sure you want to edit this schedule?')) {
       angForm.get('day1').setValue(angForm.get('day1').value.toUpperCase());
       angForm.get('room1').setValue(angForm.get('room1').value.toUpperCase());
@@ -180,6 +180,9 @@ export class EditScheduleComponent implements OnInit {
           this.router.navigate([`schedule/${schedcode}`])
         }
       })
+    }
+    else {
+      window.location.reload()
     }
 
 

@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { CurriculumService } from 'src/app/services/curriculum.service';
 
 @Component({
   selector: 'app-student-list',
@@ -19,27 +20,36 @@ export class StudentListComponent implements OnInit {
     'middleName',
     'lastName',
     'suffix',
-    'course',
-    'edit'
+    'edit',
+    'shiftTo',
+    'confirmShift'
   ];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  //--- DATA FOR DISPLAYING IN THE LIST ---//
+  curricula: any = [];
   students: any = [];
+
+  //--- FORMS FOR INSERTING TO THE DATABASE ---//
+  shifteeForm: any;
+  studentInfoForm: any;
   dataSource!: MatTableDataSource<any>;
 
   constructor(
     private studentService: StudentService,
+    private curriculumService: CurriculumService,
     private router: Router,
     private toastr: ToastrService,
     private _liveAnnouncer: LiveAnnouncer
   ) {
-    
+
   }
 
   ngOnInit(): void {
     this.getStudents();
+    this.getCurricula();
   }
 
   redirectTo(student: any): void {
@@ -57,6 +67,19 @@ export class StudentListComponent implements OnInit {
         //console.log(this.students)
       }
     })
+  }
+
+  getCurricula() {
+    this.curriculumService.getCurricula().subscribe((res) => {
+      if(res) {
+        this.curricula = res.curricula;
+        //console.log(this.curricula)
+      }
+    })
+  }
+
+  onConfirmShift() {
+
   }
 
   applyFilter(event: Event) {

@@ -64,20 +64,12 @@ export class AddStudentComponent implements OnInit {
             }
           });
         }
-        alert("Students imported successfully.");
+        this.toastr.success('Students Added Successfully.')
         this.router.navigate(['/student/list'])
       }
     }
-  }
-
-  numberFilter(event: any) {
-    var charCode = (event.which) ? event.which : event.keyCode;
-    // Only Numbers 0-9
-    if ((charCode < 48 || charCode > 57)) {
-      event.preventDefault();
-      return false;
-    } else {
-      return true;
+    else {
+      window.location.reload()
     }
   }
 }

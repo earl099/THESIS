@@ -27,24 +27,24 @@ export class EditStudentComponent implements OnInit {
 
   ngOnInit(): void {
     this.angForm = this.fb.group({
-      studentNumber: new FormControl({ value: this.student.studentNumber, disabled: false }),
-      firstName: new FormControl({ value: this.student.firstName, disabled: false }, Validators.required),
-      middleName: new FormControl({ value: this.student.middleName, disabled: false }),
-      lastName: new FormControl({ value: this.student.lastName, disabled: false }, Validators.required),
-      suffix: new FormControl({ value: this.student.suffix, disabled: false }),
-      street: new FormControl({ value: this.student.suffix, disabled: false }, Validators.required),
-      barangay: new FormControl({ value: this.student.barangay, disabled: false }, Validators.required),
-      municipality: new FormControl({ value: this.student.municipality, disabled: false }, Validators.required),
-      province: new FormControl({ value: this.student.province, disabled: false }, Validators.required),
-      dateOfBirth: new FormControl({ value: this.student.dateOfBirth, disabled: false }, Validators.required),
-      gender: new FormControl({ value: this.student.gender, disabled: false }, Validators.required),
-      religion: new FormControl({ value: this.student.religion, disabled: false }, Validators.required),
-      citizenship: new FormControl({ value: this.student.citizenship, disabled: false }, Validators.required),
-      status: new FormControl({ value: this.student.status, disabled: false }, Validators.required),
-      guardian: new FormControl({ value: this.student.guardian, disabled: false }, Validators.required),
-      mobilePhone: new FormControl({ value: this.student.mobilePhone, disabled: false }, Validators.required),
-      email: new FormControl({ value: this.student.email, disabled: false }, Validators.required),
-      highschool: new FormControl({ value: this.student.course, disabled: false }, Validators.required)
+      studentNumber: new FormControl({ value: '', disabled: false }),
+      firstName: new FormControl({ value: '', disabled: false }, Validators.required),
+      middleName: new FormControl({ value: '', disabled: false }),
+      lastName: new FormControl({ value: '', disabled: false }, Validators.required),
+      suffix: new FormControl({ value: '', disabled: false }),
+      street: new FormControl({ value: '', disabled: false }, Validators.required),
+      barangay: new FormControl({ value: '', disabled: false }, Validators.required),
+      municipality: new FormControl({ value: '', disabled: false }, Validators.required),
+      province: new FormControl({ value: '', disabled: false }, Validators.required),
+      dateOfBirth: new FormControl({ value: '', disabled: false }, Validators.required),
+      gender: new FormControl({ value: '', disabled: false }, Validators.required),
+      religion: new FormControl({ value: '', disabled: false }, Validators.required),
+      citizenship: new FormControl({ value: '', disabled: false }, Validators.required),
+      status: new FormControl({ value: '', disabled: false }, Validators.required),
+      guardian: new FormControl({ value: '', disabled: false }, Validators.required),
+      mobilePhone: new FormControl({ value: '', disabled: false }, Validators.required),
+      email: new FormControl({ value: '', disabled: false }, Validators.required),
+      highschool: new FormControl({ value: '', disabled: false }, Validators.required)
     });
 
     this.getStudent();

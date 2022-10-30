@@ -35,7 +35,10 @@ app.use('/api', curriculumRouter);
 
 //--- CURRICULUM CONTENT FUNCTIONS ---//
 const currContentRouter = require('./routes/currContentRoutes');
-app.use('/api', currContentRouter)
+app.use('/api', currContentRouter);
+
+const shifteeRouter = require('./routes/shifteeRoutes');
+app.use('/api', shifteeRouter);
 
 //---DB CONNECTION---//
 // const db = mysql.createConnection({

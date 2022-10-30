@@ -2,8 +2,13 @@
   <div class="page__box p-3 mt-2">Add Schedule</div>
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
-      <div class="container">
-        
+      <div class="container fs-6">
+        <label for="singleFile">Upload Schedule List</label>
+        <br><br>
+        <input mat-input #fileImportInput id="singleFile" type="file" (change)="fileChangeListener($event)" accept=".csv">
+        <br><br>
+        <button mat-button (click)="importSchedules()">Import Schedules</button>
+        <button mat-button routerLink="/schedule/list">Back to list</button>
       </div>
     </div>
   </div>

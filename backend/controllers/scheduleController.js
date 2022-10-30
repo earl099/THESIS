@@ -84,23 +84,23 @@ const addSchedule = async (req, res) => {
     }
 
     try {
-        if(schedule.day1 != null || ""){
+        if(schedule.timein1 != null || ""){
             scheduleModel.ok1 = 'Y';
         }
-        if(schedule.day2 != null || ""){
+        if(schedule.timein2 != null || ""){
             scheduleModel.ok2 = 'Y';
         }
-        if(schedule.day3 != null || ""){
+        if(schedule.timein3 != null || ""){
             scheduleModel.ok3 = 'Y';
         }
-        if(schedule.day4 != null || ""){
+        if(schedule.timein4 != null || ""){
             scheduleModel.ok4 = 'Y';
         }
         const createdSchedule = await scheduleModel.create(schedule);
         res.status(201).send({createdSchedule: createdSchedule, message: 'Schedule Added.'});
     } 
     catch {
-        res.status(500).send({message: 'Schedule already exists.'});
+        res.status(500).send({ message: 'Schedule already exists.' });
     }
 }
 
