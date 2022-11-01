@@ -19,6 +19,13 @@ export class StudentService {
     private toastr: ToastrService
   ) { }
 
+  //--- SHIFTEE ADDING FUNCTION ---//
+  addShiftee(shifteeData: any): Observable<any> {
+    return this.httpClient
+    .post(`${this.baseUrl}/shiftee/add`, shifteeData, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Add Shiftee')))
+  }
+  
   //--- ADD STUDENT FUNCTION ---//
   addStudent(studentData: any): Observable<any> {
     return this.httpClient
@@ -65,6 +72,15 @@ export class StudentService {
       catchError(this.handleError<any>('Edit Student'))
     );
   }
+
+  //--- COURSE MODIFICATION FUNCTION ---//
+  editCourse(studentNumber: number, studentData: any): Observable<any> {
+    return this.httpClient
+    .put(`${this.baseUrl}/student/edit/course/${studentNumber}`, studentData, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Edit Course')))
+  }
+
+
 
   //--- ERROR HANDLING ---//
   private handleError<T>(operation = 'operation', result?: T) {

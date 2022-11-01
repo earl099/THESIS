@@ -4,9 +4,10 @@ module.exports = (sequelize, DataTypes) => {
     let shift = sequelize.define('enrollshifttbl', {
         id: {
             primaryKey: true,
+            type: DataTypes.INTEGER(6),
             autoIncrement: true,
             allowNull: false,
-            type: DataTypes.INTEGER(6)
+            
         },
         studentnumber: {
             type: DataTypes.STRING(9)
@@ -22,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         schoolyear: {
             type: DataTypes.STRING(10)
-        },
+        }
     },
     {
         freezeTableName: true,
@@ -36,4 +37,6 @@ module.exports = (sequelize, DataTypes) => {
             }
         ]
     })
+
+    return shift;
 }

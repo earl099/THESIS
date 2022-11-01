@@ -125,6 +125,29 @@ const editStudent = async (req, res) => {
     }
 }
 
+const editCourse = async (req, res) => {
+    const studentnumber = req.params.studentNumber;
+
+    const {
+        studentNumber,
+        course
+    } = req.body
+
+    const newCourse = {
+        studentNumber,
+        course
+    }
+
+    const updatedCourse = await studentModel.update(newCourse, { where: { studentNumber: studentnumber }})
+
+    if(updatedCourse[0] > 0) {
+        res.status(200).send({ message: 'Course updated successfully.', newCourse: newCourse })
+    }
+    else {
+        
+    }
+}
+
 //--- GET ALL STUDENTS ---//
 const getStudents = async (req, res) => {
     //if(!req.query.size || !req.query.page) { return res.status(500).send({ message: 'Page number and page size required.' }); }
@@ -208,5 +231,6 @@ module.exports = {
     addStudent,
     editStudent,
     getStudents,
-    getStudent
+    getStudent,
+    editCourse
 }

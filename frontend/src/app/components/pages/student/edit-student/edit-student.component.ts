@@ -53,8 +53,7 @@ export class EditStudentComponent implements OnInit {
   getStudent() {
     this.studentService.getStudent(this.linkStudentNumber).subscribe((res) => {
       if(res) {
-        this.toastr.success(res.message);
-        console.log(res.student)
+        //console.log(res.student)
         this.student = res.student;
 
         this.angForm.get('studentNumber').setValue(this.student.studentNumber)
@@ -101,7 +100,6 @@ export class EditStudentComponent implements OnInit {
         if(res) {
           this.toastr.success(res.message);
           //console.log(res.student);
-          alert('Student updated successfully.');
           this.router.navigate([`/student/profile/${studentNumber}`]);
         }
         else{

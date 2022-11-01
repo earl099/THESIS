@@ -13,7 +13,7 @@
         <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
           <ng-container matColumnDef="studentNumber">
             <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by studentNumber"> Student Number </th>
-            <td mat-cell *matCellDef="let student" (click)="redirectTo(student)"> {{student.studentNumber}} </td>
+            <td mat-cell *matCellDef="let student" (click)="redirectTo(student)" > {{student.studentNumber}} </td>
           </ng-container>
 
           <ng-container matColumnDef="firstName">
@@ -46,19 +46,26 @@
           <ng-container matColumnDef="shiftTo">
             <th mat-header-cell *matHeaderCellDef> Shift to Course </th>
             <td mat-cell *matCellDef="let student">
-              <form></form>
-              <mat-form-field>
-                <mat-select #course>
-                  <mat-option></mat-option>
-                </mat-select>
-              </mat-form-field>
+              <form [formGroup]="studentInfoForm">
+                <mat-form-field>
+                  <mat-select #course>
+                    <mat-option
+                    *ngFor="let item of curricula" [value]="item.course"
+                    (onSelectionChange)="initChangeCourse(student.studentNumber, student.course, item.course)"
+                    >
+                      {{ item.course }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </form>
+
             </td>
           </ng-container>
 
           <ng-container matColumnDef="confirmShift">
             <th mat-header-cell *matHeaderCellDef> Confirm </th>
             <td mat-cell *matCellDef="let student">
-              <button mat-raised-button (click)="onConfirmShift()"> Shift </button>
+              <button mat-raised-button (click)="onConfirmShift(student.studentNumber)"> Shift </button>
             </td>
           </ng-container>
 

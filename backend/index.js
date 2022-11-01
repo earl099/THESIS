@@ -37,6 +37,7 @@ app.use('/api', curriculumRouter);
 const currContentRouter = require('./routes/currContentRoutes');
 app.use('/api', currContentRouter);
 
+//--- SHIFTEE FUNCTIONS ---//
 const shifteeRouter = require('./routes/shifteeRoutes');
 app.use('/api', shifteeRouter);
 

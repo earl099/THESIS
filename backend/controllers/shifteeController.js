@@ -21,11 +21,11 @@ const addShiftee = async (req, res) => {
     }
 
     try {
-        const createdShiftee = await shifteeModel.create(shiftee)
-        res.status(201).send({ createdShift: createdShiftee, message: 'Shiftee Added.' })
+        const createdShiftee = await shifteeModel.create(shiftee);
+        res.status(201).send({ createdShift: createdShiftee, message: 'Shiftee Added.' });
     }
     catch {
-        rea.status(500).send({ message: 'Shiftee already exists.' })
+        res.status(500).send({ message: 'Shiftee already exists.' })
     }
 }
 

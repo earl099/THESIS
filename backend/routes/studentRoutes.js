@@ -15,4 +15,7 @@ router.get('/student/list', studentController.getStudents);
 //--- STUDENT PROFILE ROUTER ---//
 router.get('/student/profile/:studentNumber', studentController.getStudent)
 
+//--- COURSE MODIFICATION ROUTER ---//
+router.put('/student/edit/course/:studentNumber', studentController.editCourse)
+
 module.exports = router;
