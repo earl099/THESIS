@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SearchUserComponent } from './search-user.component';
+import { CogReprintComponent } from './cog-reprint.component';
 
-describe('SearchUserComponent', () => {
-  let component: SearchUserComponent;
-  let fixture: ComponentFixture<SearchUserComponent>;
+describe('CogReprintComponent', () => {
+  let component: CogReprintComponent;
+  let fixture: ComponentFixture<CogReprintComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SearchUserComponent ]
+      declarations: [ CogReprintComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SearchUserComponent);
+    fixture = TestBed.createComponent(CogReprintComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

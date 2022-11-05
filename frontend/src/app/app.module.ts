@@ -34,8 +34,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 //STATIC COMPONENTS
 import { HeaderComponent } from './components/partials/header/header.component';
-import { SearchStudentComponent } from './components/partials/search-student/search-student.component';
-import { SearchUserComponent } from './components/partials/search-user/search-user.component';
 import { NotFoundComponent } from './components/partials/not-found/not-found.component';
 import { SidenavComponent } from './components/partials/sidenav/sidenav.component';
 
@@ -69,11 +67,12 @@ import { VariableEditComponent } from './components/pages/admin-menu/variable-ed
 import { InstallPageComponent } from './components/pages/admin-menu/install-page/install-page.component';
 
 //ENROLLMENT COMPONENTS
-import { AssessmentComponent } from './components/pages/enrollment/assessment/assessment.component';
 import { ValidationComponent } from './components/pages/enrollment/validation/validation.component';
 import { AddingComponent } from './components/pages/enrollment/adding/adding.component';
 import { DroppingComponent } from './components/pages/enrollment/dropping/dropping.component';
 import { ChangingComponent } from './components/pages/enrollment/changing/changing.component';
+import { RegformReprintComponent } from './components/pages/enrollment/regform-reprint/regform-reprint.component';
+import { CogReprintComponent } from './components/pages/enrollment/cog-reprint/cog-reprint.component';
 
 //SCHEDULE COMPONENTS
 import { AddScheduleComponent } from './components/pages/schedule/add-schedule/add-schedule.component';
@@ -100,14 +99,13 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
 
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     StudentListComponent,
     UserListComponent,
-    SearchStudentComponent,
-    SearchUserComponent,
     NotFoundComponent,
     StudentProfileComponent,
     UserPageComponent,
@@ -116,7 +114,6 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
     DashboardComponent,
     AddStudentComponent,
     EditUserComponent,
-    AssessmentComponent,
     ValidationComponent,
     AddingComponent,
     DroppingComponent,
@@ -144,7 +141,9 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
     ContentAddComponent,
     ContentEditComponent,
     ContentListComponent,
-    ContentPageComponent
+    ContentPageComponent,
+    RegformReprintComponent,
+    CogReprintComponent
   ],
   imports: [
     BrowserModule,

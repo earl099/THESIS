@@ -61,7 +61,7 @@ const addStudent = async (req, res) => {
 
     try {
         const createdStudent = await studentModel.create(student);
-        res.status(201).send({createdStudent: createdStudent, message: 'Student Added.'});
+        res.status(201).send({ createdStudent: createdStudent, message: 'Student Added.' });
     }
     catch {
         res.status(500).send({ message: 'Student already exists.' });

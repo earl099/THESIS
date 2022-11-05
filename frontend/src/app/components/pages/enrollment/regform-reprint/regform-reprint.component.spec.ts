@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SearchStudentComponent } from './search-student.component';
+import { RegformReprintComponent } from './regform-reprint.component';
 
-describe('SearchStudentComponent', () => {
-  let component: SearchStudentComponent;
-  let fixture: ComponentFixture<SearchStudentComponent>;
+describe('RegformReprintComponent', () => {
+  let component: RegformReprintComponent;
+  let fixture: ComponentFixture<RegformReprintComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SearchStudentComponent ]
+      declarations: [ RegformReprintComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SearchStudentComponent);
+    fixture = TestBed.createComponent(RegformReprintComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

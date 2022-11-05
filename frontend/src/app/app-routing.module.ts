@@ -27,7 +27,7 @@ import { LoaAddComponent } from './components/pages/reports/loa/loa-add/loa-add.
 import { LoaListComponent } from './components/pages/reports/loa/loa-list/loa-list.component';
 import { ShifteeAddComponent } from './components/pages/reports/shiftee/shiftee-add/shiftee-add.component';
 import { ShifteeListComponent } from './components/pages/reports/shiftee/shiftee-list/shiftee-list.component';
-import { AssessmentComponent } from './components/pages/enrollment/assessment/assessment.component';
+import { RegformReprintComponent } from './components/pages/enrollment/regform-reprint/regform-reprint.component';
 import { ValidationComponent } from './components/pages/enrollment/validation/validation.component';
 import { AddingComponent } from './components/pages/enrollment/adding/adding.component';
 import { ChangingComponent } from './components/pages/enrollment/changing/changing.component';
@@ -43,6 +43,7 @@ import { ContentListComponent } from './components/pages/admin-menu/curriculum/c
 import { ContentAddComponent } from './components/pages/admin-menu/curriculum/content-curriculum/content-add/content-add.component';
 import { ContentPageComponent } from './components/pages/admin-menu/curriculum/content-curriculum/content-page/content-page.component';
 import { ContentEditComponent } from './components/pages/admin-menu/curriculum/content-curriculum/content-edit/content-edit.component';
+import { CogReprintComponent } from './components/pages/enrollment/cog-reprint/cog-reprint.component';
 
 
 
@@ -127,9 +128,6 @@ const routes: Routes = [
   { path: 'schedule/:schedcode', component: ScheduleProfileComponent, canActivate: [AuthGuard] },
 
   /*--- ENROLLMENT SUBMENU ---*/
-  //ASSESSMENT PAGE
-  { path: 'enrollment/assessment', component: AssessmentComponent, canActivate: [AuthGuard] },
-
   //VALIDATION PAGE
   { path: 'enrollment/validation', component: ValidationComponent, canActivate: [AuthGuard] },
 
@@ -141,6 +139,12 @@ const routes: Routes = [
 
   //CHANGING PAGE
   { path: 'enrollment/changing', component: ChangingComponent, canActivate: [AuthGuard] },
+
+  //REGFORM REPRINT PAGE
+  { path: 'enrollment/reprint-regform', component: RegformReprintComponent, canActivate: [AuthGuard] },
+
+  //REGFORM REPRINT PAGE
+  { path: 'enrollment/reprint-cog', component: CogReprintComponent, canActivate: [AuthGuard] },
 
   /*--- REPORTS SUBMENU ---*/
   //GENERATE REPORTS PAGE

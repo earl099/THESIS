@@ -41,6 +41,12 @@ app.use('/api', currContentRouter);
 const shifteeRouter = require('./routes/shifteeRoutes');
 app.use('/api', shifteeRouter);
 
+const studEnrollRouter = require('./routes/studEnrollRoutes');
+app.use('/api', studEnrollRouter);
+
+const divOfFeesRouter = require('./routes/divOfFeesRoutes');
+app.use('/api', divOfFeesRouter);
+
 //---DB CONNECTION---//
 // const db = mysql.createConnection({
 //     host: 'localhost',
