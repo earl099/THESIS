@@ -42,6 +42,7 @@ db.currContent = require('../models/currContentModel')(sequelize, DataTypes);
 db.shiftee = require('../models/shifteeModel')(sequelize, DataTypes);
 db.studEnroll = require('../models/studEnrollModel')(sequelize, DataTypes);
 db.divOfFees = require('../models/divOfFeesModel')(sequelize, DataTypes);
+db.subjEnroll = require('../models/subjEnrollModel')(sequelize, DataTypes);
 
 try{
     //--- SYNC DB ---//

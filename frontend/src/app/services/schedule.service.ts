@@ -8,7 +8,6 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class ScheduleService {
-  redirectUrl!: string;
   baseUrl = environment.apiBaseUrl;
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type' : 'application/json' })
@@ -60,6 +59,18 @@ export class ScheduleService {
     )
     .pipe(
       catchError(this.handleError<any>('Edit Schedule'))
+    )
+  }
+
+  //--- SEARCH SCHEDULE BY STUDNUM, SEM, SY ---//
+  getScheduleByStudNumSemSY(studentnumber: any, semester: any, schoolyear: any) {
+    return this.httpClient
+    .get(
+      `${this.baseUrl}/schedule/search/${studentnumber}/${semester}/${schoolyear}`,
+      this.httpOptions
+      )
+    .pipe(
+      catchError(this.handleError<any>('Search Schedules'))
     )
   }
 

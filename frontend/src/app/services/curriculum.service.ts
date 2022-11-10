@@ -7,8 +7,8 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
+
 export class CurriculumService {
-  redirectUrl!: string;
   baseUrl = environment.apiBaseUrl;
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })

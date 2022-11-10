@@ -71,8 +71,8 @@ import { ValidationComponent } from './components/pages/enrollment/validation/va
 import { AddingComponent } from './components/pages/enrollment/adding/adding.component';
 import { DroppingComponent } from './components/pages/enrollment/dropping/dropping.component';
 import { ChangingComponent } from './components/pages/enrollment/changing/changing.component';
-import { RegformReprintComponent } from './components/pages/enrollment/regform-reprint/regform-reprint.component';
-import { CogReprintComponent } from './components/pages/enrollment/cog-reprint/cog-reprint.component';
+import { RegformReprintComponent } from './components/pages/enrollment/reprint/regform-reprint/regform-reprint.component';
+import { CogReprintComponent } from './components/pages/enrollment/reprint/cog-reprint/cog-reprint.component';
 
 //SCHEDULE COMPONENTS
 import { AddScheduleComponent } from './components/pages/schedule/add-schedule/add-schedule.component';

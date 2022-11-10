@@ -15,4 +15,7 @@ router.get('/schedule/list', scheduleController.getSchedules);
 //--- SCHEDULE PROFILE ROUTER ---//
 router.get('/schedule/:schedcode', scheduleController.getSchedule);
 
+//--- SEARCH SCHEDULE BY STUDNUM, SEM, SY ---//
+router.get('/schedule/search/:studentnumber/:semester/:schoolyear', scheduleController.getScheduleByStudNumSemSY)
+
 module.exports = router;

@@ -8,7 +8,6 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class StudentService {
-  redirectUrl!: string;
   baseUrl = environment.apiBaseUrl;
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -25,7 +24,7 @@ export class StudentService {
     .post(`${this.baseUrl}/shiftee/add`, shifteeData, this.httpOptions)
     .pipe(catchError(this.handleError<any>('Add Shiftee')))
   }
-  
+
   //--- ADD STUDENT FUNCTION ---//
   addStudent(studentData: any): Observable<any> {
     return this.httpClient

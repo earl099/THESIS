@@ -262,9 +262,49 @@ const getSchedule = async (req, res) => {
     }
 }
 
+//--- GET SCHEDULE BY STUDENT NUMBER, SEMESTER AND SCHOOL YEAR ---//
+const getScheduleByStudNumSemSY = async (req, res) => {
+    const studentnumber = req.params.studentnumber
+    const semester = req.params.semester
+    const schoolyear = req.params.schoolyear
+
+    const schedule = await scheduleModel.findAll({
+        attributes: [
+            'subjectCode',
+            'units',
+            'section',
+            'instructor',
+            'timein1',
+            'timeout1',
+            'day1',
+            'room1',
+            'timein2',
+            'timeout2',
+            'day2',
+            'room2',
+            'timein3',
+            'timeout3',
+            'day3',
+            'room3',
+            'timein4',
+            'timeout4',
+            'day4',
+            'room4',
+            'oras',
+            'units'
+        ],
+        where: {
+            studentnumber: studentnumber,
+            semester: semester,
+            schoolyear: schoolyear
+        }
+    })
+}
+
 module.exports = {
     addSchedule,
     editSchedule,
     getSchedules,
-    getSchedule
+    getSchedule,
+    getScheduleByStudNumSemSY
 }

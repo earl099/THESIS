@@ -16,6 +16,6 @@ router.get('/fees/paid/:studentnumber/:semester/:schoolyear', divOfFeesControlle
 router.put('/fees/edit/:studentnumber/:semester/:schoolyear', divOfFeesController.editFees)
 
 //--- EDIT PAID FEES ROUTE ---//
-router.put('/fees/edit/paid/:studentnumber/:semester/:schoolyear', divOfFeesController.editPaidFees)
+router.put('/fees/paid/edit/:studentnumber/:semester/:schoolyear', divOfFeesController.editPaidFees)
 
 module.exports = router;

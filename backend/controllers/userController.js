@@ -172,7 +172,7 @@ const deleteUser = async (req, res) => {
         res.status(200).send({ message: 'User deleted successfully.', deletedUser: deletedUser })
     }
     else {
-        res.status(404).send({ message: 'User not deleted.' });
+        res.status(404).send({ message: 'User does not exist.' });
     }
 }
 
