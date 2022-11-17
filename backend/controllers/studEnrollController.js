@@ -43,7 +43,10 @@ const addStudEnroll = async (req, res) => {
 }
 
 const editStudEnroll = async (req, res) => {
-    const studentnumber = req.params.studentnumber;
+    const studentnumber = req.params.studentnumber
+    const Semester = req.params.semester
+    const Schoolyear = req.params.schoolyear
+
     const {
         semester,
         schoolyear,
@@ -70,7 +73,14 @@ const editStudEnroll = async (req, res) => {
         notuitionenroll
     }
 
-    const updatedStudEnroll = await studEnrollModel.update(studEnroll, { where: { studentnumber: studentnumber }})
+    const updatedStudEnroll = await studEnrollModel.update(studEnroll, { where: { studentnumber: studentnumber, semester: Semester, schoolyear: Schoolyear }})
+
+    if(updatedStudEnroll[0] > 0) {
+        res.status(200).send({ message: 'Student enrolled data updated successfully.', updatedStudEnroll: updatedStudEnroll })
+    }
+    else {
+        res.status(500).send({ message: 'Student enrolled data could not be updated.' })
+    }
 }
 
 const getStudsEnroll = async (req, res) => {
@@ -100,6 +110,8 @@ const getStudsEnroll = async (req, res) => {
 
 const getStudEnroll = async (req, res) => {
     const studentNumber = req.params.studentnumber
+    const semester = req.params.semester
+    const schoolyear = req.params.schoolyear
     const studEnroll = await studEnrollModel.findOne({
         attributes: [
             'studentnumber',
@@ -114,7 +126,11 @@ const getStudEnroll = async (req, res) => {
             'coursenow',
             'notuitionenroll'
         ],
-        where: { studentnumber: studentNumber }
+        where: { 
+            studentnumber: studentNumber, 
+            semester: semester, 
+            schoolyear: schoolyear 
+        }
     })
 
     if(studEnroll) {

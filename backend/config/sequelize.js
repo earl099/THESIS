@@ -43,6 +43,8 @@ db.shiftee = require('../models/shifteeModel')(sequelize, DataTypes);
 db.studEnroll = require('../models/studEnrollModel')(sequelize, DataTypes);
 db.divOfFees = require('../models/divOfFeesModel')(sequelize, DataTypes);
 db.subjEnroll = require('../models/subjEnrollModel')(sequelize, DataTypes);
+db.subjects = require('../models/subjectsModel')(sequelize, DataTypes);
+db.scholarship = require('../models/scholarshipModel')(sequelize, DataTypes)
 
 try{
     //--- SYNC DB ---//

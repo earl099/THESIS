@@ -63,8 +63,106 @@ export class EnrollmentService {
       .put(`${this.baseUrl}/fees/paid/edit/${studentnumber}/${semester}/${schoolyear}`, feesData, this.httpOptions)
       .pipe(catchError(this.handleError<any>('Edit Paid Fees')))
   }
-  
-  //--- ERROR HAANDLING ---//
+
+  //--- ADD STUDENT ENROLLED ---//
+  addStudEnroll(data: any) {
+    return this.httpClient
+    .post(`${this.baseUrl}/student_enroll/add`, data, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Add Student Enrolled')))
+  }
+
+  //--- EDIT STUDENT ENROLLED ---//
+  editStudEnroll(
+    studentnumber: any,
+    semester: any,
+    schoolyear: any,
+    data: any
+    ): Observable<any> {
+      return this.httpClient
+      .put(`${this.baseUrl}/student_enroll/${studentnumber}/${semester}/${schoolyear}`, data, this.httpOptions)
+      .pipe(catchError(this.handleError<any>('Edit Student Enrolled')))
+    }
+
+  //--- GET STUDENTS ENROLLED ---//
+  getStudsEnroll(semester: any, schoolyear: any): Observable<any> {
+    return this.httpClient
+    .get(`${this.baseUrl}/student_enroll/list/${semester}/${schoolyear}`, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Get Students Enrolled')))
+  }
+
+
+  //--- GET STUDENT ENROLLED ---//
+  getStudEnroll(
+    studentNumber: any,
+    semester: any,
+    schoolyear: any
+  ): Observable<any> {
+    return this.httpClient
+    .get(`${this.baseUrl}/student_enroll/${studentNumber}/${semester}/${schoolyear}`, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Get Student Enrolled')))
+  }
+
+  //--- ADD SUBJECT ENROLLED ---//
+  addSubjEnrolled(data: any): Observable<any> {
+    return this.httpClient
+    .post(`${this.baseUrl}/validation/add`, data, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Add Subject Enrolled')))
+  }
+
+  //--- GET SUBJECTS ENROLLED ---//
+  getSubjsEnrolled(studentnumber: any, semester: any, schoolyear: any): Observable<any> {
+    return this.httpClient
+    .get(`${this.baseUrl}/validation/get/${studentnumber}/${semester}/${schoolyear}`, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Get Subject Enrolled')))
+  }
+
+  //--- DELETE SUBJECT ENROLLED ---//
+  deleteSubjEnrolled(studentnumber: any, schedcode: any): Observable<any> {
+    return this.httpClient.delete(`${this.baseUrl}/validation/drop/${studentnumber}/${schedcode}`)
+    .pipe(catchError(this.handleError<any>('Delete Subject Enrolled')))
+  }
+
+  //--- ADD SUBJECT ---//
+  addSubject(data: any): Observable<any> {
+    return this.httpClient.post(`${this.baseUrl}/subject/add`, data, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Add Subject')))
+  }
+
+  //--- EDIT SUBJECT ---//
+  editSubject(subjectcode: any, data: any): Observable<any> {
+    return this.httpClient.put(`${this.baseUrl}/subject/edit/${subjectcode}`, data, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Edit Subject')))
+  }
+
+  //--- GET SUBJECT ---//
+  getSubject(subjectcode: any) {
+    return this.httpClient.get(`${this.baseUrl}/subject/get/${subjectcode}`, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Get Subject')))
+  }
+
+  //--- GET SUBJECT TITLE ---//
+  getSubjectTitle(subjectcode: any) {
+    return this.httpClient.get(`${this.baseUrl}/subject/get/title/${subjectcode}`, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Get Subject Title')))
+  }
+
+  //--- DELETE SUBJECT ---//
+  deleteSubject(subjectcode: any) {
+    return this.httpClient.delete(`${this.baseUrl}/subject/delete/${subjectcode}`, this.httpOptions)
+  }
+
+  //--- GET SCHOLARSHIPS ---//
+  getScholarships(): Observable<any> {
+    return this.httpClient.get(`${this.baseUrl}/scholarship/list`, this.httpOptions)
+  }
+
+  //--- GET SCHOLARSHIP DETAILS ---//
+  getScholarshipDetails(scholarship: any): Observable<any> {
+    return this.httpClient.get(`${this.baseUrl}/scholarship/${scholarship}`, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Get Scholarship Details')))
+  }
+
+  //--- ERROR HANDLING ---//
   private handleError<T>(operation = 'operation', result?: T) {
     return (): Observable<T> => {
       this.toastr.error(`${operation} failed !`);

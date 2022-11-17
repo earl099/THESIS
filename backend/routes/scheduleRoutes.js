@@ -15,7 +15,10 @@ router.get('/schedule/list', scheduleController.getSchedules);
 //--- SCHEDULE PROFILE ROUTER ---//
 router.get('/schedule/:schedcode', scheduleController.getSchedule);
 
-//--- SEARCH SCHEDULE BY STUDNUM, SEM, SY ---//
-router.get('/schedule/search/:studentnumber/:semester/:schoolyear', scheduleController.getScheduleByStudNumSemSY)
+//--- SEARCH SCHEDULE BY SCHEDCODE, SEM, SY ---//
+router.get('/schedule/search/:schedcode/:semester/:schoolyear', scheduleController.getScheduleBySchedCodeSemSY)
+
+//--- DELETE SCHEDULE ---//
+router.delete('/schedule/delete/:schedcode', scheduleController.deleteSchedule)
 
 module.exports = router;

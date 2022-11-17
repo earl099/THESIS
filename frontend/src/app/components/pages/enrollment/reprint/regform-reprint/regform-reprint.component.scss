@@ -1,1 +1,20 @@
 @import '../../../index/home/home.component.scss';
+
+p{
+  font-size: medium;
+}
+
+div.container{
+  overflow: visible !important;
+}
+
+table
+{
+  cursor: default !important;
+  width: max-content;
+}
+
+.mat-row:hover {
+  background-color: initial;
+  cursor: default;
+}

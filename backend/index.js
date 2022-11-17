@@ -47,6 +47,15 @@ app.use('/api', studEnrollRouter);
 const divOfFeesRouter = require('./routes/divOfFeesRoutes');
 app.use('/api', divOfFeesRouter);
 
+const subjEnrollRouter = require('./routes/subjEnrollRoutes')
+app.use('/api', subjEnrollRouter)
+
+const subjectsRouter = require('./routes/subjectsRoutes')
+app.use('/api', subjectsRouter)
+
+const scholarshipRouter = require('./routes/scholarshipRoutes')
+app.use('/api', scholarshipRouter)
+
 //---DB CONNECTION---//
 // const db = mysql.createConnection({
 //     host: 'localhost',

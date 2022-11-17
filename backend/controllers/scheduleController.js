@@ -216,15 +216,10 @@ const getSchedule = async (req, res) => {
             'schedcode',
             'subjectCode',
             'units',
+            'labunits',
             'semester',
             'schoolyear',
-            'slots',
-            'subjectype',
             'section',
-            'instructor',
-            'tuition',
-            'graded',
-            'gradeddate',
             'timein1',
             'timeout1',
             'day1',
@@ -241,15 +236,7 @@ const getSchedule = async (req, res) => {
             'timeout4',
             'day4',
             'room4',
-            'oras',
-            'ojt',
-            'petition',
-            'thesis',
-            'labunits',
-            'internet',
-            'residency',
-            'encodegrade',
-            'gradingpart'
+            'oras'
         ],
         where: { schedcode: schedCode }
     });
@@ -263,8 +250,8 @@ const getSchedule = async (req, res) => {
 }
 
 //--- GET SCHEDULE BY STUDENT NUMBER, SEMESTER AND SCHOOL YEAR ---//
-const getScheduleByStudNumSemSY = async (req, res) => {
-    const studentnumber = req.params.studentnumber
+const getScheduleBySchedCodeSemSY = async (req, res) => {
+    const schedcode = req.params.schedcode
     const semester = req.params.semester
     const schoolyear = req.params.schoolyear
 
@@ -299,6 +286,26 @@ const getScheduleByStudNumSemSY = async (req, res) => {
             schoolyear: schoolyear
         }
     })
+
+    if(schedule) {
+        res.status(200).send({ message: 'Schedule found.', schedule: schedule })
+    }
+    else {
+        res.status(500).send({ message: 'Schedule not found.' })
+    }
+}
+
+const deleteSchedule = async (req, res) => {
+    const schedcode = req.params.schedcode
+
+    const deletedSchedule = await scheduleModel.destroy({ where: { schedcode: schedcode }})
+
+    if(deletedSchedule) {
+        res.status(200).send({ message: 'Schedule deleted successfully.', deletedSchedule: deletedSchedule })
+    }
+    else {
+        res.status(404).send({ message: 'Schedule does not exist.' })
+    }
 }
 
 module.exports = {
@@ -306,5 +313,6 @@ module.exports = {
     editSchedule,
     getSchedules,
     getSchedule,
-    getScheduleByStudNumSemSY
+    getScheduleBySchedCodeSemSY,
+    deleteSchedule
 }

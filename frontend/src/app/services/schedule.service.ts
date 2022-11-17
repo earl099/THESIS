@@ -62,16 +62,21 @@ export class ScheduleService {
     )
   }
 
-  //--- SEARCH SCHEDULE BY STUDNUM, SEM, SY ---//
-  getScheduleByStudNumSemSY(studentnumber: any, semester: any, schoolyear: any) {
+  //--- SEARCH SCHEDULE BY SCHEDCODE, SEM, SY ---//
+  getScheduleByStudNumSemSY(schedcode: any, semester: any, schoolyear: any) {
     return this.httpClient
     .get(
-      `${this.baseUrl}/schedule/search/${studentnumber}/${semester}/${schoolyear}`,
+      `${this.baseUrl}/schedule/search/${schedcode}/${semester}/${schoolyear}`,
       this.httpOptions
       )
     .pipe(
       catchError(this.handleError<any>('Search Schedules'))
     )
+  }
+
+  //--- DELETE SCHEDULE ---//
+  deleteSchedule(schedcode: any) {
+    return this.httpClient.delete(`${this.baseUrl}/schedule/delete/${schedcode}`)
   }
 
   //--- ERROR HANDLING ---//

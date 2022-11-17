@@ -213,7 +213,8 @@ const getStudent = async (req, res) => {
             'mobilePhone',
             'email',
             'course',
-            'highschool'
+            'highschool',
+            'curriculumid'
         ],
         where: { studentNumber: studentNumber }
     });

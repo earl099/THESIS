@@ -7,12 +7,12 @@ const router = require('express').Router()
 router.post('/student_enroll/add', studEnrollController.addStudEnroll)
 
 //--- STUDENT ENROLLED MODIFICATION ROUTE ---//
-router.put('/student_enroll/edit/studentnumber', studEnrollController.editStudEnroll)
+router.put('/student_enroll/edit/:studentnumber/:semester/:schoolyear', studEnrollController.editStudEnroll)
 
 //--- STUDENT ENROLLED LIST ROUTE ---//
-router.get('/student_enroll/list', studEnrollController.getStudsEnroll)
+router.get('/student_enroll/list/:semester/:schoolyear', studEnrollController.getStudsEnroll)
 
 //--- STUDENT ENROLLED DATA ROUTE ---//
-router.get('/student_enroll/:studentnumber', studEnrollController.getStudEnroll)
+router.get('/student_enroll/:studentnumber/:semester/:schoolyear', studEnrollController.getStudEnroll)
 
 module.exports = router

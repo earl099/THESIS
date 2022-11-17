@@ -37,17 +37,14 @@ const addSubjEnrolled = async (req, res) => {
 //--- GET SUBJECTS ENROLLED ---//
 const getSubjsEnrolled = async (req, res) => {
     const studentnumber = req.params.studentnumber
+    const semester = req.params.semester
+    const schoolyear = req.params.schoolyear
+
     const subjsEnrolled = await subjEnrollModel.findAll({
         attributes: [
-            studentnumber,
-            schedcode,
-            edate,
-            status,
-            semester,
-            schoolyear,
-            evaluate
+            'schedcode'
         ],
-        where: { studentnumber: studentnumber }
+        where: { studentnumber: studentnumber, semester: semester, schoolyear: schoolyear }
     })
 
     if(subjsEnrolled.length > 0) {
