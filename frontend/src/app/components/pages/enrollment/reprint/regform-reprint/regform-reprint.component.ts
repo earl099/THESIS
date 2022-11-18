@@ -5,8 +5,9 @@ import { ToastrService } from 'ngx-toastr';
 import { EnrollmentService } from 'src/app/services/enrollment.service';
 import { ScheduleService } from 'src/app/services/schedule.service';
 import { StudentService } from 'src/app/services/student.service';
-import * as jsPDF from 'jspdf';
-
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-regform-reprint',
@@ -35,14 +36,12 @@ export class RegformReprintComponent implements OnInit {
   ]
   resultDataSource!: MatTableDataSource<any>
   resultVisibility: boolean = false
+  buttonVisibility: boolean = true
 
-  @ViewChild('print') print!: ElementRef;
-  @ViewChild('canvas') canvas!: ElementRef;
-  @ViewChild('downloadLink') downloadLink!: ElementRef;
+  @ViewChild('print') print!: ElementRef
 
   constructor(
     private fb: FormBuilder,
-    private toastr: ToastrService,
     private studentService: StudentService,
     private enrollmentService: EnrollmentService,
     private scheduleService: ScheduleService,
@@ -313,7 +312,19 @@ export class RegformReprintComponent implements OnInit {
   }
 
   exportRegForm() {
-    
+
+    let data: any = document.getElementById('print')
+    html2canvas(data).then((canvas) => {
+      this.buttonVisibility = false
+      let fileWidth = 208
+      let fileHeight = (canvas.height * fileWidth) / canvas.width
+      const fileURI = canvas.toDataURL('image/png')
+      let pdf = new jsPDF('p', 'mm', 'a4')
+      let position = 0
+      pdf.addImage(fileURI, 'PNG', 0, position, fileWidth, fileHeight)
+      pdf.save( this.resultForm.get('lastname').value + '-regform.pdf')
+    })
+    this.buttonVisibility = true
   }
 
   backToSearch() {
@@ -324,6 +335,7 @@ export class RegformReprintComponent implements OnInit {
     this.searchForm.get('schoolyear').setValue('')
     this.totalHours = 0
     this.totalUnits = 0
+    this.totalAmount = 0
   }
 
   numberFilter(event: any) {
