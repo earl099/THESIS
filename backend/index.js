@@ -56,6 +56,9 @@ app.use('/api', subjectsRouter)
 const scholarshipRouter = require('./routes/scholarshipRoutes')
 app.use('/api', scholarshipRouter)
 
+const gradesRouter = require('./routes/gradesRoutes')
+app.use('/api', gradesRouter)
+
 //---DB CONNECTION---//
 // const db = mysql.createConnection({
 //     host: 'localhost',

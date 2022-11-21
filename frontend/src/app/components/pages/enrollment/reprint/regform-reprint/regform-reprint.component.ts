@@ -1,13 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
-import { ToastrService } from 'ngx-toastr';
 import { EnrollmentService } from 'src/app/services/enrollment.service';
 import { ScheduleService } from 'src/app/services/schedule.service';
 import { StudentService } from 'src/app/services/student.service';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-regform-reprint',
@@ -18,9 +16,11 @@ export class RegformReprintComponent implements OnInit {
   searchForm: any
   searchVisibility: boolean = true
 
+  //--- STUDENT INFO AND DIVISION OF FEES DATA ---//
   resultForm: any
   currentDate = Date.now()
 
+  //--- SUBJECTS TABLE DATA ---//
   resultSubjectsList: any
   totalUnits: number = 0
   totalHours: number = 0
@@ -36,7 +36,6 @@ export class RegformReprintComponent implements OnInit {
   ]
   resultDataSource!: MatTableDataSource<any>
   resultVisibility: boolean = false
-  buttonVisibility: boolean = true
 
   @ViewChild('print') print!: ElementRef
 
@@ -46,7 +45,7 @@ export class RegformReprintComponent implements OnInit {
     private enrollmentService: EnrollmentService,
     private scheduleService: ScheduleService,
   ) { }
-
+  
   ngOnInit(): void {
     this.searchForm = this.fb.group({
       studentnumber: new FormControl({ value: '', disabled: false }),
@@ -312,19 +311,17 @@ export class RegformReprintComponent implements OnInit {
   }
 
   exportRegForm() {
-
     let data: any = document.getElementById('print')
     html2canvas(data).then((canvas) => {
-      this.buttonVisibility = false
       let fileWidth = 208
       let fileHeight = (canvas.height * fileWidth) / canvas.width
-      const fileURI = canvas.toDataURL('image/png')
+      const fileURI = canvas.toDataURL('image/jpg')
       let pdf = new jsPDF('p', 'mm', 'a4')
       let position = 0
-      pdf.addImage(fileURI, 'PNG', 0, position, fileWidth, fileHeight)
-      pdf.save( this.resultForm.get('lastname').value + '-regform.pdf')
+      let date = new Date(Date.now())
+      pdf.addImage(fileURI, 'JPG', 0, position, fileWidth, fileHeight)
+      pdf.save( this.resultForm.get('lastname').value + '-regform-' + (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear() + '.pdf')
     })
-    this.buttonVisibility = true
   }
 
   backToSearch() {

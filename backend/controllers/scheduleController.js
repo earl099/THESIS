@@ -251,7 +251,6 @@ const getSchedule = async (req, res) => {
 
 //--- GET SCHEDULE BY STUDENT NUMBER, SEMESTER AND SCHOOL YEAR ---//
 const getScheduleBySchedCodeSemSY = async (req, res) => {
-    const schedcode = req.params.schedcode
     const semester = req.params.semester
     const schoolyear = req.params.schoolyear
 
@@ -281,7 +280,6 @@ const getScheduleBySchedCodeSemSY = async (req, res) => {
             'units'
         ],
         where: {
-            studentnumber: studentnumber,
             semester: semester,
             schoolyear: schoolyear
         }

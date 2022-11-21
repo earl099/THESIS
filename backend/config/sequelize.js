@@ -45,6 +45,7 @@ db.divOfFees = require('../models/divOfFeesModel')(sequelize, DataTypes);
 db.subjEnroll = require('../models/subjEnrollModel')(sequelize, DataTypes);
 db.subjects = require('../models/subjectsModel')(sequelize, DataTypes);
 db.scholarship = require('../models/scholarshipModel')(sequelize, DataTypes)
+db.grades = require('../models/gradesModel')(sequelize, DataTypes)
 
 try{
     //--- SYNC DB ---//

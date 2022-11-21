@@ -1,1 +1,23 @@
 @import '../../../index/home/home.component.scss';
+
+div.container
+{
+  width: max-content;
+}
+
+div.col
+{
+  p{
+    font-size: small;
+  }
+}
+
+.mat-row:hover {
+  background-color: initial;
+  cursor: default;
+}
+table
+{
+  cursor: default !important;
+  width: max-content;
+}
