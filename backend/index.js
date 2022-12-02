@@ -59,6 +59,15 @@ app.use('/api', scholarshipRouter)
 const gradesRouter = require('./routes/gradesRoutes')
 app.use('/api', gradesRouter)
 
+const assessListRouter = require('./routes/assessListRoutes')
+app.use('/api', assessListRouter)
+
+const gradeLogRouter = require('./routes/gradeLogsRoutes')
+app.use('/api', gradeLogRouter)
+
+const processLogsRouter = require('./routes/processLogsRoutes')
+app.use('/api', processLogsRouter)
+
 //---DB CONNECTION---//
 // const db = mysql.createConnection({
 //     host: 'localhost',

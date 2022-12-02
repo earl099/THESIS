@@ -162,6 +162,10 @@ export class CogReprintComponent implements OnInit {
     this.searchForm.get('studentnumber').setValue('')
     this.searchForm.get('semester').setValue('')
     this.searchForm.get('schoolyear').setValue('')
+    this.totalUnits = 0
+    this.totalCreditUnits = 0
+    this.aveGrade = 0
+    this.passingPercentage = 0
   }
 
   numberFilter(event: any) {

@@ -12,7 +12,6 @@ const getGradesByStudNumSemSY = async (req, res) => {
     const grades = await gradesModel.findAll({
         attributes: [
             'subjectcode',
-            
             'mygrade',
             'mygradeedit',
             'mygradeeditdate',

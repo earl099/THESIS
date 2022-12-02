@@ -45,7 +45,7 @@ export class RegformReprintComponent implements OnInit {
     private enrollmentService: EnrollmentService,
     private scheduleService: ScheduleService,
   ) { }
-  
+
   ngOnInit(): void {
     this.searchForm = this.fb.group({
       studentnumber: new FormControl({ value: '', disabled: false }),

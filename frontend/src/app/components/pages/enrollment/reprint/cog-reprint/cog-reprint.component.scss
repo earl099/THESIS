@@ -2,13 +2,13 @@
 
 div.container
 {
-  width: max-content;
+  width: initial;
 }
 
 div.col
 {
   p{
-    font-size: small;
+    font-size: smaller;
   }
 }
 
@@ -19,5 +19,5 @@ div.col
 table
 {
   cursor: default !important;
-  width: max-content;
+  width: 1080px;
 }
