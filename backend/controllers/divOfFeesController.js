@@ -233,7 +233,7 @@ const getFees = async (req, res) => {
             'edfs',
             'psyc',
             'trm',
-            'fishery',
+            'fishery'
         ],
         where: { studentnumber: studentnumber, semester: semester, schoolyear: schoolyear}
     });

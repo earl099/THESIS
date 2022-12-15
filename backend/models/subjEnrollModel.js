@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DATE
         },
         status: {
-            type: DataTypes.STRING(15)
+            type: DataTypes.STRING(15),
+            defaultValue: 'NOT GRADED'
         },
         semester: {
             type: DataTypes.STRING(15)

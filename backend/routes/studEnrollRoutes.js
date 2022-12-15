@@ -15,4 +15,7 @@ router.get('/student_enroll/list/:semester/:schoolyear', studEnrollController.ge
 //--- STUDENT ENROLLED DATA ROUTE ---//
 router.get('/student_enroll/:studentnumber/:semester/:schoolyear', studEnrollController.getStudEnroll)
 
+//--- TRANSACTION ROUTE ---//
+router.post('/validate/:studentnumber/:semester/:schoolyear', studEnrollController.fullTransaction)
+
 module.exports = router

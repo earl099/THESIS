@@ -68,6 +68,9 @@ app.use('/api', gradeLogRouter)
 const processLogsRouter = require('./routes/processLogsRoutes')
 app.use('/api', processLogsRouter)
 
+const feesRouter = require('./routes/feesRoutes')
+app.use('/api', feesRouter)
+
 //---DB CONNECTION---//
 // const db = mysql.createConnection({
 //     host: 'localhost',

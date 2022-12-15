@@ -2,8 +2,11 @@
   <div class="page__box p-3 mt-2">Validation</div>
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
-      <div class="container"><p>Validation Content Here</p></div>
-
+      <div class="container" *ngIf="searchVisibility">
+        <form [formGroup]="searchForm">
+          
+        </form>
+      </div>
     </div>
   </div>
 </div>

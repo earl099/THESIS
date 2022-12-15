@@ -6,10 +6,26 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./validation.component.scss']
 })
 export class ValidationComponent implements OnInit {
+  searchForm: any
+  searchVisibility: boolean = true
 
-  constructor() { }
+  constructor(
+    
+  ) { }
 
   ngOnInit(): void {
   }
 
+
+
+  numberFilter(event: any) {
+    var charCode = (event.which) ? event.which : event.keyCode;
+    // Only Numbers 0-9
+    if ((charCode < 48 || charCode > 57)) {
+      event.preventDefault();
+      return false;
+    } else {
+      return true;
+    }
+  }
 }

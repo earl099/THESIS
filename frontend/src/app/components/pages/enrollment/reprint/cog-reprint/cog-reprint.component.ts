@@ -6,12 +6,14 @@ import { StudentService } from 'src/app/services/student.service';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { EnrollmentService } from 'src/app/services/enrollment.service';
+import { VariableService } from 'src/app/services/variable.service';
 @Component({
   selector: 'app-cog-reprint',
   templateUrl: './cog-reprint.component.html',
   styleUrls: ['./cog-reprint.component.scss']
 })
 export class CogReprintComponent implements OnInit {
+  globalVar: any
   searchForm: any
   searchVisibility: boolean = true
 
@@ -44,7 +46,8 @@ export class CogReprintComponent implements OnInit {
     private fb: FormBuilder,
     private studentService: StudentService,
     private enrollmentService: EnrollmentService,
-    private gradesService: GradesService
+    private gradesService: GradesService,
+    private variableService: VariableService
   ) { }
 
   ngOnInit(): void {
@@ -61,11 +64,19 @@ export class CogReprintComponent implements OnInit {
       lastname: new FormControl({ value: '', disabled: false }),
       course:  new FormControl({ value: '', disabled: false })
     })
+
+    this.variableService.getLegend().subscribe((res) => {
+      if(res) {
+        this.globalVar = res.legend
+      }
+
+    })
   }
 
   generateCog() {
     this.searchVisibility = false
     this.resultVisibility = true
+
 
     this.studentService.getStudent(this.searchForm.get('studentnumber').value).subscribe((res) => {
       if(res) {
@@ -87,16 +98,17 @@ export class CogReprintComponent implements OnInit {
         this.resultGradesList = res.grades
 
         for(let i = 0; i < this.resultGradesList.length; i++) {
+          let gradeCounter = this.resultGradesList.length
           this.resultGradesList[i] = Object.assign(this.resultGradesList[i], creditunitsControl)
           this.enrollmentService.getSubjectTitle(this.resultGradesList[i].subjectcode).subscribe((res) => {
             let tmpData: any
             if(res) {
               tmpData = res.subject
               this.resultGradesList[i] = Object.assign(this.resultGradesList[i], tmpData)
+              //credit units
               if(
                 this.resultGradesList[i].mygrade == 'INC' ||
-                this.resultGradesList[i].mygrade == '4.00' ||
-                this.resultGradesList[i].mygrade == '5.00'
+                this.resultGradesList[i].mygrade == 'S'
               ) {
                 if(this.resultGradesList[i].makeupgrade == '-') {
                   this.resultGradesList[i].creditUnits = '0'
@@ -104,29 +116,69 @@ export class CogReprintComponent implements OnInit {
                 else {
                   this.resultGradesList[i].creditUnits = this.resultGradesList[i].units
                 }
+
+
               }
               else {
                 this.resultGradesList[i].creditUnits = this.resultGradesList[i].units
               }
 
+
+              //grade
+              if(!Number.isNaN(Number(this.resultGradesList[i].mygrade))) {
+                this.aveGrade += Number(this.resultGradesList[i].mygrade)
+              }
               this.totalUnits += Number(this.resultGradesList[i].units)
               this.totalCreditUnits += Number(this.resultGradesList[i].creditUnits)
               this.passingPercentage = (this.totalCreditUnits / this.totalUnits) * 100
-              this.aveGrade += Number(this.resultGradesList[i].mygrade)
+
 
               if(i == this.resultGradesList.length - 1) {
                 this.resultDataSource = new MatTableDataSource(this.resultGradesList)
-                this.aveGrade /= this.resultGradesList.length
+
                 if(this.aveGrade >= 1 && this.aveGrade <= 1.45) {
-                  this.scholarship = this.scholarshipList[0]
+                  for(let j = 0; j < this.resultGradesList.length; j++){
+                    if(
+                      this.resultGradesList[j].mygrade == 'INC' ||
+                      this.resultGradesList[j].mygrade == 'US' ||
+                      this.resultGradesList[j].mygrade == '4.00' ||
+                      this.resultGradesList[j].mygrade == '5.00'
+                    ) {
+                      this.scholarship = this.scholarshipList[2]
+                      break
+                    }
+                    else {
+                      this.scholarship = this.scholarshipList[0]
+                    }
+                  }
+
                 }
                 else if(this.aveGrade >= 1.46 && this.aveGrade <= 1.75) {
-                  this.scholarship = this.scholarshipList[1]
+                  for(let j = 0; j < this.resultGradesList.length; j++){
+                    if(
+                      this.resultGradesList[j].mygrade == 'INC' ||
+                      this.resultGradesList[j].mygrade == 'US' ||
+                      this.resultGradesList[j].mygrade == '4.00' ||
+                      this.resultGradesList[j].mygrade == '5.00'
+                    ) {
+                      this.scholarship = this.scholarshipList[2]
+                      break
+                    }
+                    else {
+                      this.scholarship = this.scholarshipList[1]
+                    }
+                  }
                 }
                 else {
                   this.scholarship = this.scholarshipList[2]
                 }
-                //console.log(this.resultGradesList)
+                for(let k = 0; k < this.resultGradesList.length; k++) {
+                  if(Number.isNaN(this.resultGradesList[k].mygrade)) {
+                    gradeCounter -= 1
+                  }
+                }
+                this.aveGrade /= gradeCounter
+                console.log(this.aveGrade)
               }
             }
 

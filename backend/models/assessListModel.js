@@ -1,7 +1,7 @@
 "use strict"
 
 module.exports = (sequelize, DataTypes) => {
-    let assessList = sequelize.define('enrollstudentassesslist', {
+    let assessList = sequelize.define('enrollstudentassesslisttbl', {
         id: {
             primaryKey: true,
             autoIncrement: true,

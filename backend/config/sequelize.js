@@ -47,8 +47,10 @@ db.subjects = require('../models/subjectsModel')(sequelize, DataTypes);
 db.scholarship = require('../models/scholarshipModel')(sequelize, DataTypes)
 db.grades = require('../models/gradesModel')(sequelize, DataTypes)
 db.assessList = require('../models/assessListModel')(sequelize, DataTypes)
+db.assessSubj = require('../models/assessSubjModel')(sequelize, DataTypes)
 db.gradeLogs = require('../models/gradeLogsModel')(sequelize, DataTypes)
 db.processLogs = require('../models/processLogsModel')(sequelize, DataTypes)
+db.fees = require('../models/feesModel')(sequelize, DataTypes)
 
 try{
     //--- SYNC DB ---//
