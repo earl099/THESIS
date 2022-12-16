@@ -224,4 +224,6 @@ module.exports = (sequelize, DataTypes) => {
             },
         ]
     })
+
+    return fees
 }
