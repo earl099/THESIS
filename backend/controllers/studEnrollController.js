@@ -154,7 +154,7 @@ const getStudEnroll = async (req, res) => {
     }
 }
 
-const fullTransaction = async (req, res) => {
+const addTransaction = async (req, res) => {
     //current date for assessment
     const currentDate = new Date()
 
@@ -535,10 +535,12 @@ const fullTransaction = async (req, res) => {
             
         }
 
-        //CREATING DIVIDIONOFFEES DATA
+        //CREATING STUDENROLL, SUBJENROLL, DIVIDIONOFFEES DATA
         let subjEnrollList
+        let schedule = new Array()
         let studEnroll
         let divOfFees
+        let scholarship
         try {
             
 
@@ -561,12 +563,58 @@ const fullTransaction = async (req, res) => {
                 }
             }, { transaction })
 
+            for(let i = 0; i < subjEnrollList.length; i++) {
+                let tmpData = await scheduleModel.findOne({
+                    attributes: [
+                        'schedcode',
+                        'subjectCode',
+                        'units',
+                        'labunits',
+                        'section',
+                        'instructor',
+                        'timein1',
+                        'timeout1',
+                        'day1',
+                        'room1',
+                        'timein2',
+                        'timeout2',
+                        'day2',
+                        'room2',
+                        'timein3',
+                        'timeout3',
+                        'day3',
+                        'room3',
+                        'timein4',
+                        'timeout4',
+                        'day4',
+                        'room4',
+                        'oras'
+                    ],
+                    where: { schedcode: subjEnrollList[i].schedcode }
+                }, { transaction })
+                schedule.push(tmpData)
+            }
+
             divOfFees = await divOfFeesModel.create(divOfFeesObject, { transaction })
+            
+            scholarship = await scholarshipModel.findOne({
+                attributes: [
+                    'scholarship',
+                    'srf',
+                    'sfdf',
+                    'tuition'
+                ],
+                where: { scholarship: studEnroll.scholarship }
+            }, { transaction })
+
             res.status(200).send({ 
                 message: 'Student Validation Success', 
                 studEnroll: studEnroll, 
-                subjEnrollList: subjEnrollList, 
+                subjEnrollList: subjEnrollList,
+                schedule: schedule,
+                scholarship: scholarship,
                 divOfFees: divOfFees
+                
             })
         } catch (error) {
             res.status(500).send({ error: error, message: 'Error Validating Student.' })
@@ -587,5 +635,5 @@ module.exports = {
     editStudEnroll,
     getStudsEnroll,
     getStudEnroll,
-    fullTransaction
+    addTransaction
 }

@@ -6,6 +6,7 @@ import { ScheduleService } from 'src/app/services/schedule.service';
 import { StudentService } from 'src/app/services/student.service';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { VariableService } from 'src/app/services/variable.service';
 
 @Component({
   selector: 'app-regform-reprint',
@@ -15,6 +16,7 @@ import html2canvas from 'html2canvas';
 export class RegformReprintComponent implements OnInit {
   searchForm: any
   searchVisibility: boolean = true
+  globalVariable: any
 
   //--- STUDENT INFO AND DIVISION OF FEES DATA ---//
   resultForm: any
@@ -44,6 +46,7 @@ export class RegformReprintComponent implements OnInit {
     private studentService: StudentService,
     private enrollmentService: EnrollmentService,
     private scheduleService: ScheduleService,
+    private variableService: VariableService
   ) { }
 
   ngOnInit(): void {
@@ -51,6 +54,14 @@ export class RegformReprintComponent implements OnInit {
       studentnumber: new FormControl({ value: '', disabled: false }),
       semester: new FormControl({ value: '', disabled: false }),
       schoolyear: new FormControl({ value: '', disabled: false })
+    })
+
+    this.variableService.getLegend().subscribe((res) => {
+      if(res) {
+        this.globalVariable = res.legend
+        this.searchForm.get('semester').setValue(this.globalVariable[0].semester)
+        this.searchForm.get('schoolyear').setValue(this.globalVariable[0].schoolyear)
+      }
     })
 
     this.resultForm = this.fb.group({
@@ -139,7 +150,7 @@ export class RegformReprintComponent implements OnInit {
         this.resultForm.get('discountSrf').setValue(res.scholarshipDetails.srf)
         this.resultForm.get('discountSfdf').setValue(res.scholarshipDetails.sfdf)
         this.resultForm.get('discountTuition').setValue(res.scholarshipDetails.tuition)
-        console.log(this.resultForm.value)
+        //console.log(this.resultForm.value)
       })
     })
 
@@ -222,15 +233,39 @@ export class RegformReprintComponent implements OnInit {
           )
 
           this.totalAmount += (
-            this.resultForm.get('tuition').value +
+            (
+              this.resultForm.get('tuition').value -
+              (
+                this.resultForm.get('tuition').value *
+                (
+                  this.resultForm.get('discountTuition').value / 100
+                )
+              )
+            ) +
             this.resultForm.get('library').value +
             this.resultForm.get('medical').value +
             this.resultForm.get('publication').value +
             this.resultForm.get('registration').value +
             this.resultForm.get('guidance').value +
             this.resultForm.get('id').value +
-            this.resultForm.get('sfdf').value +
-            this.resultForm.get('srf').value +
+            (
+              this.resultForm.get('sfdf').value -
+              (
+                this.resultForm.get('sfdf').value *
+                (
+                  this.resultForm.get('discountSfdf').value / 100
+                )
+              )
+            ) +
+            (
+              this.resultForm.get('srf').value -
+              (
+                this.resultForm.get('srf').value *
+                (
+                  this.resultForm.get('discountSrf').value / 100
+                )
+              )
+            ) +
             this.resultForm.get('athletic').value +
             this.resultForm.get('scuaa').value +
             this.resultForm.get('deposit').value +
@@ -273,7 +308,7 @@ export class RegformReprintComponent implements OnInit {
                   this.resultSubjectsList[i] = Object.assign(this.resultSubjectsList[i], tmpResult2)
                   if(i == this.resultSubjectsList.length - 1) {
                     this.resultDataSource = new MatTableDataSource(this.resultSubjectsList)
-                    console.log(this.resultSubjectsList)
+                    //console.log(this.resultSubjectsList)
                     for(let j = 0; j < this.resultSubjectsList.length; j++) {
                       let sectionChecker: boolean = true
                       if(j == 0) {
@@ -328,8 +363,8 @@ export class RegformReprintComponent implements OnInit {
     this.searchVisibility = true
     this.resultVisibility = false
     this.searchForm.get('studentnumber').setValue('')
-    this.searchForm.get('semester').setValue('')
-    this.searchForm.get('schoolyear').setValue('')
+    this.searchForm.get('semester').setValue(this.globalVariable[0].semester)
+    this.searchForm.get('schoolyear').setValue(this.globalVariable[0].schoolyear)
     this.totalHours = 0
     this.totalUnits = 0
     this.totalAmount = 0

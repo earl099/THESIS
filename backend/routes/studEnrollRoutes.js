@@ -16,6 +16,7 @@ router.get('/student_enroll/list/:semester/:schoolyear', studEnrollController.ge
 router.get('/student_enroll/:studentnumber/:semester/:schoolyear', studEnrollController.getStudEnroll)
 
 //--- TRANSACTION ROUTE ---//
-router.post('/validate/:studentnumber/:semester/:schoolyear', studEnrollController.fullTransaction)
+router.post('/validate/:studentnumber/:semester/:schoolyear', studEnrollController.addTransaction)
+
 
 module.exports = router

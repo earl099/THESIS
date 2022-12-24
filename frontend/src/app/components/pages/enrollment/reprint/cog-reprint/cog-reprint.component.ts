@@ -68,6 +68,8 @@ export class CogReprintComponent implements OnInit {
     this.variableService.getLegend().subscribe((res) => {
       if(res) {
         this.globalVar = res.legend
+        this.searchForm.get('semester').setValue(this.globalVar[0].ksemester)
+        this.searchForm.get('schoolyear').setValue(this.globalVar[0].kschoolyear)
       }
 
     })

@@ -28,6 +28,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatFileUploadModule } from 'angular-material-fileupload';
 import { MatStepperModule } from '@angular/material/stepper'
 import { MatRadioModule } from '@angular/material/radio';
+import { MatTabsModule } from '@angular/material/tabs';
 
 //BACKEND IMPORTS
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -173,7 +174,8 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
     MatFileUploadModule,
     MatStepperModule,
     MatRadioModule,
-
+    MatTabsModule,
+    
     //BACKEND IMPORTS
     HttpClientModule,
 

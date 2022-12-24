@@ -149,17 +149,27 @@ export class EnrollmentService {
   //--- DELETE SUBJECT ---//
   deleteSubject(subjectcode: any) {
     return this.httpClient.delete(`${this.baseUrl}/subject/delete/${subjectcode}`, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Delete Subject')))
   }
 
   //--- GET SCHOLARSHIPS ---//
   getScholarships(): Observable<any> {
     return this.httpClient.get(`${this.baseUrl}/scholarship/list`, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Get Scholarships')))
   }
 
   //--- GET SCHOLARSHIP DETAILS ---//
   getScholarshipDetails(scholarship: any): Observable<any> {
     return this.httpClient.get(`${this.baseUrl}/scholarship/${scholarship}`, this.httpOptions)
     .pipe(catchError(this.handleError<any>('Get Scholarship Details')))
+  }
+
+  //--- TRANSACTION FOR STUDENT VALIDATION ---//
+  addValidateStudent(studentnumber: any, semester: any, schoolyear: any): Observable<any> {
+    return this.httpClient.post(
+      `${this.baseUrl}/validate/${studentnumber}/${semester}/${schoolyear}`,
+      this.httpOptions
+    ).pipe(catchError(this.handleError<any>('Validate Student')))
   }
 
   //--- ERROR HANDLING ---//
