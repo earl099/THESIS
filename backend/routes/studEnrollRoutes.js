@@ -21,5 +21,10 @@ router.post('/validate/:studentnumber/:semester/:schoolyear', studEnrollControll
 //--- ADD SUBJECT ROUTE ---//
 router.post('/validate/add/:studentnumber/:semester/:schoolyear', studEnrollController.addSubjTransaction)
 
-router.delete('/validate/drop/:studentnumber/:semester/:schoolyear', studEnrollController.dropSubjTransaction)
+//--- DROP SUBJECT ROUTE ---//
+router.post('/validate/drop/:studentnumber/:semester/:schoolyear', studEnrollController.dropSubjTransaction)
+
+//--- CHANGE SUBJECT ROUTE ---//
+router.post('/validate/change/:studentnumber/:semester/:schoolyear', studEnrollController.changeSubjTransaction)
+
 module.exports = router
