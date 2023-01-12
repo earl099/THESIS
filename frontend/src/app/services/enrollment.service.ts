@@ -174,14 +174,22 @@ export class EnrollmentService {
 
   //--- TRANSACTION FOR ADDING SUBJECT ---//
   addSubjTransaction(studentnumber: any, semester: any, schoolyear: any, data: any): Observable<any> {
+<<<<<<< HEAD
     return this.httpClient.post(
+=======
+    return this.httpClient.put(
+>>>>>>> 8f25131e85583d0b57a71125c9cb05e7776d0112
       `${this.baseUrl}/validate/add/${studentnumber}/${semester}/${schoolyear}`,
       data, this.httpOptions
     ).pipe(catchError(this.handleError<any>('Add Subject')))
   }
 
   //--- TRANSACTION FOR DELETING SUBJECT ---//
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 8f25131e85583d0b57a71125c9cb05e7776d0112
   //--- ERROR HANDLING ---//
   private handleError<T>(operation = 'operation', result?: T) {
     return (): Observable<T> => {
