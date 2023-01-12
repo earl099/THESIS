@@ -8,6 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 //ANGULAR MATERIAL IMPORTS
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTableModule } from '@angular/material/table';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -154,6 +155,7 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
     FormsModule,
 
     // ANGULAR MATERIAL IMPORTS
+    MatAutocompleteModule,
     MatTableModule,
     MatSidenavModule,
     MatToolbarModule,
@@ -175,7 +177,7 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
     MatStepperModule,
     MatRadioModule,
     MatTabsModule,
-    
+
     //BACKEND IMPORTS
     HttpClientModule,
 

@@ -18,5 +18,8 @@ router.get('/student_enroll/:studentnumber/:semester/:schoolyear', studEnrollCon
 //--- TRANSACTION ROUTE ---//
 router.post('/validate/:studentnumber/:semester/:schoolyear', studEnrollController.addTransaction)
 
+//--- ADD SUBJECT ROUTE ---//
+router.post('/validate/add/:studentnumber/:semester/:schoolyear', studEnrollController.addSubjTransaction)
 
+router.delete('/validate/drop/:studentnumber/:semester/:schoolyear', studEnrollController.dropSubjTransaction)
 module.exports = router

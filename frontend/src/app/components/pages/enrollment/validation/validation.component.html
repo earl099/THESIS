@@ -3,7 +3,7 @@
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
       <div class="container" *ngIf="searchVisibility">
-        <form [formGroup]="searchForm">
+        <<ng-container [formGroup]="searchForm">
           <mat-form-field>
             <mat-label>Student Number</mat-label>
             <input matInput type="text" formControlName="studentnumber" autocomplete="off" (keypress)="numberFilter($event)">
@@ -37,7 +37,7 @@
               </div>
             </div>
           </div>
-        </form>
+        </ng-container>
       </div>
 
       <!-- STUDENT INFORMATION -->
