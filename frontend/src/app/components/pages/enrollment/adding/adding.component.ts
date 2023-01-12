@@ -270,23 +270,15 @@ export class AddingComponent implements OnInit {
               schoolyear: this.searchForm.get('schoolyear').value,
               isShown: this.addedSchedule.get('isShown').value,
               isTextResult: this.addedSchedule.get('isTextResult').value,
-<<<<<<< HEAD
               subjectCode: this.addedSchedule.get('subjectCode').value,
               subjNum: this.addedScheduleList.length
-=======
-              subjectCode: this.addedSchedule.get('subjectCode').value
->>>>>>> 8f25131e85583d0b57a71125c9cb05e7776d0112
             },
             this.addedScheduleList.length - 1
           )
           console.log(this.addedScheduleList)
         }
       })
-<<<<<<< HEAD
-      console.log(schedcode)
-=======
       //console.log(schedcode)
->>>>>>> 8f25131e85583d0b57a71125c9cb05e7776d0112
     } catch (error) {
       console.log(error)
     }
@@ -295,14 +287,10 @@ export class AddingComponent implements OnInit {
 
   //FUNCTION FOR FINALIZING ADDED SCHEDULES
   finalAdd() {
-<<<<<<< HEAD
     if(this.addedScheduleList.length < 1) {
       this.toastr.error('Please add a subject.')
     }
     else if(!this.addedSchedule.get('isShown').value && this.addedScheduleList.length < 1) {
-=======
-    if(!this.addedSchedule.get('isShown').value && this.addedScheduleList.length < 1) {
->>>>>>> 8f25131e85583d0b57a71125c9cb05e7776d0112
       this.toastr.error('All Subjects must be searched before reevaluation.')
     }
     else {
@@ -320,37 +308,18 @@ export class AddingComponent implements OnInit {
               this.searchForm.get('semester').value,
               this.searchForm.get('schoolyear').value,
               json
-<<<<<<< HEAD
             ).subscribe()
             this.toastr.success('Added Subject/s Successfully.')
 
           }
           catch (error) {
             this.toastr.error('Error Adding Subject')
-=======
-            ).subscribe((res) => {
-
-            })
-          }
-          catch (error) {
-
->>>>>>> 8f25131e85583d0b57a71125c9cb05e7776d0112
           }
 
         }
       }
-<<<<<<< HEAD
-      //this.backToSearch()
+      this.backToSearch()
     }
-
-
-=======
-    }
-
-    if(this.addedScheduleList.length < 1) {
-      this.toastr.error('Please add a subject.')
-    }
->>>>>>> 8f25131e85583d0b57a71125c9cb05e7776d0112
   }
 
   backToSearch() {

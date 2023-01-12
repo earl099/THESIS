@@ -631,6 +631,411 @@ const addTransaction = async (req, res) => {
     }
 }
 
+const addSubjTransaction = async (req, res) => {
+    //PREPARING OBJECTS FOR TRANSACTION
+    const studentnumber = req.params.studentnumber
+    const semester = req.params.semester
+    const schoolyear = req.params.schoolyear
+    let subjCounter = 0
+    let transaction = await db.sequelize.transaction()
+
+
+    const studentInfo = await studentModel.findOne({
+        attributes: [
+            'firstName',
+            'lastName',
+            'middleName',
+            'course',
+            'citizenship',
+            'yearAdmitted',
+            'SemesterAdmitted'
+        ],
+        where: { studentNumber: studentnumber }
+    })
+
+    const assessedStud = await assessListModel.findOne({
+        attributes: [
+            'studentnumber',
+            'StudentStatus',
+            'scholarship',
+            'yearLevel',
+            'majorCourse',
+            'statusII'
+        ],
+        where: { 
+            studentnumber: studentnumber, 
+            semester: semester, 
+            schoolyear: schoolyear 
+        }
+    })
+
+    const scholarship = await scholarshipModel.findOne({
+        attributes: [
+            'scholarship',
+            'srf',
+            'sfdf',
+            'tuition',
+            'lessAll',
+            'active'
+        ],
+        where: { scholarship: assessedStud.scholarship }
+    })
+
+    //for creating the notuitionenroll field
+    let notuitionenroll
+    if(assessedStud.scholarship == 'RA 10931') {
+        notuitionenroll = 'True'
+    }
+    else {
+        notuitionenroll = 'FALSE'
+    }
+
+    //BASE FEES
+    const feesBase = await feesModel.findOne({
+        attributes: [
+            'labAnSci',
+            'labBioSci',
+            'labCEMDS',
+            'labCropSci',
+            'labHRM',
+            'labEng',
+            'labPhySci',
+            'labVetMed',
+            'labSpeech',
+            'labEnglish',
+            'labNursing',
+            'ccl',
+            'internet',
+            'NSTP',
+            'ojt',
+            'thesis',
+            'studentTeaching',
+            'lateReg',
+            'residency',
+            'foreignStudent',
+            'addedSubj',
+            'petitionSubj',
+            'tuition',
+            'identification',
+            'sfdf',
+            'srf',
+            'athletic',
+            'scuaa',
+            'deposit',
+            'other',
+            'miscLibrary',
+            'miscMedical',
+            'miscPublication',
+            'miscRegistration',
+            'miscGuidance',
+            'rle',
+            'labcspear',
+            'mwRLE',
+            'edfs',
+            'psyc',
+            'rletwo',
+            'rlethree',
+            'mwrletwo',
+            'mwrlethree',
+            'trm',
+            'fishery'
+        ],
+        where: {
+            course: studentInfo.course,
+            semester: semester,
+            schoolyear: schoolyear,
+            semesteradmitted: studentInfo.SemesterAdmitted,
+            yearadmitted: studentInfo.yearAdmitted
+        }
+    })
+
+    //CHECKER IF THE STUDENT HAS ADDED SUBJECTS IN CURRENT FEES
+    const addedSubjValue = await divOfFeesModel.findOne({
+        attributes: [ 'addedSubj' ],
+        where: { studentnumber: studentnumber, semester: semester, schoolyear: schoolyear }
+
+    })
+
+    //CREATING THE ADDED SUBJECTS OBJECT
+    const { schedcode, edate } = req.body
+
+    let subjEnrollData = {
+        studentnumber: studentnumber,
+        schedcode: schedcode,
+        edate: edate,
+        semester: semester,
+        schoolyear: schoolyear
+    }
+
+    if((addedSubjValue.addedSubj / feesBase.addedSubj) > 0) {
+        subjCounter = (addedSubjValue.addedSubj / feesBase.addedSubj)
+    }
+    subjCounter++
+
+    try {
+        await subjEnrollModel.create(subjEnrollData, { transaction })
+    }
+    catch {
+        res.status(500).send({ message: 'Error Adding Subject' })
+    }
+
+    //ANSCI, BIOSCI, CEMDS, HRM, CROPSCI, ENGINEERING, PHYSCI, VETMED, SPEECH, 
+    //ENGLISH, NURSING, CCL, RLE, CSPEAR, EDFS, PSYC, TRM, FISHERY, STUDENT TEACHING, NSTP
+    //--- ^^^MULTIPLIERS^^^ ---//
+    const labFeeMultiplier = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+
+    //OJT, PETITION, THESIS, INTERNET, RESIDENCY, FOREIGN STUDENT, ADDED SUBJECT CHECKER
+    const otherFeeChecker = [0,0,0,0,0,0,subjCounter]
+
+    //Total units
+    let totalUnits = 0
+
+    const schedcodeList = await scheduleModel.findAll({
+        attributes: [
+            'schedcode',
+            'subjectype',
+            'units',
+            'labunits',
+            'ojt',
+            'petition',
+            'thesis',
+            'internet',
+            'residency'
+        ],
+        where: {
+            semester: semester, 
+            schoolyear: schoolyear 
+        }
+    })
+
+
+    for(let i = 0; i < schedcodeList.length; i++) {
+        switch (schedcodeList[i].subjectype) {
+            case 'AN SCI':
+                labFeeMultiplier[0]++
+                break
+            case 'BIO SCI':
+                labFeeMultiplier[1]++
+                break
+            case 'CEMDS':
+                labFeeMultiplier[2]++
+                break
+            case 'HRM':
+                labFeeMultiplier[3]++
+                break
+            case 'CROP SCI':
+                labFeeMultiplier[4]++
+                break
+            case 'ENGINEERING':
+                labFeeMultiplier[5]++
+                break
+            case 'PHY SCI':
+                labFeeMultiplier[6]++
+                break
+            case 'VET':
+                labFeeMultiplier[7]++
+                break
+            case 'SPEECH':
+                labFeeMultiplier[8]++
+                break
+            case 'ENGLISH LAB':
+                labFeeMultiplier[9]++
+                break
+            case 'NURSING LAB':
+                labFeeMultiplier[10]++
+                break
+            case 'CCL':
+                labFeeMultiplier[11]++
+                break
+            case 'RLE':
+            case 'RLE 2':
+            case 'RLE 3':
+            case 'RLE 4':
+            case 'MWRLE 2':
+            case 'MWRLE 3':
+                labFeeMultiplier[12]++
+                break
+            case 'CSPEAR':
+                labFeeMultiplier[13]++
+                break
+            case 'EDFS':
+                labFeeMultiplier[14]++
+                break
+            case 'PSYC':
+                labFeeMultiplier[15]++
+                break
+            case 'TRM':
+                labFeeMultiplier[16]++
+                break
+            case 'FISHERY':
+                labFeeMultiplier[17]++
+                break
+            case 'STUDENT TEACHING':
+                labFeeMultiplier[18]++
+                break
+            case 'NSTP':
+                labFeeMultiplier[19]++
+                break 
+            default:
+                break
+        }
+    }
+
+    //OTHER FEES CHECKER AND CALCULATION OF TOTAL UNITS
+    for(let i = 0; i < schedcodeList.length; i++) {
+        //OTHER FEES
+        switch (schedcodeList[i].ojt) {
+            case 'Y':
+                otherFeeChecker[0]++
+                break;
+        }
+        switch (schedcodeList[i].petition) {
+            case 'Y':
+                otherFeeChecker[1]++
+                break;
+        }
+        switch (schedcodeList[i].thesis) {
+            case 'Y':
+                otherFeeChecker[2]++
+                break;
+        }
+        switch (schedcodeList[i].internet) {
+            case 'Y':
+                otherFeeChecker[3]++
+                break;
+        }
+        switch (schedcodeList[i].residency) {
+            case 'Y':
+                otherFeeChecker[4]++
+                break;
+        }
+
+        //TOTAL UNITS
+        totalUnits += Number(schedcodeList[i].units) + Number(schedcodeList[i].labunits)
+    }
+
+    //FOREIGN STUDENT CHECKER
+    switch(studentInfo.citizenship) {
+        case !'FILIPINO':
+            otherFeeChecker[5]++
+            break
+    }
+
+    //DIVIDIONOFFEES OBJECT CREATION
+    const totalTuition = totalUnits * feesBase.tuition
+    const rleFee = Number(feesBase.rle) + Number(feesBase.rletwo) + 
+                Number(feesBase.rlethree) + Number(feesBase.mwRLE) + 
+                Number(feesBase.mwrletwo) + Number(feesBase.mwrlethree)
+
+    const updatedDivOfFeesObject = {
+        studentnumber: studentnumber,
+        semester: semester,
+        schoolyear: schoolyear,
+        ansci: labFeeMultiplier[0] * feesBase.labAnSci,
+        biosci: labFeeMultiplier[1] * feesBase.labBioSci,
+        cemds: labFeeMultiplier[2] * feesBase.labCEMDS,
+        hrm: labFeeMultiplier[3] * feesBase.labHRM,
+        cropsci: labFeeMultiplier[4] * feesBase.labCropSci,
+        engineering: labFeeMultiplier[5] * feesBase.labEng,
+        physci: labFeeMultiplier[6] * feesBase.labPhySci,
+        vetmed: labFeeMultiplier[7] * feesBase.labVetMed,
+        speech: labFeeMultiplier[8] * feesBase.labSpeech,
+        english: labFeeMultiplier[9] * feesBase.labEnglish,
+        nursing: labFeeMultiplier[10] * feesBase.labNursing,
+        ccl: labFeeMultiplier[11] * feesBase.ccl,
+        rle: labFeeMultiplier[12] * rleFee,
+        internet: otherFeeChecker[3] * feesBase.internet,
+        nstp: labFeeMultiplier[19] * feesBase.NSTP,
+        ojt: otherFeeChecker[0] * feesBase.ojt,
+        thesis: otherFeeChecker[2] * feesBase.thesis,
+        student: labFeeMultiplier[18] * feesBase.studentTeaching,
+        residency: otherFeeChecker[4] * feesBase.residency,
+        foreignstudent: otherFeeChecker[5] * feesBase.foreignStudent,
+        addedsubj: otherFeeChecker[6] * feesBase.addedSubj,
+        tuition: totalTuition - (totalTuition * (scholarship.tuition / 100)),
+        library: feesBase.miscLibrary,
+        medical: feesBase.miscMedical,
+        publication: feesBase.miscPublication,
+        registration: feesBase.miscRegistration,
+        guidance: feesBase.miscGuidance,
+        id: feesBase.identification,
+        sfdf: feesBase.sfdf - (feesBase.sfdf * (scholarship.sfdf / 100)),
+        srf: feesBase.srf - (feesBase.srf * (scholarship.srf / 100)),
+        athletic: feesBase.athletic,
+        scuaa: feesBase.scuaa,
+        deposit: feesBase.deposit,
+        cspear: labFeeMultiplier[13] * feesBase.labcspear,
+        edfs: labFeeMultiplier[14] * feesBase.edfs,
+        psyc: labFeeMultiplier[15] * feesBase.psyc,
+        trm: labFeeMultiplier[16] * feesBase.trm,
+        fishery: labFeeMultiplier[17] * feesBase.fishery,
+    }
+
+    //TRANSACTION
+    let updatedSubjEnrolled
+    let updatedDivOfFees
+    try {
+        //GETTING ALL SUBJECTS ENROLLED
+        try {
+            updatedSubjEnrolled = await subjEnrollModel.findAll({
+                attributes: [
+                    'studentnumber',
+                    'schedcode',
+                    'edate',
+                    'semester',
+                    'schoolyear'
+                ],
+                where: {
+                    studentnumber: studentnumber,
+                    semester: semester,
+                    schoolyear: schoolyear
+                }
+            },
+            { transaction })
+        } catch (error) {
+            res.status(500).send({ error: error, message: 'Error in Updated Subject Enrolled' })
+            return
+        }
+
+
+        //UPDATE DIVISION OF FEES
+        try {
+            updatedDivOfFees = await divOfFeesModel.update(
+                updatedDivOfFeesObject, 
+                { 
+                    where: 
+                    {
+                        studentnumber: studentnumber,
+                        semester: semester,
+                        schoolyear: schoolyear
+                    } 
+                }, { transaction: transaction })
+        } catch (error) {
+            res.status(500).send({ error: error, message: 'Error in Updated Div of Fees' })
+            return
+        }
+
+
+        res.status(200).send({
+            message: 'Transaction Completed successfully.',
+            updatedDivOfFees: updatedDivOfFees,
+            updatedSubjEnrolled: updatedSubjEnrolled
+        })
+        transaction.commit()
+    } catch (error) {
+        transaction.rollback()
+        res.status(500).send({ error: error, message: 'Error in Transaction' })
+    }
+}
+
+const dropSubjTransaction = async (req, res) => {
+
+}
+
+const changeSubjTransaction = async (req, res) => {
+
+}
+
 module.exports = {
     addStudEnroll,
     editStudEnroll,
