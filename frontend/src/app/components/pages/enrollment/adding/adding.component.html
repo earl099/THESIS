@@ -2,8 +2,94 @@
   <div class="page__box p-3 mt-2">Adding Subject</div>
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
-      <div class="container"><p>Adding Subject Content Here</p></div>
+      <div class="container" *ngIf="searchVisibility">
+        <form [formGroup]="searchForm">
+          <mat-form-field>
+            <mat-label>Student Number</mat-label>
+            <input matInput type="text" formControlName="studentnumber" autocomplete="off" (keypress)="numberFilter($event)">
+          </mat-form-field>
+          <br>
 
+          <mat-form-field>
+            <mat-label>Semester</mat-label>
+            <mat-select formControlName="semester">
+              <mat-option value="FIRST">FIRST</mat-option>
+              <mat-option value="SECOND">SECOND</mat-option>
+              <mat-option value="SUMMER">SUMMER</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <br>
+
+          <mat-form-field>
+            <mat-label>School Year</mat-label>
+            <input matInput type="text" formControlName="schoolyear" autocomplete="off">
+          </mat-form-field>
+          <br>
+
+          <div class="container">
+            <div class="row align-items-start">
+              <div class="col">
+                <button mat-button type="submit" class="btn btn-success" (click)="generateData()">Proceed</button>
+              </div>
+
+              <div class="col">
+                <button mat-button routerLink="/dashboard">Back to Dashboard</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="container" *ngIf="resultVisibility">
+        <button mat-button class="btn btn-success" (click)="addSubject()">Add Subject</button>
+        <p *ngIf="addedSchedule.isTextResult">Subjects to be Added:</p>
+        <div *ngFor="let schedule of addedScheduleList; let index = index">
+          <div [formGroup]="addedSchedule">
+            <!-- SCHEDCODE INPUT -->
+            <mat-form-field appearance="fill" *ngIf="schedule.isShown">
+              <mat-label>Schedule Code</mat-label>
+              <input
+                matInput
+                type="text"
+                aria-label="Schedule Code"
+                [matAutocomplete]="auto"
+                [formControl]="schedControl"
+                (keypress)="numberFilter($event)"
+                #schedcode
+              >
+
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let sched of filteredSched | async" [value]="sched.schedcode" >
+                  <span>{{sched.schedcode}}</span> |
+                  <small>{{sched.subjectCode}}</small>
+                </mat-option>
+              </mat-autocomplete>
+
+            </mat-form-field>
+            <div class="row align-items-start">
+              <div class="col">
+                <p class="fs-6" *ngIf="schedule.isTextResult">Sched Code: {{schedule.schedcode}}</p>
+              </div>
+              <div class="col">
+                <p class="fs-6" *ngIf="schedule.isTextResult">Subj Code: {{schedule.subjectCode}}</p>
+              </div>
+            </div>
+
+            <button
+              mat-button type="submit"
+              class="btn btn-success"
+              (click)="searchAndAdd(schedControl.value)"
+              *ngIf="schedule.isShown"
+            > Search Subject </button>
+          </div>
+        </div>
+
+        <div class="row align-items-start">
+          <button mat-button class="btn btn-success" *ngIf="resultVisibility" (click)="finalAdd()">Reevaluate Fees</button>
+          <button mat-button class="btn btn-success" (click)="backToSearch()">Back to Search</button>
+        </div>
+
+      </div>
     </div>
   </div>
 </div>

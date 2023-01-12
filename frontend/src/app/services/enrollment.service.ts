@@ -172,6 +172,16 @@ export class EnrollmentService {
     ).pipe(catchError(this.handleError<any>('Validate Student')))
   }
 
+  //--- TRANSACTION FOR ADDING SUBJECT ---//
+  addSubjTransaction(studentnumber: any, semester: any, schoolyear: any, data: any): Observable<any> {
+    return this.httpClient.put(
+      `${this.baseUrl}/validate/add/${studentnumber}/${semester}/${schoolyear}`,
+      data, this.httpOptions
+    ).pipe(catchError(this.handleError<any>('Add Subject')))
+  }
+
+  //--- TRANSACTION FOR DELETING SUBJECT ---//
+  
   //--- ERROR HANDLING ---//
   private handleError<T>(operation = 'operation', result?: T) {
     return (): Observable<T> => {

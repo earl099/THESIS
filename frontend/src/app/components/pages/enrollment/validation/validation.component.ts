@@ -12,11 +12,14 @@ import { VariableService } from 'src/app/services/variable.service';
   styleUrls: ['./validation.component.scss']
 })
 export class ValidationComponent implements OnInit {
+  //VARIABLE FOR DEFAULT VALUE OF SEMESTER AND SCHOOLYEAR
   globalVar: any
 
+  //SEARCH FORM FOR PARAMETERS IN VALIDATION FUNCTION
   searchForm: any
   searchVisibility: boolean = true
 
+  //VARIABLES FOR THE VALIDATED STUDENT
   resultForm: any
   totalAmount: number = 0
   ptotalAmount: number = 0
@@ -33,11 +36,13 @@ export class ValidationComponent implements OnInit {
   resultDataSource!: MatTableDataSource<any>
   resultVisibility: boolean = false
 
+  //WILL BE MAKING A FUNCTION THAT EDITS THE SCHOLARSHIP OF THE STUDENT AND UPDATES THE AFFECTED TABLES
+
+
   constructor(
     private fb: FormBuilder,
     private enrollmentService: EnrollmentService,
     private studentService: StudentService,
-    private scheduleService: ScheduleService,
     private variableService: VariableService
   ) { }
 
