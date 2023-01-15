@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { map, Observable, startWith } from 'rxjs';
 import { EnrollmentService } from 'src/app/services/enrollment.service';
@@ -30,10 +30,7 @@ export class AddingComponent implements OnInit {
   addedScheduleList: Array<any> = []
 
   //VARIABLES FOR ADDING STUDENT
-  resultForm: any
   resultVisibility: boolean = false
-  totalAmount: number = 0
-  pTotalAmount: number = 0
   date = new Date()
 
   constructor(
@@ -76,112 +73,6 @@ export class AddingComponent implements OnInit {
       isShown: new FormControl({ value: true, disabled: false }),
       isTextResult: new FormControl({ value: false, disabled: false })
     })
-
-    //INITIALIZING RESULTFORM OBJECT FOR DIVSION OF FEES
-    this.resultForm = this.fb.group({
-      //student information
-      studentnumber: new FormControl({ value: '', disabled: false }),
-      firstname: new FormControl({ value: '', disabled: false }),
-      middlename: new FormControl({ value: '', disabled: false }),
-      lastname: new FormControl({ value: '', disabled: false }),
-      course:  new FormControl({ value: '', disabled: false }),
-      major:  new FormControl({ value: '', disabled: false }),
-      year:  new FormControl({ value: '', disabled: false }),
-      scholarship: new FormControl({ value: '', disabled: false }),
-      discountSrf: new FormControl({ value: '', disabled: false }),
-      discountSfdf: new FormControl({ value: '', disabled: false }),
-      discountTuition: new FormControl({ value: '', disabled: false }),
-
-      //division of fees
-      ansci: new FormControl({ value: '', disabled: false }),
-      biosci: new FormControl({ value: '', disabled: false }),
-      cemds: new FormControl({ value: '', disabled: false }),
-      hrm: new FormControl({ value: '', disabled: false }),
-      cropsci: new FormControl({ value: '', disabled: false }),
-      engineering: new FormControl({ value: '', disabled: false }),
-      physci: new FormControl({ value: '', disabled: false }),
-      vetmed: new FormControl({ value: '', disabled: false }),
-      speech: new FormControl({ value: '', disabled: false }),
-      english: new FormControl({ value: '', disabled: false }),
-      nursing: new FormControl({ value: '', disabled: false }),
-      ccl: new FormControl({ value: '', disabled: false }),
-      rle: new FormControl({ value: '', disabled: false }),
-      internet: new FormControl({ value: '', disabled: false }),
-      nstp: new FormControl({ value: '', disabled: false }),
-      ojt: new FormControl({ value: '', disabled: false }),
-      thesis: new FormControl({ value: '', disabled: false }),
-      student: new FormControl({ value: '', disabled: false }),
-      late: new FormControl({ value: '', disabled: false }),
-      residency: new FormControl({ value: '', disabled: false }),
-      foreignstudent: new FormControl({ value: '', disabled: false }),
-      addedsubj: new FormControl({ value: '', disabled: false }),
-      petition: new FormControl({ value: '', disabled: false }),
-      tuition: new FormControl({ value: '', disabled: false }),
-      library: new FormControl({ value: '', disabled: false }),
-      medical: new FormControl({ value: '', disabled: false }),
-      publication: new FormControl({ value: '', disabled: false }),
-      registration: new FormControl({ value: '', disabled: false }),
-      guidance: new FormControl({ value: '', disabled: false }),
-      id: new FormControl({ value: '', disabled: false }),
-      sfdf: new FormControl({ value: '', disabled: false }),
-      srf: new FormControl({ value: '', disabled: false }),
-      athletic: new FormControl({ value: '', disabled: false }),
-      scuaa: new FormControl({ value: '', disabled: false }),
-      deposit: new FormControl({ value: '', disabled: false }),
-      cspear: new FormControl({ value: '', disabled: false }),
-      edfs: new FormControl({ value: '', disabled: false }),
-      psyc: new FormControl({ value: '', disabled: false }),
-      trm: new FormControl({ value: '', disabled: false }),
-      fishery: new FormControl({ value: '', disabled: false }),
-      totalLab: new FormControl({ value: '', disabled: false }),
-      totalOther: new FormControl({ value: '', disabled: false }),
-
-      //paid divoffees
-      pansci: new FormControl({ value: '', disabled: false }),
-      pbiosci: new FormControl({ value: '', disabled: false }),
-      pcemds: new FormControl({ value: '', disabled: false }),
-      phrm: new FormControl({ value: '', disabled: false }),
-      pcropsci: new FormControl({ value: '', disabled: false }),
-      pengineering: new FormControl({ value: '', disabled: false }),
-      pphysci: new FormControl({ value: '', disabled: false }),
-      pvetmed: new FormControl({ value: '', disabled: false }),
-      pspeech: new FormControl({ value: '', disabled: false }),
-      penglish: new FormControl({ value: '', disabled: false }),
-      pnursing: new FormControl({ value: '', disabled: false }),
-      pccl: new FormControl({ value: '', disabled: false }),
-      prle: new FormControl({ value: '', disabled: false }),
-      pinternet: new FormControl({ value: '', disabled: false }),
-      pnstp: new FormControl({ value: '', disabled: false }),
-      pojt: new FormControl({ value: '', disabled: false }),
-      pthesis: new FormControl({ value: '', disabled: false }),
-      pstudent: new FormControl({ value: '', disabled: false }),
-      plate: new FormControl({ value: '', disabled: false }),
-      presidency: new FormControl({ value: '', disabled: false }),
-      pforeignstudent: new FormControl({ value: '', disabled: false }),
-      paddedsubj: new FormControl({ value: '', disabled: false }),
-      ppetition: new FormControl({ value: '', disabled: false }),
-      ptuition: new FormControl({ value: '', disabled: false }),
-      plibrary: new FormControl({ value: '', disabled: false }),
-      pmedical: new FormControl({ value: '', disabled: false }),
-      ppublication: new FormControl({ value: '', disabled: false }),
-      pregistration: new FormControl({ value: '', disabled: false }),
-      pguidance: new FormControl({ value: '', disabled: false }),
-      pid: new FormControl({ value: '', disabled: false }),
-      psfdf: new FormControl({ value: '', disabled: false }),
-      psrf: new FormControl({ value: '', disabled: false }),
-      pathletic: new FormControl({ value: '', disabled: false }),
-      pscuaa: new FormControl({ value: '', disabled: false }),
-      pdeposit: new FormControl({ value: '', disabled: false }),
-      pcspear: new FormControl({ value: '', disabled: false }),
-      pedfs: new FormControl({ value: '', disabled: false }),
-      ppsyc: new FormControl({ value: '', disabled: false }),
-      ptrm: new FormControl({ value: '', disabled: false }),
-      pfishery: new FormControl({ value: '', disabled: false }),
-      ptotalLab: new FormControl({ value: '', disabled: false }),
-      ptotalOther: new FormControl({ value: '', disabled: false })
-    })
-
-
   }
 
 

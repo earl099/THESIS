@@ -181,7 +181,12 @@ export class EnrollmentService {
   }
 
   //--- TRANSACTION FOR DELETING SUBJECT ---//
-
+  dropSubjTransaction(studentnumber: any, semester: any, schoolyear: any, data: any): Observable<any> {
+    return this.httpClient.post(
+      `${this.baseUrl}/validate/drop/${studentnumber}/${semester}/${schoolyear}`,
+      data, this.httpOptions
+    ).pipe(catchError(this.handleError<any>('Drop Subject')))
+  }
   //--- ERROR HANDLING ---//
   private handleError<T>(operation = 'operation', result?: T) {
     return (): Observable<T> => {
