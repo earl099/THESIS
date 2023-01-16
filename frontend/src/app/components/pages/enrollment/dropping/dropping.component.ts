@@ -32,7 +32,7 @@ export class DroppingComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    
+
   }
 
 }
