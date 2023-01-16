@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { GradesService } from 'src/app/services/grades.service';
 import { StudentService } from 'src/app/services/student.service';
 import html2canvas from 'html2canvas';

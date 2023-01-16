@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ToastrService } from 'ngx-toastr';
 import { EnrollmentService } from 'src/app/services/enrollment.service';
 import { StudentService } from 'src/app/services/student.service';
