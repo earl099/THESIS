@@ -75,11 +75,6 @@ export class AddingComponent implements OnInit {
     })
   }
 
-
-  generateData() {
-    this.generateScheduleList()
-  }
-
   generateScheduleList() {
     //SETTING VALUES FOR SCHEDULE DATA AND PUSHING IT TO SCHEDULE LIST
     if(
@@ -201,7 +196,6 @@ export class AddingComponent implements OnInit {
               json
             ).subscribe()
             this.toastr.success('Added Subject/s Successfully.')
-
           }
           catch (error) {
             this.toastr.error('Error Adding Subject')

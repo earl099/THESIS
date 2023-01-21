@@ -1215,16 +1215,28 @@ const dropSubjTransaction = async (req, res) => {
 
     //CHECKS IF THE SUBJECT IS AN ADDED SUBJECT
     let divOfFeesObject
-    let isAddedSubject = false
     if(assessedCounter > subjEnrolled.length) {
-        isAddedSubject = true
 
         //DROP SUBJECT INDEX SUBJENROLLEDCOUNTER
-        await subjEnrollModel.destroy(subjEnrolled[subjEnrolledCounter], { transaction })
+        await subjEnrollModel.destroy({ 
+            where: { 
+                schedcode: subjEnrolled[subjEnrolledCounter].schedcode, 
+                studentnumber: studentnumber, 
+                semester: semester,
+                schoolyear: schoolyear
+            }
+        }, { transaction })
     }
     else {
         //DROP SUBJECT INDEX ASSESSEDCOUNTER
-        await subjEnrollModel.destroy(subjEnrolled[assessedCounter], { transaction })
+        await subjEnrollModel.destroy({
+            where: {
+                schedcode: subjEnrolled[assessedCounter].schedcode,
+                studentnumber: studentnumber, 
+                semester: semester,
+                schoolyear: schoolyear
+            }
+        }, { transaction })
     }
 
     //ANSCI, BIOSCI, CEMDS, HRM, CROPSCI, ENGINEERING, PHYSCI, VETMED, SPEECH, 
@@ -1233,7 +1245,7 @@ const dropSubjTransaction = async (req, res) => {
     const labFeeMultiplier = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
     //OJT, PETITION, THESIS, INTERNET, RESIDENCY, FOREIGN STUDENT, ADDED SUBJECT CHECKER
-    const otherFeeChecker = [0,0,0,0,0,0,subjCounter]
+    const otherFeeChecker = [0,0,0,0,0,0]
 
     //Total units
     let totalUnits = 0
@@ -1405,96 +1417,50 @@ const dropSubjTransaction = async (req, res) => {
                 Number(feesBase.mwrletwo) + Number(feesBase.mwrlethree)
 
     //CALCULATION OF DIVISION OF FEES
-    if(isAddedSubject) {
-        divOfFeesObject = {
-            studentnumber: studentnumber,
-            semester: semester,
-            schoolyear: schoolyear,
-            ansci: labFeeMultiplier[0] * feesBase.labAnSci,
-            biosci: labFeeMultiplier[1] * feesBase.labBioSci,
-            cemds: labFeeMultiplier[2] * feesBase.labCEMDS,
-            hrm: labFeeMultiplier[3] * feesBase.labHRM,
-            cropsci: labFeeMultiplier[4] * feesBase.labCropSci,
-            engineering: labFeeMultiplier[5] * feesBase.labEng,
-            physci: labFeeMultiplier[6] * feesBase.labPhySci,
-            vetmed: labFeeMultiplier[7] * feesBase.labVetMed,
-            speech: labFeeMultiplier[8] * feesBase.labSpeech,
-            english: labFeeMultiplier[9] * feesBase.labEnglish,
-            nursing: labFeeMultiplier[10] * feesBase.labNursing,
-            ccl: labFeeMultiplier[11] * feesBase.ccl,
-            rle: labFeeMultiplier[12] * rleFee,
-            internet: otherFeeChecker[3] * feesBase.internet,
-            nstp: labFeeMultiplier[19] * feesBase.NSTP,
-            ojt: otherFeeChecker[0] * feesBase.ojt,
-            thesis: otherFeeChecker[2] * feesBase.thesis,
-            student: labFeeMultiplier[18] * feesBase.studentTeaching,
-            residency: otherFeeChecker[4] * feesBase.residency,
-            foreignstudent: otherFeeChecker[5] * feesBase.foreignStudent,
-            addedsubj: (otherFeeChecker[6] * feesBase.addedSubj) - (feesBase.addedSubj),
-            tuition: totalTuition - (totalTuition * (scholarship.tuition / 100)),
-            library: feesBase.miscLibrary,
-            medical: feesBase.miscMedical,
-            publication: feesBase.miscPublication,
-            registration: feesBase.miscRegistration,
-            guidance: feesBase.miscGuidance,
-            id: feesBase.identification,
-            sfdf: feesBase.sfdf - (feesBase.sfdf * (scholarship.sfdf / 100)),
-            srf: feesBase.srf - (feesBase.srf * (scholarship.srf / 100)),
-            athletic: feesBase.athletic,
-            scuaa: feesBase.scuaa,
-            deposit: feesBase.deposit,
-            cspear: labFeeMultiplier[13] * feesBase.labcspear,
-            edfs: labFeeMultiplier[14] * feesBase.edfs,
-            psyc: labFeeMultiplier[15] * feesBase.psyc,
-            trm: labFeeMultiplier[16] * feesBase.trm,
-            fishery: labFeeMultiplier[17] * feesBase.fishery,
-        }
+    divOfFeesObject = {
+        studentnumber: studentnumber,
+        semester: semester,
+        schoolyear: schoolyear,
+        ansci: labFeeMultiplier[0] * feesBase.labAnSci,
+        biosci: labFeeMultiplier[1] * feesBase.labBioSci,
+        cemds: labFeeMultiplier[2] * feesBase.labCEMDS,
+        hrm: labFeeMultiplier[3] * feesBase.labHRM,
+        cropsci: labFeeMultiplier[4] * feesBase.labCropSci,
+        engineering: labFeeMultiplier[5] * feesBase.labEng,
+        physci: labFeeMultiplier[6] * feesBase.labPhySci,
+        vetmed: labFeeMultiplier[7] * feesBase.labVetMed,
+        speech: labFeeMultiplier[8] * feesBase.labSpeech,
+        english: labFeeMultiplier[9] * feesBase.labEnglish,
+        nursing: labFeeMultiplier[10] * feesBase.labNursing,
+        ccl: labFeeMultiplier[11] * feesBase.ccl,
+        rle: labFeeMultiplier[12] * rleFee,
+        internet: otherFeeChecker[3] * feesBase.internet,
+        nstp: labFeeMultiplier[19] * feesBase.NSTP,
+        ojt: otherFeeChecker[0] * feesBase.ojt,
+        thesis: otherFeeChecker[2] * feesBase.thesis,
+        student: labFeeMultiplier[18] * feesBase.studentTeaching,
+        residency: otherFeeChecker[4] * feesBase.residency,
+        foreignstudent: otherFeeChecker[5] * feesBase.foreignStudent,
+        addedsubj: otherFeeChecker[6] * feesBase.addedSubj,
+        tuition: totalTuition - (totalTuition * (scholarship.tuition / 100)),
+        library: feesBase.miscLibrary,
+        medical: feesBase.miscMedical,
+        publication: feesBase.miscPublication,
+        registration: feesBase.miscRegistration,
+        guidance: feesBase.miscGuidance,
+        id: feesBase.identification,
+        sfdf: feesBase.sfdf - (feesBase.sfdf * (scholarship.sfdf / 100)),
+        srf: feesBase.srf - (feesBase.srf * (scholarship.srf / 100)),
+        athletic: feesBase.athletic,
+        scuaa: feesBase.scuaa,
+        deposit: feesBase.deposit,
+        cspear: labFeeMultiplier[13] * feesBase.labcspear,
+        edfs: labFeeMultiplier[14] * feesBase.edfs,
+        psyc: labFeeMultiplier[15] * feesBase.psyc,
+        trm: labFeeMultiplier[16] * feesBase.trm,
+        fishery: labFeeMultiplier[17] * feesBase.fishery,
     }
-    else {
-        divOfFeesObject = {
-            studentnumber: studentnumber,
-            semester: semester,
-            schoolyear: schoolyear,
-            ansci: labFeeMultiplier[0] * feesBase.labAnSci,
-            biosci: labFeeMultiplier[1] * feesBase.labBioSci,
-            cemds: labFeeMultiplier[2] * feesBase.labCEMDS,
-            hrm: labFeeMultiplier[3] * feesBase.labHRM,
-            cropsci: labFeeMultiplier[4] * feesBase.labCropSci,
-            engineering: labFeeMultiplier[5] * feesBase.labEng,
-            physci: labFeeMultiplier[6] * feesBase.labPhySci,
-            vetmed: labFeeMultiplier[7] * feesBase.labVetMed,
-            speech: labFeeMultiplier[8] * feesBase.labSpeech,
-            english: labFeeMultiplier[9] * feesBase.labEnglish,
-            nursing: labFeeMultiplier[10] * feesBase.labNursing,
-            ccl: labFeeMultiplier[11] * feesBase.ccl,
-            rle: labFeeMultiplier[12] * rleFee,
-            internet: otherFeeChecker[3] * feesBase.internet,
-            nstp: labFeeMultiplier[19] * feesBase.NSTP,
-            ojt: otherFeeChecker[0] * feesBase.ojt,
-            thesis: otherFeeChecker[2] * feesBase.thesis,
-            student: labFeeMultiplier[18] * feesBase.studentTeaching,
-            residency: otherFeeChecker[4] * feesBase.residency,
-            foreignstudent: otherFeeChecker[5] * feesBase.foreignStudent,
-            addedsubj: otherFeeChecker[6] * feesBase.addedSubj,
-            tuition: totalTuition - (totalTuition * (scholarship.tuition / 100)),
-            library: feesBase.miscLibrary,
-            medical: feesBase.miscMedical,
-            publication: feesBase.miscPublication,
-            registration: feesBase.miscRegistration,
-            guidance: feesBase.miscGuidance,
-            id: feesBase.identification,
-            sfdf: feesBase.sfdf - (feesBase.sfdf * (scholarship.sfdf / 100)),
-            srf: feesBase.srf - (feesBase.srf * (scholarship.srf / 100)),
-            athletic: feesBase.athletic,
-            scuaa: feesBase.scuaa,
-            deposit: feesBase.deposit,
-            cspear: labFeeMultiplier[13] * feesBase.labcspear,
-            edfs: labFeeMultiplier[14] * feesBase.edfs,
-            psyc: labFeeMultiplier[15] * feesBase.psyc,
-            trm: labFeeMultiplier[16] * feesBase.trm,
-            fishery: labFeeMultiplier[17] * feesBase.fishery,
-        }
-    }
+    
 
     //TRANSACTION
     let updatedDivOfFees
@@ -1508,7 +1474,8 @@ const dropSubjTransaction = async (req, res) => {
                     semester: semester,
                     schoolyear: schoolyear
                 }
-            }
+            },
+            { transaction }
         )
 
         res.status(200).send({

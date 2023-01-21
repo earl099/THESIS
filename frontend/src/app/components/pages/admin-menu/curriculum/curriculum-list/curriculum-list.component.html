@@ -5,8 +5,8 @@
       <div class="container"><p>Curriculum List</p></div>
       <button mat-button class="btn btn-success" routerLink="/curriculum/add">Add Curriculum</button>
       <br>
-      
-      <mat-form-field appearance="standard">
+
+      <mat-form-field appearance="fill">
         <mat-label>Filter</mat-label>
         <input matInput (keyup)="applyFilter($event)" placeholder="Enter a filter" #input>
       </mat-form-field>

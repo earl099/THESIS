@@ -15,7 +15,7 @@ router.get('/schedule/list', scheduleController.getSchedules);
 //--- SCHEDULE PROFILE ROUTER ---//
 router.get('/schedule/:schedcode', scheduleController.getSchedule);
 
-//--- SEARCH SCHEDULE BY SCHEDCODE, SEM, SY ---//
+//--- SEARCH SCHEDULE BY SEM, SY ---//
 router.get('/schedule/search/:semester/:schoolyear', scheduleController.getScheduleBySemSY)
 
 //--- DELETE SCHEDULE ---//
