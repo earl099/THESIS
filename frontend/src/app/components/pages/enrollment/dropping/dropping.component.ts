@@ -12,6 +12,7 @@ import { VariableService } from 'src/app/services/variable.service';
   templateUrl: './dropping.component.html',
   styleUrls: ['./dropping.component.scss']
 })
+
 export class DroppingComponent implements OnInit {
   //VARIABLE FOR DEFAULT VALUE OF SEMESTER AND SCHOOLYEAR
   globalVar: any

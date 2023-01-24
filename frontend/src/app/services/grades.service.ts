@@ -27,6 +27,27 @@ export class GradesService {
       .pipe(catchError(this.handleError<any>('Get Grades')))
   }
 
+  //--- GET GRADES BY SCHEDCODE, SUBJCODE AND STUDNUM ---//
+  getGradeBySchedCodeSubjCodeAndStudNum(
+    schedcode: any,
+    subjectcode: any,
+    studentnumber: any
+  ): Observable<any> {
+    return this.httpClient.get(`${this.baseURL}/grades/get/${schedcode}/${subjectcode}/${studentnumber}`, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Get Grade')))
+  }
+
+  //--- UPDATE GRADES ---//
+  updateGrade(
+    studentnumber: any,
+    schedcode: any,
+    subjectcode: any,
+    gradeData: any
+  ): Observable<any> {
+    return this.httpClient.put(`${this.baseURL}/grades/update/${studentnumber}/${schedcode}/${subjectcode}`, gradeData, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Update Grade')))
+  }
+
   //--- ERROR HANDLING ---//
   private handleError<T>(operation = 'operation', result?: T) {
     return (): Observable<T> => {

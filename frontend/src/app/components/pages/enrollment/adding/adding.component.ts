@@ -24,6 +24,7 @@ export class AddingComponent implements OnInit {
   schedControl = new FormControl('0')
   filteredSched!: Observable<any>
   scheduleList: Array<any> = []
+  subjEnrolledData: Array<any> = []
 
   //SCHEDULES LIST FOR ADDING SUBJECTS
   addedSchedule: any
@@ -94,13 +95,59 @@ export class AddingComponent implements OnInit {
             if(res) {
               this.resultVisibility = true
               this.searchVisibility = false
-              let tmpData = res.schedule
+              this.enrollmentService.getSubjsEnrolled(
+                this.searchForm.get('studentnumber').value,
+                this.searchForm.get('semester').value,
+                this.searchForm.get('schoolyear').value
+              ).subscribe((res) => {
+                if(res) {
+                  let schedcode = res.subjsEnrolled
+                  for (let i = 0; i < schedcode.length; i++) {
+                    this.scheduleService.getSchedule(schedcode[i].schedcode).subscribe((res) => {
+                      if(res) {
+                        let scheduleData = res.schedule
+                        if(this.subjEnrolledData.length == null) {
+                          this.subjEnrolledData.fill(scheduleData, -1)
+                        }
+                        else {
+                          this.subjEnrolledData.push(scheduleData)
+                        }
 
-              for(let i = 0; i < tmpData.length; i++) {
-                //console.log(scheduleData.value)
-                this.scheduleList.push(tmpData[i])
-              }
-              console.log(this.scheduleList)
+                        if(i == schedcode.length - 1) {
+                          //FILTER THE ENROLLED SUBJECTS
+                          this.scheduleService.getScheduleBySemSY(
+                            this.searchForm.get('semester').value,
+                            this.searchForm.get('schoolyear').value
+                          )
+                          .subscribe((res) => {
+                            if(res) {
+                              let tmpData2 = res.schedule
+                              let enrolled = false
+                              for(let i = 0; i < tmpData2.length; i++) {
+                                for (let j = 0; j < this.subjEnrolledData.length; j++) {
+                                  enrolled = false
+                                  if(this.subjEnrolledData[j].schedcode == tmpData2[i].schedcode) {
+                                    enrolled = true
+                                    break
+                                  }
+                                }
+                                if(enrolled) {
+                                  continue
+                                }
+                                else {
+                                  this.scheduleList.push(tmpData2[i])
+                                }
+                              }
+                              console.log(this.scheduleList)
+                            }
+                          })
+                        }
+                      }
+                    })
+                  }
+                }
+              })
+              //console.log(this.scheduleList)
             }
           })
         }
@@ -141,8 +188,30 @@ export class AddingComponent implements OnInit {
           this.addedSchedule.get('isShown').setValue(false)
           this.addedSchedule.get('isTextResult').setValue(true)
 
-          this.addedScheduleList.fill(
-            {
+          if(this.addedScheduleList.length <= 1) {
+
+            this.addedScheduleList.fill(
+              {
+                studentnumber: this.searchForm.get('studentnumber').value,
+                schedcode: this.addedSchedule.get('schedcode').value,
+                edate: String(
+                  this.date.getFullYear() + '-' +
+                  (this.date.getMonth() + 1) + '-' +
+                  this.date.getDate() + ' ' +
+                  this.date.getHours() + ':' +
+                  this.date.getMinutes() + ':' +
+                  this.date.getSeconds()),
+                semester: this.searchForm.get('semester').value,
+                schoolyear: this.searchForm.get('schoolyear').value,
+                isShown: false,
+                isTextResult: true,
+                subjectCode: this.addedSchedule.get('subjectCode').value,
+                subjNum: this.addedScheduleList.length
+              }
+            )
+          }
+          else {
+            this.addedScheduleList.push({
               studentnumber: this.searchForm.get('studentnumber').value,
               schedcode: this.addedSchedule.get('schedcode').value,
               edate: String(
@@ -158,9 +227,16 @@ export class AddingComponent implements OnInit {
               isTextResult: this.addedSchedule.get('isTextResult').value,
               subjectCode: this.addedSchedule.get('subjectCode').value,
               subjNum: this.addedScheduleList.length
-            },
-            this.addedScheduleList.length - 1
-          )
+            })
+            for (let i = 0; i < this.addedScheduleList.length; i++) {
+              if(this.addedScheduleList[i].schedcode == '') {
+                this.addedScheduleList.splice(i, 1)
+              }
+
+            }
+
+          }
+
           console.log(this.addedScheduleList)
         }
       })
@@ -211,8 +287,7 @@ export class AddingComponent implements OnInit {
     this.resultVisibility = false
     this.searchVisibility = true
     this.searchForm.get('studentnumber').setValue('')
-    this.searchForm.get('semester').setValue(this.globalVar[0].semester)
-    this.searchForm.get('schoolyear').setValue(this.globalVar[0].schoolyear)
+    this.schedControl.reset()
     this.scheduleList.splice(0, this.scheduleList.length)
     this.addedScheduleList.splice(0, this.addedScheduleList.length)
     //console.log(this.scheduleList)

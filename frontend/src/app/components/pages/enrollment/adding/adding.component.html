@@ -85,8 +85,14 @@
         </div>
 
         <div class="row align-items-start">
-          <button mat-button class="btn btn-success" *ngIf="resultVisibility" (click)="finalAdd()">Reevaluate Fees</button>
-          <button mat-button class="btn btn-success" (click)="backToSearch()">Back to Search</button>
+          <div class="col">
+            <button mat-button class="btn btn-success" *ngIf="resultVisibility" (click)="finalAdd()">Reevaluate Fees</button>
+          </div>
+          <div class="col">
+            <button mat-button class="btn btn-success" (click)="backToSearch()">Back to Search</button>
+          </div>
+
+
         </div>
 
       </div>

@@ -895,7 +895,7 @@ const addSubjTransaction = async (req, res) => {
     }
 
     //OTHER FEES CHECKER AND CALCULATION OF TOTAL UNITS
-    for(let i = 0; i < schedcodeList.length; i++) {
+    for(let i = 0; i < subjEnrolledObj.length; i++) {
         const schedcodeList = await scheduleModel.findOne({
             attributes: [
                 'schedcode',
