@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const requestIp = require('request-ip')
 require('dotenv').config({ path: '../.env' });
 const app = express();
 
@@ -68,6 +69,11 @@ app.use('/api', processLogsRouter)
 const feesRouter = require('./routes/feesRoutes')
 app.use('/api', feesRouter)
 
+app.use(requestIp.mw())
+app.get('/api/get/ip', (req, res) => {
+    const clientIp = req.socket.remoteAddress;
+    res.send({ clientIp: clientIp });
+});
 //---DB CONNECTION---//
 // const db = mysql.createConnection({
 //     host: 'localhost',

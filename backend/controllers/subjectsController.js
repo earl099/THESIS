@@ -142,6 +142,25 @@ const getSubjTitle = async (req, res) => {
      }
 }
 
+//--- GET SCHOOLYEAR ---//
+const getSchoolyear = async (req, res) => {
+    const schoolyear = await subjectsModel.findAll({
+        attributes: [
+            [
+                db.sequelize.fn(
+                    'DISTINCT', 
+                    db.sequelize.col('schoolyear')
+                ), 
+                'schoolyear'
+            ]
+        ]
+    })
+
+    if(schoolyear.length > 0) {
+        res.status(200).send({ schoolyear: schoolyear })
+    }
+}
+
 //--- DELETE SUBJECT ---//
 const deleteSubject = async (req, res) => {
     const subjectcode = req.params.subjectcode
@@ -160,5 +179,6 @@ module.exports = {
     editSubject,
     getSubject,
     getSubjTitle,
+    getSchoolyear,
     deleteSubject
 }

@@ -18,6 +18,9 @@ router.get('/schedule/:schedcode', scheduleController.getSchedule);
 //--- SEARCH SCHEDULE BY SEM, SY ---//
 router.get('/schedule/search/:semester/:schoolyear', scheduleController.getScheduleBySemSY)
 
+//--- GET SCHOOLYEAR ---//
+router.get('/schedule/get/schoolyear', scheduleController.getSchoolyear)
+
 //--- DELETE SCHEDULE ---//
 router.delete('/schedule/delete/:schedcode', scheduleController.deleteSchedule)
 

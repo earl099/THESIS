@@ -27,14 +27,10 @@ export class GradesService {
       .pipe(catchError(this.handleError<any>('Get Grades')))
   }
 
-  //--- GET GRADES BY SCHEDCODE, SUBJCODE AND STUDNUM ---//
-  getGradeBySchedCodeSubjCodeAndStudNum(
-    schedcode: any,
-    subjectcode: any,
-    studentnumber: any
-  ): Observable<any> {
-    return this.httpClient.get(`${this.baseURL}/grades/get/${schedcode}/${subjectcode}/${studentnumber}`, this.httpOptions)
-    .pipe(catchError(this.handleError<any>('Get Grade')))
+  //--- GET SCHOOLYEAR ---//
+  getSchoolyear(studentnumber: any) {
+    return this.httpClient.get(`${this.baseURL}/grades/get/${studentnumber}`, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Get Schoolyear')))
   }
 
   //--- UPDATE GRADES ---//
@@ -44,7 +40,7 @@ export class GradesService {
     subjectcode: any,
     gradeData: any
   ): Observable<any> {
-    return this.httpClient.put(`${this.baseURL}/grades/update/${studentnumber}/${schedcode}/${subjectcode}`, gradeData, this.httpOptions)
+    return this.httpClient.post(`${this.baseURL}/grades/update/${studentnumber}/${schedcode}/${subjectcode}`, gradeData, this.httpOptions)
     .pipe(catchError(this.handleError<any>('Update Grade')))
   }
 

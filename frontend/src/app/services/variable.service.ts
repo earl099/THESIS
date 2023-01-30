@@ -38,6 +38,11 @@ export class VariableService {
     .pipe(catchError(this.handleError<any>('Edit Global Variables')))
   }
 
+  getIpAddress(): Observable<any> {
+    return this.httpClient.get(`${this.baseUrl}/get/ip`)
+    .pipe(catchError(this.handleError<any>('Get IP Address')))
+  }
+
   //--- ERROR HANDLERS ---//
   private handleError<T>(operation = 'operation', result?: T) {
     return (): Observable<T> => {

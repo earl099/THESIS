@@ -26,7 +26,7 @@ export class AdminLoginComponent implements OnInit {
       next: (res) => {
         console.log(res);
         if(res) {
-          localStorage.setItem('user', JSON.stringify(res.user));
+          localStorage.setItem('user', res.user.username);
           this.userService.setToken(res.user.collegeID);
           localStorage.setItem('expirationDuration', res.expirationDuration);
 

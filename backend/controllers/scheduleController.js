@@ -97,7 +97,9 @@ const addSchedule = async (req, res) => {
             scheduleModel.ok4 = 'Y';
         }
         const createdSchedule = await scheduleModel.create(schedule);
-        res.status(201).send({createdSchedule: createdSchedule, message: 'Schedule Added.'});
+        res.status(201).send({
+            createdSchedule: createdSchedule, message: 'Schedule Added.'
+        });
     } 
     catch {
         res.status(500).send({ message: 'Schedule already exists.' });
@@ -293,6 +295,26 @@ const getScheduleBySemSY = async (req, res) => {
     }
 }
 
+//--- GET SCHOOLYEAR ---//
+const getSchoolyear = async (req, res) => {
+    const schoolyear = await scheduleModel.findAll({
+        attributes: [
+            [
+                db.sequelize.fn(
+                    'DISTINCT', 
+                    db.sequelize.col('schoolyear')
+                ), 
+                'schoolyear'
+            ]
+        ]
+    })
+
+    if(schoolyear.length > 0) {
+        res.status(200).send({ schoolyear: schoolyear })
+    }
+}
+
+//--- DELETE SCHEDULE ---//
 const deleteSchedule = async (req, res) => {
     const schedcode = req.params.schedcode
 
@@ -312,5 +334,6 @@ module.exports = {
     getSchedules,
     getSchedule,
     getScheduleBySemSY,
+    getSchoolyear,
     deleteSchedule
 }

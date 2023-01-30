@@ -9,7 +9,10 @@ router.get('/grades/:studentnumber/:semester/:schoolyear', gradesController.getG
 //--- GET GRADE BY SCHEDCODE, SUBJCODE AND STUDENT NUMBER ROUTE ---//
 router.get('/grades/get/:schedcode/:subjectcode/:studentnumber', gradesController.getGradeBySubjcodeSchedcodeAndStudNum)
 
+//--- GET SCHOOLYEAR ---//
+router.get('/grades/get/:studentnumber', gradesController.getSchoolyear)
+
 //--- UPDATE AND COMPLETION GRADE ROUTE ---//
-router.put('/grades/update/:studentnumber/:schedcode/:subjectcode/', gradesController.updateGrade)
+router.post('/grades/update/:studentnumber/:schedcode/:subjectcode', gradesController.updateGrade)
 
 module.exports = router
