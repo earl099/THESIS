@@ -16,6 +16,8 @@ import { VariableService } from 'src/app/services/variable.service';
   styleUrls: ['./student-list.component.scss']
 })
 export class StudentListComponent implements OnInit {
+  processData: any
+
   columns: string[] = [
     'studentNumber',
     'firstName',
@@ -66,6 +68,15 @@ export class StudentListComponent implements OnInit {
       courseto: new FormControl({value: '', disabled: false}),
       semester: new FormControl({value: '', disabled: false}),
       schoolyear: new FormControl({value: '', disabled: false})
+    })
+
+    this.processData = this.fb.group({
+      username: new FormControl({ value: '', disabled: false }),
+      ipaddress: new FormControl({ value: '', disabled: false }),
+      pcname: new FormControl({ value: '', disabled: false }),
+      studentnumber: new FormControl({ value: '', disabled: false }),
+      type: new FormControl({ value: '', disabled: false }),
+      description: new FormControl({ value: '', disabled: false })
     })
 
     this.getStudents();
@@ -139,6 +150,22 @@ export class StudentListComponent implements OnInit {
 
         this.studentService.editCourse(Number(this.studentInfoForm.get('studentNumber').value), this.studentInfoForm.value).subscribe((res) => {
           if(res) {
+            this.variableService.getIpAddress().subscribe((res) => {
+              if(res) {
+                let ipAdd = res.clientIp
+
+                this.processData.get('username').setValue(localStorage.getItem('user'))
+                this.processData.get('ipaddress').setValue(ipAdd)
+                this.processData.get('pcname').setValue(window.location.hostname)
+                this.processData.get('studentnumber').setValue(this.studentInfoForm.get('studentNumber').value)
+                this.processData.get('type').setValue('Shifted Course')
+                this.processData.get('description').setValue(
+                  `Shifted ${this.studentInfoForm.get('studentNumber').value}'s
+                  from ${this.shifteeForm.get('coursefrom').value} to ${this.shifteeForm.get('coursefrom').value}`)
+                this.variableService.addProcess(this.processData).subscribe()
+              }
+            })
+
             this.toastr.success(res.message)
             this.router.navigate(['/student/list'])
           }

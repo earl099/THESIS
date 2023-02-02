@@ -38,6 +38,13 @@ export class VariableService {
     .pipe(catchError(this.handleError<any>('Edit Global Variables')))
   }
 
+  //--- ADDING LOGS ---//
+  addProcess(processData: any): Observable<any> {
+    return this.httpClient.post(`${this.baseUrl}/log/process/add`, processData, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Add Process Log')))
+  }
+
+  //--- GETTING THE IP ADDRESS ---//
   getIpAddress(): Observable<any> {
     return this.httpClient.get(`${this.baseUrl}/get/ip`)
     .pipe(catchError(this.handleError<any>('Get IP Address')))

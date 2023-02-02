@@ -11,6 +11,8 @@ import { VariableService } from 'src/app/services/variable.service';
   styleUrls: ['./validation.component.scss']
 })
 export class ValidationComponent implements OnInit {
+  processData: any
+
   //VARIABLE FOR DEFAULT VALUE OF SEMESTER AND SCHOOLYEAR
   globalVar: any
 
@@ -153,6 +155,16 @@ export class ValidationComponent implements OnInit {
       pfishery: new FormControl({ value: '', disabled: false }),
       ptotalLab: new FormControl({ value: '', disabled: false }),
       ptotalOther: new FormControl({ value: '', disabled: false })
+    })
+
+    //process log data
+    this.processData = this.fb.group({
+      username: new FormControl({ value: '', disabled: false }),
+      ipaddress: new FormControl({ value: '', disabled: false }),
+      pcname: new FormControl({ value: '', disabled: false }),
+      studentnumber: new FormControl({ value: '', disabled: false }),
+      type: new FormControl({ value: '', disabled: false }),
+      description: new FormControl({ value: '', disabled: false })
     })
 
     this.variableService.getLegend().subscribe((res) => {
@@ -459,6 +471,21 @@ export class ValidationComponent implements OnInit {
           this.ptotalAmount += this.resultForm.get('ptotalLab').value + this.resultForm.get('ptotalOther').value
         }
         //--- PAID DIVISION OF FEES END HERE ---//
+
+        //--- ADD LOG TO DB ---//
+        this.variableService.getIpAddress().subscribe((res) => {
+          if(res) {
+            let ipAdd = res.clientIp
+
+            this.processData.get('username').setValue(localStorage.getItem('user'))
+            this.processData.get('ipaddress').setValue(ipAdd)
+            this.processData.get('pcname').setValue(window.location.hostname)
+            this.processData.get('studentnumber').setValue(this.searchForm.get('studentnumber').value)
+            this.processData.get('type').setValue('Validate Student')
+            this.processData.get('description').setValue(`Validated ${this.searchForm.get('studentnumber').value}'s assessment data.`)
+            this.variableService.addProcess(this.processData).subscribe()
+          }
+        })
       }
     })
   }

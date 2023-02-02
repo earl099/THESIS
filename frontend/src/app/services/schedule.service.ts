@@ -74,11 +74,6 @@ export class ScheduleService {
     )
   }
 
-  //--- DELETE SCHEDULE ---//
-  deleteSchedule(schedcode: any) {
-    return this.httpClient.delete(`${this.baseUrl}/schedule/delete/${schedcode}`)
-  }
-
   //--- ERROR HANDLING ---//
   private handleError<T>(operation = 'operation', result?: T) {
     return (): Observable<T> => {

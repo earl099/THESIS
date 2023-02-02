@@ -1,18 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { MatTableDataSource } from '@angular/material/table';
 import { GradesService } from 'src/app/services/grades.service';
 import { StudentService } from 'src/app/services/student.service';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { EnrollmentService } from 'src/app/services/enrollment.service';
 import { VariableService } from 'src/app/services/variable.service';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-cog-reprint',
   templateUrl: './cog-reprint.component.html',
   styleUrls: ['./cog-reprint.component.scss']
 })
 export class CogReprintComponent implements OnInit {
+  schoolyear: any
+  gradeLogData: any
   globalVar: any
   searchForm: any
   searchVisibility: boolean = true
@@ -47,7 +50,8 @@ export class CogReprintComponent implements OnInit {
     private studentService: StudentService,
     private enrollmentService: EnrollmentService,
     private gradesService: GradesService,
-    private variableService: VariableService
+    private variableService: VariableService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -68,10 +72,21 @@ export class CogReprintComponent implements OnInit {
     this.variableService.getLegend().subscribe((res) => {
       if(res) {
         this.globalVar = res.legend
-        this.searchForm.get('semester').setValue(this.globalVar[0].ksemester)
-        this.searchForm.get('schoolyear').setValue(this.globalVar[0].kschoolyear)
       }
+    })
 
+    this.gradeLogData = this.fb.group({
+      schedcode: new FormControl({ value: '', disabled: false }),
+      subjectcode: new FormControl({ value: '', disabled: false }),
+      studentnumber: new FormControl({ value: '', disabled: false }),
+      myprocess: new FormControl({ value: '', disabled: false }),
+      mydate: new FormControl({ value: '', disabled: false }),
+      mytime: new FormControl({ value: '', disabled: false }),
+      ipaddress: new FormControl({ value: '', disabled: false }),
+      pcname: new FormControl({ value: '', disabled: false }),
+      username: new FormControl({ value: '', disabled: false }),
+      semester: new FormControl({ value: '', disabled: false }),
+      schoolyear: new FormControl({ value: '', disabled: false })
     })
   }
 
@@ -207,6 +222,39 @@ export class CogReprintComponent implements OnInit {
         date.getDate() + '-' + date.getFullYear() + '.pdf'
       )
     })
+
+
+    //--- CREATING GRADE LOG OBJECT TO INPUT TO GRADE LOG TABLE ---//
+    this.variableService.getIpAddress().subscribe((res) => {
+      if(res) {
+        let ipAdd = res.clientIp
+        let date = new Date()
+        this.gradeLogData.get('schedcode').setValue('N/A')
+        this.gradeLogData.get('subjectcode').setValue('N/A')
+        this.gradeLogData.get('studentnumber').setValue(this.searchForm.get('studentnumber').value)
+        this.gradeLogData.get('myprocess').setValue('EXPORT COG')
+        this.gradeLogData.get('mydate').setValue(String(
+          date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+        ))
+        this.gradeLogData.get('mytime').setValue(String(
+          date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()
+        ))
+        this.gradeLogData.get('ipaddress').setValue(ipAdd)
+        this.gradeLogData.get('pcname').setValue(window.location.hostname)
+        this.gradeLogData.get('username').setValue(localStorage.getItem('user'))
+        this.gradeLogData.get('semester').setValue(this.searchForm.get('semester').value)
+        this.gradeLogData.get('schoolyear').setValue(this.searchForm.get('schoolyear').value)
+        //--- ADD GRADE LOG TO DB ---//
+        this.gradesService.addGradeLog(this.gradeLogData.value).subscribe((res) => {
+          if(res) {
+            this.toastr.success('COG Exported')
+            this.backToSearch()
+          }
+        })
+      }
+    })
+
+
   }
 
   backToSearch() {
@@ -220,6 +268,14 @@ export class CogReprintComponent implements OnInit {
     this.totalCreditUnits = 0
     this.aveGrade = 0
     this.passingPercentage = 0
+  }
+
+  getSchoolyear(studentnumber: any) {
+    this.gradesService.getSchoolyear(studentnumber).subscribe((res) => {
+      if(res) {
+        this.schoolyear = res.schoolyear
+      }
+    })
   }
 
   numberFilter(event: any) {

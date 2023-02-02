@@ -6,7 +6,7 @@
         <form [formGroup]="searchForm">
           <mat-form-field>
             <mat-label>Student Number</mat-label>
-            <input matInput type="text" formControlName="studentnumber" autocomplete="off" (keypress)="numberFilter($event)">
+            <input matInput #studentnumber type="text" formControlName="studentnumber" autocomplete="off" (keypress)="numberFilter($event)" (change)="getSchoolyear(studentnumber.value)">
           </mat-form-field>
           <br>
 
@@ -22,7 +22,9 @@
 
           <mat-form-field>
             <mat-label>School Year</mat-label>
-            <input matInput type="text" formControlName="schoolyear" autocomplete="off">
+            <mat-select formControlName="schoolyear">
+              <mat-option *ngFor="let year of schoolyear" [value]="year.schoolyear">{{year.schoolyear}}</mat-option>
+            </mat-select>
           </mat-form-field>
           <br>
 

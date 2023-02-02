@@ -14,6 +14,8 @@ import { VariableService } from 'src/app/services/variable.service';
   styleUrls: ['./regform-reprint.component.scss']
 })
 export class RegformReprintComponent implements OnInit {
+  processData: any
+
   searchForm: any
   searchVisibility: boolean = true
   globalVariable: any
@@ -120,6 +122,15 @@ export class RegformReprintComponent implements OnInit {
       fishery: new FormControl({ value: '', disabled: false }),
       totalLab: new FormControl({ value: '', disabled: false }),
       totalOther: new FormControl({ value: '', disabled: false })
+    })
+
+    this.processData = this.fb.group({
+      username: new FormControl({ value: '', disabled: false }),
+      ipaddress: new FormControl({ value: '', disabled: false }),
+      pcname: new FormControl({ value: '', disabled: false }),
+      studentnumber: new FormControl({ value: '', disabled: false }),
+      type: new FormControl({ value: '', disabled: false }),
+      description: new FormControl({ value: '', disabled: false })
     })
   }
 
@@ -356,6 +367,21 @@ export class RegformReprintComponent implements OnInit {
       let date = new Date(Date.now())
       pdf.addImage(fileURI, 'JPG', 0, position, fileWidth, fileHeight)
       pdf.save( this.resultForm.get('lastname').value + '-regform-' + (date.getMonth() + 1) + '-' + date.getDate() + '-' + date.getFullYear() + '.pdf')
+    })
+
+    //--- ADD LOG TO DB ---//
+    this.variableService.getIpAddress().subscribe((res) => {
+      if(res) {
+        let ipAdd = res.clientIp
+
+        this.processData.get('username').setValue(localStorage.getItem('user'))
+        this.processData.get('ipaddress').setValue(ipAdd)
+        this.processData.get('pcname').setValue(window.location.hostname)
+        this.processData.get('studentnumber').setValue(this.searchForm.get('studentnumber').value)
+        this.processData.get('type').setValue('Export Registration Form')
+        this.processData.get('description').setValue(`Exported ${this.searchForm.get('studentnumber').value}'s Registration Form to PDF.`)
+        this.variableService.addProcess(this.processData).subscribe()
+      }
     })
   }
 

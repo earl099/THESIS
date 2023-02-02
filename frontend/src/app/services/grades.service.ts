@@ -44,6 +44,11 @@ export class GradesService {
     .pipe(catchError(this.handleError<any>('Update Grade')))
   }
 
+  addGradeLog(logData: any): Observable<any> {
+    return this.httpClient.post(`${this.baseURL}/logs/grade/add`, logData, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Add Grade Log')))
+  }
+
   //--- ERROR HANDLING ---//
   private handleError<T>(operation = 'operation', result?: T) {
     return (): Observable<T> => {

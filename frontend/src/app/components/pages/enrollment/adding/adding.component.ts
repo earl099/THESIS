@@ -13,6 +13,8 @@ import { VariableService } from 'src/app/services/variable.service';
   styleUrls: ['./adding.component.scss']
 })
 export class AddingComponent implements OnInit {
+  processData: any
+
   //VARIABLE FOR DEFAULT VALUE OF SEMESTER AND SCHOOLYEAR
   globalVar: any
 
@@ -73,6 +75,16 @@ export class AddingComponent implements OnInit {
       subjectCode: new FormControl({ value:'', disabled: false }),
       isShown: new FormControl({ value: true, disabled: false }),
       isTextResult: new FormControl({ value: false, disabled: false })
+    })
+
+    //process log data
+    this.processData = this.fb.group({
+      username: new FormControl({ value: '', disabled: false }),
+      ipaddress: new FormControl({ value: '', disabled: false }),
+      pcname: new FormControl({ value: '', disabled: false }),
+      studentnumber: new FormControl({ value: '', disabled: false }),
+      type: new FormControl({ value: '', disabled: false }),
+      description: new FormControl({ value: '', disabled: false })
     })
   }
 
@@ -270,7 +282,26 @@ export class AddingComponent implements OnInit {
               this.searchForm.get('semester').value,
               this.searchForm.get('schoolyear').value,
               json
-            ).subscribe()
+            ).subscribe((res) => {
+              if(res) {
+                this.variableService.getIpAddress().subscribe((res) => {
+                  if(res) {
+                    let ipAdd = res.clientIp
+
+                    this.processData.get('username').setValue(localStorage.getItem('user'))
+                    this.processData.get('ipaddress').setValue(ipAdd)
+                    this.processData.get('pcname').setValue(window.location.hostname)
+                    this.processData.get('studentnumber').setValue(this.searchForm.get('studentnumber').value)
+                    this.processData.get('type').setValue('Add Subject')
+                    this.processData.get('description').setValue(
+                      `Added ${this.addedScheduleList[i].schedcode}
+                      to ${this.searchForm.get('studentnumber').value}'s schedule.`
+                    )
+                    this.variableService.addProcess(this.processData).subscribe()
+                  }
+                })
+              }
+            })
             this.toastr.success('Added Subject/s Successfully.')
           }
           catch (error) {

@@ -3,6 +3,7 @@ import { FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ScheduleService } from 'src/app/services/schedule.service';
+import { VariableService } from 'src/app/services/variable.service';
 
 @Component({
   selector: 'app-edit-schedule',
@@ -10,6 +11,8 @@ import { ScheduleService } from 'src/app/services/schedule.service';
   styleUrls: ['./edit-schedule.component.scss']
 })
 export class EditScheduleComponent implements OnInit {
+  processData: any
+
   angForm: any;
   schedcode: any;
   schedule: any;
@@ -33,6 +36,7 @@ export class EditScheduleComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private scheduleService: ScheduleService,
+    private variableService: VariableService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private toastr: ToastrService
@@ -66,6 +70,14 @@ export class EditScheduleComponent implements OnInit {
       oras: new FormControl({ value: '', disabled: false }),
     })
 
+    this.processData = this.fb.group({
+      username: new FormControl({ value: '', disabled: false }),
+      ipaddress: new FormControl({ value: '', disabled: false }),
+      pcname: new FormControl({ value: '', disabled: false }),
+      studentnumber: new FormControl({ value: '', disabled: false }),
+      type: new FormControl({ value: '', disabled: false }),
+      description: new FormControl({ value: '', disabled: false })
+    })
     this.getSchedule();
   }
 
@@ -176,6 +188,20 @@ export class EditScheduleComponent implements OnInit {
 
       this.scheduleService.editSchedule(schedcode, angForm.value).subscribe((res) => {
         if(res) {
+          this.variableService.getIpAddress().subscribe((res) => {
+            if(res) {
+              let ipAdd = res.clientIp
+
+              this.processData.get('username').setValue(localStorage.getItem('user'))
+              this.processData.get('ipaddress').setValue(ipAdd)
+              this.processData.get('pcname').setValue(window.location.hostname)
+              this.processData.get('studentnumber').setValue('N/A')
+              this.processData.get('type').setValue('Imported Schedule')
+              this.processData.get('description').setValue(`Modified ${schedcode}'s data.`)
+              this.variableService.addProcess(this.processData).subscribe()
+            }
+          })
+
           this.toastr.success(res.message)
           this.router.navigate([`schedule/${schedcode}`])
         }

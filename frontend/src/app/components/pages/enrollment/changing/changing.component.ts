@@ -16,6 +16,8 @@ import { VariableService } from 'src/app/services/variable.service';
 })
 
 export class ChangingComponent implements OnInit {
+  processData: any
+
   //GLOBAL VARIABLE
   globalVar: any
   date = new Date()
@@ -82,6 +84,14 @@ export class ChangingComponent implements OnInit {
       isTextResult: new FormControl({ value: 'false', disabled: false })
     })
 
+    this.processData = this.fb.group({
+      username: new FormControl({ value: '', disabled: false }),
+      ipaddress: new FormControl({ value: '', disabled: false }),
+      pcname: new FormControl({ value: '', disabled: false }),
+      studentnumber: new FormControl({ value: '', disabled: false }),
+      type: new FormControl({ value: '', disabled: false }),
+      description: new FormControl({ value: '', disabled: false })
+    })
   }
 
   generateData() {
@@ -340,6 +350,21 @@ export class ChangingComponent implements OnInit {
                       this.subjToDrop[i]
                     ).subscribe((res) => {
                       if(res) {
+                        //--- ADD LOG TO DB ---//
+                        this.variableService.getIpAddress().subscribe((res) => {
+                          if(res) {
+                            let ipAdd = res.clientIp
+
+                            this.processData.get('username').setValue(localStorage.getItem('user'))
+                            this.processData.get('ipaddress').setValue(ipAdd)
+                            this.processData.get('pcname').setValue(window.location.hostname)
+                            this.processData.get('studentnumber').setValue(this.searchForm.get('studentnumber').value)
+                            this.processData.get('type').setValue('Change Subject')
+                            this.processData.get('description').setValue(`Changed ${this.searchForm.get('studentnumber').value}'s schedule.`)
+                            this.variableService.addProcess(this.processData).subscribe()
+                          }
+                        })
+
                         this.toastr.success('Changing of Subjects Success')
                         this.backToSearch()
                       }

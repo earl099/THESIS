@@ -144,7 +144,7 @@ const editCourse = async (req, res) => {
         res.status(200).send({ message: 'Course updated successfully.', newCourse: newCourse })
     }
     else {
-        
+        res.status(500).send({ message: 'Update Course Failed.' })
     }
 }
 

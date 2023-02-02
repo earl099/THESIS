@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { StudentService } from 'src/app/services/student.service';
+import { VariableService } from 'src/app/services/variable.service';
 
 @Component({
   selector: 'app-edit-student',
@@ -10,6 +11,8 @@ import { StudentService } from 'src/app/services/student.service';
   styleUrls: ['./edit-student.component.scss']
 })
 export class EditStudentComponent implements OnInit {
+  processData: any
+
   angForm: any;
   linkStudentNumber: number;
   student: any = [];
@@ -18,6 +21,7 @@ export class EditStudentComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private studentService: StudentService,
+    private variableService: VariableService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private toastr: ToastrService
@@ -46,6 +50,15 @@ export class EditStudentComponent implements OnInit {
       email: new FormControl({ value: '', disabled: false }, Validators.required),
       highschool: new FormControl({ value: '', disabled: false }, Validators.required)
     });
+
+    this.processData = this.fb.group({
+      username: new FormControl({ value: '', disabled: false }),
+      ipaddress: new FormControl({ value: '', disabled: false }),
+      pcname: new FormControl({ value: '', disabled: false }),
+      studentnumber: new FormControl({ value: '', disabled: false }),
+      type: new FormControl({ value: '', disabled: false }),
+      description: new FormControl({ value: '', disabled: false })
+    })
 
     this.getStudent();
   }
@@ -96,8 +109,23 @@ export class EditStudentComponent implements OnInit {
       angForm.get('course').setValue(angForm.get('course').value.toUpperCase());
 
       //console.log(angForm.value);
+
       this.studentService.editStudent(studentNumber, angForm.value).subscribe((res) => {
         if(res) {
+          this.variableService.getIpAddress().subscribe((res) => {
+            if(res) {
+              let ipAdd = res.clientIp
+
+              this.processData.get('username').setValue(localStorage.getItem('user'))
+              this.processData.get('ipaddress').setValue(ipAdd)
+              this.processData.get('pcname').setValue(window.location.hostname)
+              this.processData.get('studentnumber').setValue(this.angForm.get('studentNumber').value)
+              this.processData.get('type').setValue('Edit Student Details')
+              this.processData.get('description').setValue(`Edited ${this.angForm.get('studentNumber').value}'s details to the database`)
+              this.variableService.addProcess(this.processData).subscribe()
+            }
+          })
+
           this.toastr.success(res.message);
           //console.log(res.student);
           this.router.navigate([`/student/profile/${studentNumber}`]);

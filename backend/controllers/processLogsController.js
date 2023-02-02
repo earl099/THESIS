@@ -1,13 +1,15 @@
 "use strict"
 
+const os = require('os')
 const db = require('../config/sequelize')
 const processLogsModel = db.processLogs
 
 const addProcessLog = async (req, res) => {
+    const pcname = os.hostname()
+    
     const {
         username,
         ipaddress,
-        pcname,
         studentnumber,
         type,
         description
