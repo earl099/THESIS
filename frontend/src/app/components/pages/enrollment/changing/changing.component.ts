@@ -329,6 +329,7 @@ export class ChangingComponent implements OnInit {
         }
         else {
           try{
+            let studnum = this.searchForm.get('studentnumber').value
             let json = JSON.parse(JSON.stringify(this.addedScheduleList[i]))
             console.log(json)
             this.enrollmentService.addSubjTransaction(
@@ -342,39 +343,40 @@ export class ChangingComponent implements OnInit {
                   this.toastr.error('Must Drop a Subject to continue.')
                 }
                 else {
-                  for (let i = 0; i < this.subjToDrop.length; i++) {
+                  for (let j = 0; j < this.subjToDrop.length; j++) {
                     this.enrollmentService.dropSubjTransaction(
                       this.searchForm.get('studentnumber').value,
                       this.searchForm.get('semester').value,
                       this.searchForm.get('schoolyear').value,
-                      this.subjToDrop[i]
+                      this.subjToDrop[j]
                     ).subscribe((res) => {
                       if(res) {
-                        //--- ADD LOG TO DB ---//
-                        this.variableService.getIpAddress().subscribe((res) => {
-                          if(res) {
-                            let ipAdd = res.clientIp
+                        if(i == this.addedScheduleList.length - 1 && j == this.subjToDrop.length - 1) {
+                          //--- ADD LOG TO DB ---//
+                          this.variableService.getIpAddress().subscribe((res) => {
+                            if(res) {
+                              let ipAdd = res.clientIp
 
-                            this.processData.get('username').setValue(localStorage.getItem('user'))
-                            this.processData.get('ipaddress').setValue(ipAdd)
-                            this.processData.get('pcname').setValue(window.location.hostname)
-                            this.processData.get('studentnumber').setValue(this.searchForm.get('studentnumber').value)
-                            this.processData.get('type').setValue('Change Subject')
-                            this.processData.get('description').setValue(`Changed ${this.searchForm.get('studentnumber').value}'s schedule.`)
-                            this.variableService.addProcess(this.processData).subscribe()
-                          }
-                        })
+                              this.processData.get('username').setValue(localStorage.getItem('user'))
+                              this.processData.get('ipaddress').setValue(ipAdd)
+                              this.processData.get('pcname').setValue(window.location.hostname)
+                              this.processData.get('studentnumber').setValue(studnum)
+                              this.processData.get('type').setValue('Change Subject')
+                              this.processData.get('description').setValue(`Changed ${studnum}'s schedule.`)
+                              this.variableService.addProcess(this.processData.value).subscribe()
+                            }
+                            this.toastr.success('Changing of Subjects Success')
+                            this.backToSearch()
+                          })
 
-                        this.toastr.success('Changing of Subjects Success')
-                        this.backToSearch()
+
+                        }
                       }
                     })
                   }
                 }
-
               }
             })
-
           }
           catch (error) {
             this.toastr.error('Error Reevaluating Fees')
@@ -396,6 +398,7 @@ export class ChangingComponent implements OnInit {
     this.addedScheduleList.splice(0, this.addedScheduleList.length)
     this.subjEnrolledData.splice(0, this.subjEnrolledData.length)
     this.subjToDrop.splice(0, this.subjToDrop.length)
+    window.location.reload()
   }
 
 

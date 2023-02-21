@@ -69,11 +69,15 @@ app.use('/api', processLogsRouter)
 const feesRouter = require('./routes/feesRoutes')
 app.use('/api', feesRouter)
 
+const loaRouter = require('./routes/loaRoutes')
+app.use('/api', loaRouter)
+
 app.use(requestIp.mw())
 app.get('/api/get/ip', (req, res) => {
     const clientIp = req.socket.remoteAddress;
     res.send({ clientIp: clientIp });
 });
+
 //---DB CONNECTION---//
 // const db = mysql.createConnection({
 //     host: 'localhost',

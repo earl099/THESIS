@@ -275,34 +275,41 @@ export class AddingComponent implements OnInit {
         }
         else {
           try{
-            let json = JSON.parse(JSON.stringify(this.addedScheduleList[i]))
-            console.log(json)
-            this.enrollmentService.addSubjTransaction(
-              this.searchForm.get('studentnumber').value,
-              this.searchForm.get('semester').value,
-              this.searchForm.get('schoolyear').value,
-              json
-            ).subscribe((res) => {
-              if(res) {
-                this.variableService.getIpAddress().subscribe((res) => {
-                  if(res) {
-                    let ipAdd = res.clientIp
+            if (confirm('Are you sure you want to add the subject/s to the student\'s schedule?')) {
+              let json = JSON.parse(JSON.stringify(this.addedScheduleList[i]))
+              console.log(json)
+              this.enrollmentService.addSubjTransaction(
+                this.searchForm.get('studentnumber').value,
+                this.searchForm.get('semester').value,
+                this.searchForm.get('schoolyear').value,
+                json
+              ).subscribe((res) => {
+                if(res) {
+                  let studnum = this.searchForm.get('studentnumber').value
+                  this.variableService.getIpAddress().subscribe((res) => {
+                    if(res) {
+                      for (let i = 0; i < this.addedScheduleList.length; i++) {
+                        let ipAdd = res.clientIp
 
-                    this.processData.get('username').setValue(localStorage.getItem('user'))
-                    this.processData.get('ipaddress').setValue(ipAdd)
-                    this.processData.get('pcname').setValue(window.location.hostname)
-                    this.processData.get('studentnumber').setValue(this.searchForm.get('studentnumber').value)
-                    this.processData.get('type').setValue('Add Subject')
-                    this.processData.get('description').setValue(
-                      `Added ${this.addedScheduleList[i].schedcode}
-                      to ${this.searchForm.get('studentnumber').value}'s schedule.`
-                    )
-                    this.variableService.addProcess(this.processData).subscribe()
-                  }
-                })
-              }
-            })
-            this.toastr.success('Added Subject/s Successfully.')
+                        this.processData.get('username').setValue(localStorage.getItem('user'))
+                        this.processData.get('ipaddress').setValue(ipAdd)
+                        this.processData.get('pcname').setValue(window.location.hostname)
+                        this.processData.get('studentnumber').setValue(studnum)
+                        this.processData.get('type').setValue('Add Subject')
+                        this.processData.get('description').setValue(
+                          `Added ${this.addedScheduleList[i].schedcode} to ${studnum}'s schedule.`
+                        )
+                        this.variableService.addProcess(this.processData.value).subscribe()
+                        this.backToSearch()
+                      }
+
+                    }
+                  })
+                }
+              })
+              this.toastr.success('Added Subject/s Successfully.')
+            }
+
           }
           catch (error) {
             this.toastr.error('Error Adding Subject')
@@ -310,7 +317,6 @@ export class AddingComponent implements OnInit {
 
         }
       }
-      this.backToSearch()
     }
   }
 

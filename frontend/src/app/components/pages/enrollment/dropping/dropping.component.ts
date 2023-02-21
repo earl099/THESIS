@@ -112,6 +112,8 @@ export class DroppingComponent implements OnInit {
 
   dropSubj(data: any) {
     //initialize drop
+    let studnum = this.searchForm.get('studentnumber').value
+
     if(confirm('Are you sure you want to delete this subject and reevaluate')) {
       this.enrollmentService.dropSubjTransaction(
         this.searchForm.get('studentnumber').value,
@@ -127,18 +129,19 @@ export class DroppingComponent implements OnInit {
               this.processData.get('username').setValue(localStorage.getItem('user'))
               this.processData.get('ipaddress').setValue(ipAdd)
               this.processData.get('pcname').setValue(window.location.hostname)
-              this.processData.get('studentnumber').setValue(this.searchForm.get('studentnumber').value)
+              this.processData.get('studentnumber').setValue(studnum)
               this.processData.get('type').setValue('Drop Subject')
-              this.processData.get('description').setValue(`Dropped ${data.schedcode} to ${this.searchForm.get('studentnumber').value}'s schedule.`)
-              this.variableService.addProcess(this.processData).subscribe()
+              this.processData.get('description').setValue(`Dropped ${data.schedcode} to ${studnum}'s schedule.`)
+              this.variableService.addProcess(this.processData.value).subscribe()
             }
           })
 
           this.toastr.success('Subject Dropped.')
-          this.backToSearch()
+
         }
       })
     }
+    this.backToSearch()
   }
 
   backToSearch() {

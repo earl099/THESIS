@@ -79,7 +79,29 @@ export class StudentService {
     .pipe(catchError(this.handleError<any>('Edit Course')))
   }
 
+  //--- ADD LOA FUNCTION ---//
+  addLoa(data: any): Observable<any> {
+    return this.httpClient.post(`${this.baseUrl}/loa/add`, data, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Add Loa')))
+  }
 
+  //--- ADMIN SEARCH FUNCTION ---//
+  adminSearch(): Observable<any> {
+    return this.httpClient.get(`${this.baseUrl}/loa/get/all`, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Admin Loa Search')))
+  }
+
+  //--- USER SEARCH FUNCTION ---//
+  userSearch(collegeID: any): Observable<any> {
+    return this.httpClient.get(`${this.baseUrl}/loa/get/${collegeID}`, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('User Loa Search')))
+  }
+
+  //--- DELETE FUNCTION ---//
+  deleteLoa(studentnumber: any, data: any): Observable<any> {
+    return this.httpClient.post(`${this.baseUrl}/loa/delete/${studentnumber}`, data, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Delete Loa Record')))
+  }
 
   //--- ERROR HANDLING ---//
   private handleError<T>(operation = 'operation', result?: T) {

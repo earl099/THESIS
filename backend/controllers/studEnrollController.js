@@ -5,6 +5,7 @@ const db = require('../config/sequelize')
 const studEnrollModel = db.studEnroll
 const subjEnrollModel = db.subjEnroll
 const divOfFeesModel = db.divOfFees
+const processLogsModel = db.processLogs
 
 //models needed for assessment
 const assessListModel = db.assessList
@@ -1048,6 +1049,8 @@ const addSubjTransaction = async (req, res) => {
         }
 
 
+
+
         res.status(200).send({
             message: 'Transaction Completed successfully.',
             updatedDivOfFees: updatedDivOfFees,
@@ -1194,7 +1197,7 @@ const dropSubjTransaction = async (req, res) => {
     const { schedcode } = req.body
 
     //CHECKS SCHEDCODE IN ASSESSED SUBJECTS
-    let assessedCounter = subjEnrolled.length + 1
+    let assessedCounter = 0
     for (let i = 0; i < assessSubjs.length; i++) {
         //CHANGES VALUE OF ASSESSEDCOUNTER TO I IF SCHEDCODE IS EQUAL TO ASSESSEDSUBJS SCHEDCODE
         if(schedcode == assessSubjs[i].schedcode) {
@@ -1216,7 +1219,6 @@ const dropSubjTransaction = async (req, res) => {
     //CHECKS IF THE SUBJECT IS AN ADDED SUBJECT
     let divOfFeesObject
     if(assessedCounter > subjEnrolled.length) {
-
         //DROP SUBJECT INDEX SUBJENROLLEDCOUNTER
         await subjEnrollModel.destroy({ 
             where: { 
@@ -1228,6 +1230,7 @@ const dropSubjTransaction = async (req, res) => {
         }, { transaction })
     }
     else {
+        console.log(assessedCounter)
         //DROP SUBJECT INDEX ASSESSEDCOUNTER
         await subjEnrollModel.destroy({
             where: {
