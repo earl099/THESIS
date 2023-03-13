@@ -25,6 +25,12 @@ export class StudentService {
     .pipe(catchError(this.handleError<any>('Add Shiftee')))
   }
 
+  getShiftees(): Observable<any> {
+    return this.httpClient
+    .get(`${this.baseUrl}/shiftee/list`, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Get Shiftees')))
+  }
+
   //--- ADD STUDENT FUNCTION ---//
   addStudent(studentData: any): Observable<any> {
     return this.httpClient

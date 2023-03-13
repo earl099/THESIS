@@ -15,4 +15,11 @@ router.get('/loa/get/:collegeID', loaController.userGetLoa)
 //--- LOA DELETION ---//
 router.post('/loa/delete/:studentnumber', loaController.deleteLoa)
 
+//--- REPORTS ---//
+//--- GET SCHOOLYEAR ---//
+router.get('/loa/get/schoolyear', loaController.getSchoolyear)
+
+//--- LOA SEARCH ---//
+router.post('/report/loa', loaController.advLoaSearch)
+
 module.exports = router
