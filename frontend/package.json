@@ -20,12 +20,10 @@
     "@angular/platform-browser": "^15.1.0",
     "@angular/platform-browser-dynamic": "^15.1.0",
     "@angular/router": "^15.1.0",
-    "@ctrl/ngx-csv": "^6.0.0",
     "bootstrap": "^5.2.0",
     "dom-to-image": "^2.6.0",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
-    "ngx-csv": "^0.3.2",
     "ngx-csv-parser": "^1.2.0",
     "ngx-toastr": "^16.0.2",
     "rxjs": "~7.5.0",
@@ -33,7 +31,7 @@
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^15.2.4",
+    "@angular-devkit/build-angular": "^15.1.1",
     "@angular/cli": "~15.1.1",
     "@angular/compiler-cli": "^15.1.0",
     "@types/jasmine": "~4.0.0",

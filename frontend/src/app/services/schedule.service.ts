@@ -63,7 +63,7 @@ export class ScheduleService {
   }
 
   //--- SEARCH SCHEDULE BY SCHEDCODE, SEM, SY ---//
-  getSchedulesBySemSY(semester: any, schoolyear: any) {
+  getScheduleBySemSY(semester: any, schoolyear: any) {
     return this.httpClient
     .get(
       `${this.baseUrl}/schedule/search/${semester}/${schoolyear}`,

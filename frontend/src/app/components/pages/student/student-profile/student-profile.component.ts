@@ -18,7 +18,7 @@ export class StudentProfileComponent implements OnInit {
     'Name',
     'Course',
     'Address',
-    'Gender',
+    'Sex',
     'Birthday',
     'Status',
     'Religion',
@@ -63,7 +63,7 @@ export class StudentProfileComponent implements OnInit {
             this.processData.get('studentnumber').setValue(this.studentNumber)
             this.processData.get('type').setValue('Opened Student Profile')
             this.processData.get('description').setValue(`Opened ${this.studentNumber}'s profile.`)
-            this.variableService.addProcess(this.processData.value).subscribe()
+            this.variableService.addProcess(this.processData).subscribe()
           }
         })
 

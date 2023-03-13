@@ -1,0 +1,160 @@
+<div class="container-fluid page">
+  <div class="page__box p-3 mt-2">Edit Schedule</div>
+  <div class="page__content shadow p-3 position-relative">
+    <div class="page__content-data position-absolute text-center">
+      <div class="container">
+        <form [formGroup]="angForm">
+          <div class="container">
+            <div class="row align-items-start">
+              <div class="col">
+                <mat-form-field appearance="fill" class="timein1">
+                  <mat-label>Time in</mat-label>
+                  <input matInput type="text" formControlName="timein1">
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field appearance="fill" class="timeout1">
+                  <mat-label>Time out</mat-label>
+                  <input matInput type="text" formControlName="timeout1">
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field appearance="fill" class="day1">
+                  <mat-label>Day</mat-label>
+                  <input matInput type="text" formControlName="day1" class="uppercase">
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field appearance="fill" class="room1">
+                  <mat-label>Room</mat-label>
+                  <input matInput type="text" formControlName="room1" class="uppercase">
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <br>
+
+          <div class="container" *ngIf="scheduleFields[0]">
+            <div class="row align-items-start">
+              <div class="col">
+                <mat-form-field appearance="fill" class="timein2">
+                  <mat-label>Time in</mat-label>
+                  <input matInput type="text" formControlName="timein2">
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field appearance="fill" class="timeout2">
+                  <mat-label>Time out</mat-label>
+                  <input matInput type="text" formControlName="timeout2">
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field appearance="fill" class="day2">
+                  <mat-label>Day</mat-label>
+                  <input matInput type="text" formControlName="day2" class="uppercase">
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field appearance="fill" class="room2">
+                  <mat-label>Room</mat-label>
+                  <input matInput type="text" formControlName="room2" class="uppercase">
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <br>
+
+          <div class="container" *ngIf="scheduleFields[1]">
+            <div class="row align-items-start">
+              <div class="col">
+                <mat-form-field appearance="fill" class="timein3">
+                  <mat-label>Time in</mat-label>
+                  <input matInput type="text" formControlName="timein3">
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field appearance="fill" class="timeout3">
+                  <mat-label>Time out</mat-label>
+                  <input matInput type="text" formControlName="timeout3">
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field appearance="fill" class="day3">
+                  <mat-label>Day</mat-label>
+                  <input matInput type="text" formControlName="day3" class="uppercase">
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field appearance="fill" class="room3">
+                  <mat-label>Room</mat-label>
+                  <input matInput type="text" formControlName="room3" class="uppercase">
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <br>
+
+          <div class="container" *ngIf="scheduleFields[2]">
+            <div class="row align-items-start">
+              <div class="col">
+                <mat-form-field appearance="fill" class="timein4">
+                  <mat-label>Time in</mat-label>
+                  <input matInput type="text" formControlName="timein4">
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field appearance="fill" class="timeout4">
+                  <mat-label>Time out</mat-label>
+                  <input matInput type="text" formControlName="timeout4">
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field appearance="fill" class="day4">
+                  <mat-label>Day</mat-label>
+                  <input matInput type="text" formControlName="day4" class="uppercase">
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field appearance="fill" class="room4">
+                  <mat-label>Room</mat-label>
+                  <input matInput type="text" formControlName="room4" class="uppercase">
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <br>
+
+          <div class="container">
+            <div class="row align-items-start">
+              <div class="col">
+                <mat-form-field appearance="fill" class="oras">
+                  <mat-label>Hours per week</mat-label>
+                  <input matInput type="text" formControlName="oras" (keypress)="numberFilter($event)">
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <br>
+
+          <button mat-button (click)="onAddSchedule()" *ngIf="visibleAddBtn">Add Schedule</button>
+          <button mat-button (click)="onDeleteSchedule()" *ngIf="visibleDeleteBtn">Delete Schedule</button>
+          <button mat-button type="submit" class="btn btn-success" (click)="onEditSchedule(schedcode, angForm)">Confirm Edit</button>
+          <button mat-button routerLink="/schedule/{{schedcode}}">Back to Schedule Page</button>
+          <button mat-button routerLink="/schedule/list">Back to List</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

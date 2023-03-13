@@ -11,19 +11,19 @@
   margin-right: 1rem;
 }
 
-mat-divider{
+.mat-divider{
   border-top-width: 2px;
   border-color: white;
 }
 
-mat-list-item button {
+.mat-list-item {
   height: 44px !important;
   font-size: 0.8rem;
   color: whitesmoke;
   margin-bottom: 4px;
   ::ng-deep{
 
-    mat-list-item-content{
+    .mat-list-item-content{
       border-radius: 5px;
       margin: 0.8rem;
       &:hover{
@@ -78,9 +78,4 @@ mat-list-item button {
   p{
     margin-bottom: 0;
   }
-}
-
-.mat-button.mat-success{
-  color:#1B651B
-
 }

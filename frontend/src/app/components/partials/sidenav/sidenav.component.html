@@ -1,4 +1,4 @@
-<mat-list>
+<mat-nav-list>
   <!--LOGO-->
   <div class="logo py-4">
     <img src="../../../../assets/logo.png" alt="CvSU Logo">
@@ -9,19 +9,12 @@
     <h2 matSubheader class="mt-2">PAGES</h2>
 
     <!--HOME/DASHBOARD MENUS-->
-    <mat-list-item *ngIf="loginBtn">
-      <button mat-button routerLink="/home" routerLinkActive="list-item-active">
-        <mat-icon matListItemIcon>home</mat-icon>
-        <div matListItemTitle>Home</div>
-      </button>
-    </mat-list-item>
-
-    <mat-list-item *ngIf="logoutBtn">
-      <button mat-button routerLink="/dashboard" routerLinkActive="list-item-active">
-        <mat-icon matListItemIcon>dashboard</mat-icon> Dashboard
-      </button>
-    </mat-list-item>
-
+    <a mat-list-item *ngIf="loginBtn" routerLink="/home" routerLinkActive="list-item-active">
+      <mat-icon>home</mat-icon> Home
+    </a>
+    <a mat-list-item *ngIf="logoutBtn" routerLink="/dashboard" routerLinkActive="list-item-active">
+      <mat-icon>dashboard</mat-icon> Dashboard
+    </a>
 
     <!--ADMIN SUBMENU-->
     <mat-expansion-panel *ngIf="adminLogoutBtn">
@@ -30,18 +23,27 @@
           <mat-icon>admin_panel_settings</mat-icon> <p>Admin Menu</p>
         </mat-panel-title>
       </mat-expansion-panel-header>
+      <a mat-list-item routerLink="/account/list" routerLinkActive="list-item-active">
+        <mat-icon>view_headline</mat-icon> View Accounts
+      </a>
+      <a mat-list-item routerLink="/account/add" routerLinkActive="list-item-active">
+        <mat-icon>add</mat-icon> Add Account
+      </a>
+      <!--
+      <a mat-list-item routerLink="/account/edit" routerLinkActive="list-item-active">
+        <mat-icon>edit</mat-icon> Edit Account
+      </a>
+      -->
+      <a mat-list-item routerLink="/curriculum/list" routerLinkActive="list-item-active">
+        <mat-icon>fact_check</mat-icon> Curriculum List
+      </a>
+      <a mat-list-item routerLink="/curriculum/add" routerLinkActive="list-item-active">
+        <mat-icon>add-_circle</mat-icon> Add Curriculum
+      </a>
 
-      <mat-list-item>
-        <button mat-button routerLink="/account/list" routerLinkActive="list-item-active">
-          <mat-icon>view_headline</mat-icon> View Accounts
-        </button>
-      </mat-list-item>
-
-      <mat-list-item>
-        <button mat-button routerLink="/variables/edit" routerLinkActive="list-item-active">
-          <mat-icon>edit</mat-icon> Edit Global Variables
-        </button>
-      </mat-list-item>
+      <a mat-list-item routerLink="/variables/edit" routerLinkActive="list-item-active">
+        <mat-icon>edit</mat-icon> Edit Global Variables
+      </a>
     </mat-expansion-panel>
 
     <!--STUDENT SUBMENU-->
@@ -51,19 +53,15 @@
             <mat-icon>face</mat-icon> <p>Student</p>
           </mat-panel-title>
         </mat-expansion-panel-header>
-
-        <mat-list-item>
-          <button mat-button routerLink="/student/list" routerLinkActive="list-item-active">
-            <mat-icon>list</mat-icon> Student List
-          </button>
-        </mat-list-item>
-
-        <mat-list-item>
-          <button mat-button routerLink="/student/grades" routerLinkActive="list-item-active">
-            <mat-icon>edit_square</mat-icon> Modify Grades
-          </button>
-        </mat-list-item>
-
+        <a mat-list-item routerLink="/student/add" routerLinkActive="list-item-active">
+          <mat-icon>person_add</mat-icon> Import Students
+        </a>
+        <a mat-list-item routerLink="/student/list" routerLinkActive="list-item-active">
+          <mat-icon>list</mat-icon> Student List
+        </a>
+        <a mat-list-item routerLink="/student/grades" routerLinkActive="list-item-active">
+          <mat-icon>edit_square</mat-icon> Modify Grades
+        </a>
     </mat-expansion-panel>
 
     <!--SCHEDULE SUBMENU-->
@@ -73,13 +71,12 @@
           <mat-icon>calendar_today</mat-icon> <p>Schedule</p>
         </mat-panel-title>
       </mat-expansion-panel-header>
-
-      <mat-list-item>
-        <button mat-button routerLink="/schedule/list" routerLinkActive="list-item-active">
-          <mat-icon>view_list</mat-icon> Schedule list
-        </button>
-      </mat-list-item>
-
+      <a mat-list-item routerLink="/schedule/list" routerLinkActive="list-item-active">
+        <mat-icon>view_list</mat-icon> Schedule list
+      </a>
+      <a mat-list-item routerLink="/schedule/add" routerLinkActive="list-item-active">
+        <mat-icon>add</mat-icon> Add Schedule
+      </a>
       <!--
       <a mat-list-item routerLink="/schedule/edit" routerLinkActive="list-item-active">
         <mat-icon>edit</mat-icon> Edit Schedule
@@ -94,18 +91,24 @@
           <mat-icon>checklist</mat-icon> <p>Enrollment</p>
         </mat-panel-title>
       </mat-expansion-panel-header>
-
-      <mat-list-item>
-        <button mat-button routerLink="/enrollment/assessed_list" routerLinkActive="list-item-active">
-          <mat-icon>checklist_rtl</mat-icon> Assessed List
-        </button>
-      </mat-list-item>
-
-      <mat-list-item>
-        <button mat-button routerLink="/enrollment/enrolled_list" routerLinkActive="list-item-active">
-          <mat-icon>fact_check</mat-icon> Enrolled List
-        </button>
-      </mat-list-item>
+      <a mat-list-item routerLink="/enrollment/validation" routerLinkActive="list-item-active">
+        <mat-icon>domain_verification</mat-icon> Validation
+      </a>
+      <a mat-list-item routerLink="/enrollment/adding" routerLinkActive="list-item-active">
+        <mat-icon>add</mat-icon> Adding
+      </a>
+      <a mat-list-item routerLink="/enrollment/dropping" routerLinkActive="list-item-active">
+        <mat-icon>remove</mat-icon> Dropping
+      </a>
+      <a mat-list-item routerLink="/enrollment/changing" routerLinkActive="list-item-active">
+        <mat-icon>trending_flat</mat-icon> Changing
+      </a>
+      <a mat-list-item routerLink="/enrollment/reprint-regform" routerLinkActive="list-item-active">
+        <mat-icon>print</mat-icon> Reprint RegForm
+      </a>
+      <a mat-list-item routerLink="/enrollment/reprint-cog" routerLinkActive="list-item-active">
+        <mat-icon>print</mat-icon> Reprint CoG
+      </a>
     </mat-expansion-panel>
 
     <!--REPORTS SUBMENU-->
@@ -115,26 +118,24 @@
             <mat-icon>summarize</mat-icon> <p>Reports</p>
           </mat-panel-title>
       </mat-expansion-panel-header>
-
-      <mat-list-item>
-        <button mat-button routerLink="report/generate" routerLinkActive="list-item-active">
-          <mat-icon>download_for_offline</mat-icon> Generate Report
-        </button>
-      </mat-list-item>
+      <a mat-list-item routerLink="report/generate" routerLinkActive="list-item-active">
+        <mat-icon>download_for_offline</mat-icon> Generate Report
+      </a>
+      <a mat-list-item routerLink="report/loa/list" routerLinkActive="list-item-active">
+        <mat-icon>list</mat-icon> LOA List
+      </a>
     </mat-expansion-panel>
 
 
     <!--LOGIN/ADMIN LOGIN/LOGOUT BUTTONS-->
-    <mat-list-item *ngIf="loginBtn" >
-      <button mat-button routerLink="/login/admin" routerLinkActive="list-item-active">
-        <mat-icon>person_outline</mat-icon> Admin Login
-      </button>
-    </mat-list-item>
-
-    <mat-list-item *ngIf="logoutBtn">
-      <button mat-button (click)="logout()">
-        <mat-icon>logout</mat-icon> Logout
-      </button>
-    </mat-list-item>
+    <a mat-list-item *ngIf="loginBtn" routerLink="/login/user" routerLinkActive="list-item-active">
+      <mat-icon>login</mat-icon> Login
+    </a>
+    <a mat-list-item *ngIf="loginBtn" routerLink="/login/admin" routerLinkActive="list-item-active">
+      <mat-icon>person_outline</mat-icon> Admin Login
+    </a>
+    <a mat-list-item *ngIf="logoutBtn" (click)="logout()">
+      <mat-icon>logout</mat-icon> Logout
+    </a>
   </mat-accordion>
-</mat-list>
+</mat-nav-list>

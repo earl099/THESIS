@@ -187,14 +187,6 @@ export class EnrollmentService {
       data, this.httpOptions
     ).pipe(catchError(this.handleError<any>('Drop Subject')))
   }
-
-  //--- GET ALL ASSESSED STUDEENTS BY SEEMESTER AND SCHOOLYEAR ---//
-  getAllAssessed(semester: any, schoolyear: any): Observable<any> {
-    return this.httpClient.get(
-      `${this.baseUrl}/assess_list/${semester}/${schoolyear}`, this.httpOptions
-    ).pipe(catchError(this.handleError<any>('Get Assessed Students')))
-  }
-
   //--- ERROR HANDLING ---//
   private handleError<T>(operation = 'operation', result?: T) {
     return (): Observable<T> => {

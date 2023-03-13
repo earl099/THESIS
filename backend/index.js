@@ -72,9 +72,6 @@ app.use('/api', feesRouter)
 const loaRouter = require('./routes/loaRoutes')
 app.use('/api', loaRouter)
 
-const reportRouter = require('./routes/reportRoutes')
-app.use('/api', reportRouter)
-
 app.use(requestIp.mw())
 app.get('/api/get/ip', (req, res) => {
     const clientIp = req.socket.remoteAddress;

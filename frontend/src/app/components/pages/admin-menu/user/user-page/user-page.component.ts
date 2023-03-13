@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from 'src/app/services/user.service';
 
@@ -19,13 +18,11 @@ export class UserPageComponent implements OnInit {
     'Email',
     'Admin Account'
   ];
-  user: any;
+  user: any = [];
   newPassword = '';
 
   constructor(
-    private router: Router,
     private activatedRoute: ActivatedRoute,
-    private fb: FormBuilder,
     private userService: UserService,
     private toastr: ToastrService
   ) {
@@ -34,60 +31,19 @@ export class UserPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.user = this.fb.group({
-      collegeID: new FormControl(''),
-      username: new FormControl(''),
-      email: new FormControl(''),
-      password: new FormControl(''),
-      isAdmin: new FormControl('')
-    })
-
     this.getUser();
   }
 
   getUser() {
     this.userService.getUser(this.collegeID).subscribe((res) => {
       if(res) {
-        let tmpData = res.user;
-        this.newPassword = tmpData.password.toString();
+        this.toastr.success(res.message);
+        this.user = res.user;
+        this.newPassword = this.user.password.toString();
         this.newPassword = this.newPassword.replace(/./g, '*');
         this.newPassword = this.newPassword.substring(0, 8);
-
-        this.user.get('collegeID').setValue(tmpData.collegeID)
-        this.user.get('username').setValue(tmpData.username)
-        this.user.get('email').setValue(tmpData.email)
-        this.user.get('password').setValue(this.newPassword)
-        if(!tmpData.isAdmin) {
-          this.user.get('isAdmin').setValue('No')
-        }
-        else {
-          this.user.get('isAdmin').setValue('Yes')
-        }
-
       }
     })
-  }
-
-  onEditUser(user: any) {
-    console.log(user)
-    if(confirm('Confirm Edit?')) {
-      if(
-        user.username == '' ||
-        user.password == '' ||
-        user.email == ''
-      ) {
-        this.toastr.error('Please fill out all fields')
-      }
-      else {
-        this.userService.editUser(user.collegeID, user).subscribe((res) => {
-          if(res) {
-            this.toastr.success('Edit Successful.')
-            this.router.navigate(['/account/list'])
-          }
-        })
-      }
-
-    }
   }
 
   onDeleteUser(collegeID: string) {
@@ -105,5 +61,6 @@ export class UserPageComponent implements OnInit {
     else {
       window.location.reload();
     }
+
   }
 }

@@ -3,40 +3,14 @@
 
 //FORMAT GOES HERE
 .container > * {
+  min-width: 25rem;
+  max-width: 40rem;
   font-size: 20px;
   .label{
     font-size: 24px;
   }
 }
 
-mat-card {
-  background-color: #439a43;
-  width: 75rem;
-  mat-card-content {
-    text-align: left;
-    &.info-header {
-      text-align: center;
-    }
 
-    div.row {
-      div.col {
-        div.container {
-          padding: 3rem;
-          padding-left: 8rem;
-          img {
-            width: 20rem !important;
-          }
-        }
-      }
-    }
-  }
-
-  mat-card-actions {
-    align-self: center;
-    button {
-      width: 20rem;
-    }
-  }
-}
 
 

@@ -1,0 +1,61 @@
+<div class="container-fluid page">
+  <div class="page__box p-3 mt-2">LOA List</div>
+  <div class="page__content shadow p-3 position-relative">
+    <div class="page__content-data position-absolute text-center">
+
+      <div class="container">
+        <button mat-raised-button routerLink='/report/loa/add'> Add Record </button>
+      </div>
+      <br>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Enter a filter" #input>
+      </mat-form-field>
+
+      <div class="container">
+        <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
+          <ng-container matColumnDef="studentnumber">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by studentnumber"> Student Number </th>
+            <td mat-cell *matCellDef="let student"> {{student.studentnumber}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="course">
+            <th mat-header-cell *matHeaderCellDef> Course </th>
+            <td mat-cell *matCellDef="let student"> {{student.course}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="semester">
+            <th mat-header-cell *matHeaderCellDef> Semester </th>
+            <td mat-cell *matCellDef="let student"> {{student.semester}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="schoolyear">
+            <th mat-header-cell *matHeaderCellDef> School Year </th>
+            <td mat-cell *matCellDef="let student"> {{student.schoolyear}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="isActive">
+            <th mat-header-cell *matHeaderCellDef> Active Status </th>
+            <td mat-cell *matCellDef="let student"> Yes </td>
+          </ng-container>
+
+          <ng-container matColumnDef="delete">
+            <th mat-header-cell *matHeaderCellDef> Delete </th>
+            <td mat-cell *matCellDef="let student">
+              <button mat-raised-button (click)="deleteLoa(student.studentnumber, loaForm.value)"> Delete </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columns"></tr>
+          <tr mat-row *matRowDef="let studentRow; columns: columns"></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+          </tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5]" aria-label="Select page of students"></mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>

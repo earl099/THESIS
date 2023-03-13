@@ -44,7 +44,7 @@ export class UserService {
     .pipe(catchError(this.handleError<any>('Get Users')))
   }
 
-  getUser(collegeID: string | null): Observable<any> {
+  getUser(collegeID: string): Observable<any> {
     return this.httpClient
     .get(`${this.baseUrl}/admin/user/${collegeID}`, this.httpOptions)
     .pipe(catchError(this.handleError<any>('Get User')));

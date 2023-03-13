@@ -12,17 +12,14 @@ router.get('/loa/get/all', loaController.adminGetLoa)
 //--- USER LOA SEARCH ---//
 router.get('/loa/get/:collegeID', loaController.userGetLoa)
 
-//--- GET LOA BY SEMESTER AND SCHOOLYEAR ---//
-router.get('/loa/get/:semester/:schoolyear', loaController.getLoaBySemAndSY)
-
 //--- LOA DELETION ---//
 router.post('/loa/delete/:studentnumber', loaController.deleteLoa)
 
 //--- REPORTS ---//
 //--- GET SCHOOLYEAR ---//
-router.get('/get/schoolyear/loa', loaController.getSchoolyear)
+router.get('/loa/get/schoolyear', loaController.getSchoolyear)
 
 //--- LOA SEARCH ---//
-router.post('/get/report/loa', loaController.advLoaSearch)
+router.post('/report/loa', loaController.advLoaSearch)
 
 module.exports = router

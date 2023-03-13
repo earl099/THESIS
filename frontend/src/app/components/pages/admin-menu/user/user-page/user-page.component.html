@@ -3,96 +3,44 @@
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
       <div class="container">
-        <mat-card>
-          <mat-card-header>
-            ACCOUNT PROFILE
-          </mat-card-header>
+        <div class="details">
+
+          <div class="header">
+            <span>{{identifiers[0]}}: </span>
+            <span>{{user.collegeID}}</span>
+          </div>
           <br>
-          <mat-card-content>
-            <div class="row">
-              <div class="col">
-                <div class="container">
-                  <img src="../../../../../../assets/user.png" alt="user-pic">
-                </div>
-              </div>
-              <div class="col">
-                <form [formGroup]="user">
-                  <div class="row align-middle">
-                    <div class="col">
-                      <h1><strong>College ID</strong></h1>
-                    </div>
-                    <div class="col">
-                      <mat-form-field appearance="fill">
-                        <input #collID matInput type="text" formControlName="collegeID" readonly>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                  <br>
 
-                  <div class="row">
-                    <div class="col">
-                      <h1><strong>User Name</strong></h1>
-                    </div>
-                    <div class="col">
-                      <mat-form-field appearance="fill">
-                        <input matInput type="text" formControlName="username">
-                      </mat-form-field>
-                    </div>
-                  </div>
-                  <br>
-
-                  <div class="row">
-                    <div class="col">
-                      <h1><strong>Email</strong></h1>
-                    </div>
-                    <div class="col">
-                      <mat-form-field appearance="fill">
-                        <input matInput type="text" formControlName="email">
-                      </mat-form-field>
-                    </div>
-                  </div>
-                  <br>
-
-                  <div class="row">
-                    <div class="col">
-                      <h1><strong>Password</strong></h1>
-                    </div>
-                    <div class="col">
-                      <mat-form-field appearance="fill">
-                        <input matInput type="password" formControlName="password">
-                      </mat-form-field>
-                    </div>
-                  </div>
-                  <br>
-
-                  <div class="row">
-                    <div class="col">
-                      <h1><strong>Admin Account</strong></h1>
-                    </div>
-                    <div class="col">
-                      <mat-form-field appearance="fill">
-                        <input matInput type="text" formControlName="isAdmin" readonly>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                  <br>
-                </form>
-              </div>
-            </div>
-          </mat-card-content>
-
-          <mat-card-actions>
-            <div class="col">
-              <button mat-raised-button (click)="onEditUser(user.value)"> Edit </button>
-            </div>
-            <div class="col">
-              <button mat-raised-button (click)="onDeleteUser(collID.value)"> Delete </button>
-            </div>
-
-          </mat-card-actions>
+          <div class="username">
+            <span>{{identifiers[1]}}: </span>
+            <span class="username">{{user.username}}</span>
+          </div>
           <br>
-        </mat-card>
-        <br>
+
+          <div class="password">
+            <span>{{identifiers[2]}}: </span>
+            <span class="password">{{newPassword}}</span>
+          </div>
+          <br>
+
+          <div class="email">
+            <span>{{identifiers[3]}}: </span>
+            <span class="email">{{user.email}}</span>
+          </div>
+          <br>
+
+          <div class="isAdmin">
+            <span>{{identifiers[4]}}: </span>
+            <span class="isAdmin" *ngIf="user.isAdmin">Yes</span>
+            <span class="isAdmin" *ngIf="!user.isAdmin">No</span>
+          </div>
+          <br>
+
+          <div>
+            <button mat-raised-button routerLink='/account/edit/{{user.collegeID}}'> Edit </button>
+            <button mat-raised-button (click)="onDeleteUser(user.collegeID)"> Delete </button>
+          </div>
+        </div>
       </div>
 
     </div>

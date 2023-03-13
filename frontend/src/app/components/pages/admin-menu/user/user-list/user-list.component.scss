@@ -2,7 +2,7 @@
 
 table{
   position: relative;
-  width: 50rem;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
   ng-container {
@@ -13,17 +13,4 @@ table{
 .mat-row:hover {
   background-color: #E8EAF6;
   cursor: pointer;
-}
-
-mat-form-field {
-  &.input-width {
-    width: 40rem;
-  }
-}
-
-mat-card {
-  align-items: center;
-  mat-card-content mat-form-field {
-    width: 30rem;
-  }
 }

@@ -1,0 +1,52 @@
+<div class="container-fluid page">
+  <div class="page__box p-3 mt-2">Add Account</div>
+  <div class="page__content shadow p-3 position-relative">
+    <div class="page__content-data position-absolute text-center">
+      <form [formGroup]="angForm" (ngSubmit)="addUser(angForm)" autocomplete="off">
+        <mat-form-field appearance="fill">
+          <mat-label>College ID</mat-label>
+          <mat-select formControlName="collegeID" required >
+            <mat-option value="UNIV">UNIV</mat-option>
+            <mat-option value="CAFENR">CAFENR</mat-option>
+            <mat-option value="CAS">CAS</mat-option>
+            <mat-option value="CEIT">CEIT</mat-option>
+            <mat-option value="CEMDS">CEMDS</mat-option>
+            <mat-option value="CCJ">CCJ</mat-option>
+            <mat-option value="CON">CON</mat-option>
+            <mat-option value="CVMBS">CVMBS</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <br>
+
+        <mat-form-field appearance="fill">
+          <mat-label>User Name</mat-label>
+          <input matInput type="text" formControlName="username" required>
+        </mat-form-field>
+        <br>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password" required>
+        </mat-form-field>
+        <br>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" required>
+        </mat-form-field>
+        <br>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Admin Account</mat-label>
+          <mat-select formControlName="isAdmin" required>
+            <mat-option [value]="isAdmin">Yes</mat-option>
+            <mat-option [value]="!isAdmin">No</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <br>
+
+        <button mat-button type="submit" class="btn btn-success">Add User</button>
+      </form>
+    </div>
+  </div>
+</div>

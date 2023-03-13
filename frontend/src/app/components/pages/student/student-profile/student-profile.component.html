@@ -3,101 +3,88 @@
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
       <div class="container">
-        <mat-card>
-          <mat-card-header>
-            <h1><strong>PROFILE</strong></h1>
-          </mat-card-header>
-          <mat-card-content class="info-header">
-            <div class="row">
-              <div class="col"></div>
-              <div class="col">
+        <span class="label">Basic Information:</span>
+        <br><br>
 
-              </div>
+        <div>
+          <span>{{identifiers[0]}}: </span>
+          <span><strong>{{student.studentNumber}}</strong></span>
+        </div>
+
+        <div>
+          <span>{{identifiers[1]}}:</span>
+          <span>
+            {{student.lastName}}, {{student.firstName}} {{student.middleName === '' ? '-' : student.middleName}} {{student.suffix === '' ? '-' : student.suffix }}
+          </span>
+        </div>
+
+        <div>
+          <span>{{identifiers[2]}}: </span>
+          <span>{{student.course}}</span>
+        </div>
+
+        <div>
+          <span>{{identifiers[3]}}: </span>
+          <span>{{student.street}} {{student.barangay}} {{student.municipality}} {{student.province}}</span>
+        </div>
+        <br>
+
+        <span class="label">Other Information:</span>
+        <br><br>
+        <div class="container">
+          <div class="row justify-content-start">
+            <div class="col-4">
+              <span>{{identifiers[4]}}: </span>
+              <span>{{student.gender}}</span>
             </div>
-          </mat-card-content>
-          <br>
-          <mat-card-content>
-            <div class="row">
-              <div class="col">
-                <div class="container">
-                  <img src="../../../../../assets/user.png" alt="">
-                </div>
-              </div>
 
-              <div class="col fs-5">
-                <br><br>
-                <div class="mb-3 text-center">
-                  <span class="fs-3"><u>Information</u></span>
-                </div>
-                <div class="mb-2">
-                  <span><strong>{{identifiers[0]}}: </strong></span>
-                  <span>{{student.studentNumber}}</span>
-                </div>
-
-                <div class="mb-2">
-                  <span><strong>{{identifiers[1]}}: </strong></span>
-                  <span>
-                    {{student.lastName}}, {{student.firstName}} {{student.middleName === '' ? '-' : student.middleName}} {{student.suffix === '' ? '-' : student.suffix }}
-                  </span>
-                </div>
-
-                <div class="mb-2">
-                  <span><strong>{{identifiers[2]}}: </strong></span>
-                  <span>{{student.course}}</span>
-                </div>
-
-                <div class="mb-2">
-                  <span><strong>{{identifiers[3]}}: </strong></span>
-                  <span>{{student.street}} {{student.barangay}} {{student.municipality}} {{student.province}}</span>
-                </div>
-
-                <div class="mb-2">
-                  <span><strong>{{identifiers[6]}}: </strong></span>
-                  <span>{{student.status}}</span>
-                </div>
-
-                <div class="mb-2">
-                  <span><strong>{{identifiers[8]}}: </strong></span>
-                  <span>{{student.email}}</span>
-                </div>
-
-                <div class="mb-2">
-                  <span><strong>{{identifiers[5]}}: </strong></span>
-                  <span>{{student.dateOfBirth}}</span>
-                </div>
-
-                <div class="mb-2">
-                  <span><strong>{{identifiers[9]}}: </strong></span>
-                  <span>{{student.mobilePhone}}</span>
-                </div>
-
-                <div class="mb-2">
-                  <span><strong>{{identifiers[4]}}: </strong></span>
-                  <span>{{student.gender}}</span>
-                </div>
-
-                <div class="mb-2">
-                  <span><strong>{{identifiers[7]}}: </strong></span>
-                  <span>{{student.religion}}</span>
-                </div>
-              </div>
+            <div class="col-6">
+              <span>{{identifiers[5]}}: </span>
+              <span>{{student.dateOfBirth}}</span>
             </div>
-          </mat-card-content>
+          </div>
+        </div>
 
-          <mat-card-actions>
-            <div class="row align-items-start">
-              <div class="col">
-                <button mat-raised-button routerLink='/student/edit/{{student.studentNumber}}'> Edit </button>
-              </div>
-              <div class="col">
-                <button mat-raised-button routerLink='/student/list'> Back to List </button>
-              </div>
+        <div class="container">
+          <div class="row justify-content-start">
+            <div class="col">
+              <span>{{identifiers[6]}}: </span>
+              <span>{{student.status}}</span>
             </div>
-          </mat-card-actions>
-          <br>
-        </mat-card>
+
+            <div class="col-8">
+              <span>{{identifiers[7]}}: </span>
+              <span>{{student.religion}}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="container">
+          <div class="row justify-content-start">
+            <div class="col-7">
+              <span>{{identifiers[8]}}: </span>
+              <span class="fs-6">{{student.email}}</span>
+            </div>
+
+            <div class="col">
+              <span>{{identifiers[9]}}: </span>
+              <span class="fs-6">{{student.mobilePhone}}</span>
+            </div>
+          </div>
+        </div>
       </div>
       <br>
+
+      <div class="container">
+        <div class="row align-items-start">
+          <div class="col">
+            <button mat-raised-button routerLink='/student/edit/{{student.studentNumber}}'> Edit </button>
+          </div>
+          <div class="col">
+            <button mat-raised-button routerLink='/student/list'> Back to List </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

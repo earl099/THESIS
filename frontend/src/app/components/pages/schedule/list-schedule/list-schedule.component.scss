@@ -8,7 +8,7 @@ mat-form-field {
 
 table {
   position: relative;
-  width: 81.1rem;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -16,41 +16,4 @@ table {
 .mat-row:hover {
   background-color: #E8EAF6;
   cursor: pointer;
-}
-
-mat-card {
-  width: 81.1rem;
-  background-color: #439a43;
-  font-size: medium;
-  color: white;
-
-  mat-card-content {
-    div.row {
-      div.col {
-        text-align: left;
-      }
-    }
-  }
-
-  mat-card-actions {
-    justify-content: space-evenly;
-  }
-}
-
-form {
-  width: 50rem;
-}
-
-div.container.card-content {
-  width: 100rem;
-}
-
-.col.fs-6.mt-3 {
-  input {
-    text-align-last: right;
-  }
-}
-
-.col.fs-6.mt-2 {
-  text-align: left !important;
 }

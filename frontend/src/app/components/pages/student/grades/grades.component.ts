@@ -83,9 +83,7 @@ export class GradesComponent implements OnInit {
       firstname: new FormControl({ value: '', disabled: false }),
       middlename: new FormControl({ value: '', disabled: false }),
       lastname: new FormControl({ value: '', disabled: false }),
-      course:  new FormControl({ value: '', disabled: false }),
-      gender: new FormControl({ value: '', disabled: false }),
-      fullName: new FormControl({ value: '', disabled: false })
+      course:  new FormControl({ value: '', disabled: false })
     })
 
     this.updatedGradeForm = this.fb.group({
@@ -109,79 +107,41 @@ export class GradesComponent implements OnInit {
 
   //--- ISUPDATE: TRUE IF UPDATING, FALSE IF COMPLETION ---//
   generateData(isUpdate: boolean) {
-    if(
-      (this.searchForm.get('studentnumber').value == '' ||
-      this.searchForm.get('semester').value == '' ||
-      this.searchForm.get('schoolyear').value == '') ||
-      this.studentInfoForm.get('fullName').value == ''
-    ) {
-      this.toastr.error('Please fill out all fields.')
-    }
-    else {
-      this.searchVisibility = false
-      this.studentService.getStudent(this.searchForm.get('studentnumber').value).subscribe((res) => {
-        if(res) {
-          this.studentInfoForm.get('studentnumber').setValue(this.searchForm.get('studentnumber').value)
-          this.studentInfoForm.get('firstname').setValue(res.student.firstName)
-          this.studentInfoForm.get('middlename').setValue(res.student.middleName.at(0) + '.')
-          this.studentInfoForm.get('lastname').setValue(res.student.lastName)
-          this.studentInfoForm.get('course').setValue(res.student.course)
-        }
-      })
+    this.searchVisibility = false
+    this.studentService.getStudent(this.searchForm.get('studentnumber').value).subscribe((res) => {
+      if(res) {
+        this.studentInfoForm.get('studentnumber').setValue(this.searchForm.get('studentnumber').value)
+        this.studentInfoForm.get('firstname').setValue(res.student.firstName)
+        this.studentInfoForm.get('middlename').setValue(res.student.middleName.at(0) + '.')
+        this.studentInfoForm.get('lastname').setValue(res.student.lastName)
+        this.studentInfoForm.get('course').setValue(res.student.course)
+      }
+    })
 
-      this.gradeService.getGradeByStudNumSemSY(
-        this.searchForm.get('studentnumber').value,
-        this.searchForm.get('semester').value,
-        this.searchForm.get('schoolyear').value
-      ).subscribe((res) => {
-        if(res) {
-          let tmpData = res.grades
-          if(isUpdate) {
-            this.changingVisibility = true
-            for (let i = 0; i < tmpData.length; i++) {
+    this.gradeService.getGradeByStudNumSemSY(
+      this.searchForm.get('studentnumber').value,
+      this.searchForm.get('semester').value,
+      this.searchForm.get('schoolyear').value
+    ).subscribe((res) => {
+      if(res) {
+        let tmpData = res.grades
+        if(isUpdate) {
+          this.changingVisibility = true
+          for (let i = 0; i < tmpData.length; i++) {
+            this.updatedGradeData.push(tmpData[i])
+          }
+        }
+        else {
+          this.completionVisibility = true
+          for (let i = 0; i < tmpData.length; i++) {
+            if(tmpData[i].mygrade == 'INC' || tmpData[i].mygrade == '4.00') {
               this.updatedGradeData.push(tmpData[i])
             }
           }
-          else {
-            this.completionVisibility = true
-            for (let i = 0; i < tmpData.length; i++) {
-              if(tmpData[i].mygrade == 'INC' || tmpData[i].mygrade == '4.00') {
-                this.updatedGradeData.push(tmpData[i])
-              }
-            }
-          }
-          this.gradesDataSource = new MatTableDataSource(this.updatedGradeData)
         }
-      })
-    }
-  }
-
-  generateProfile(studentnumber: any) {
-    if(
-      this.searchForm.get('studentnumber').value == '' ||
-      this.searchForm.get('semester').value == '' ||
-      this.searchForm.get('schoolyear').value == ''
-    ) {
-      this.toastr.error('Please fill out all fields.')
-    }
-    else {
-      this.studentService.getStudent(studentnumber).subscribe((res) => {
-        if(res) {
-          this.studentInfoForm.get('studentnumber').setValue(this.searchForm.get('studentnumber').value)
-          this.studentInfoForm.get('firstname').setValue(res.student.firstName)
-          this.studentInfoForm.get('middlename').setValue(res.student.middleName.at(0) + '.')
-          this.studentInfoForm.get('lastname').setValue(res.student.lastName)
-          this.studentInfoForm.get('course').setValue(res.student.course)
-          this.studentInfoForm.get('gender').setValue(res.student.gender)
-          this.studentInfoForm.get('fullName').setValue(
-            this.studentInfoForm.get('firstname').value + ' ' +
-            this.studentInfoForm.get('middlename').value + ' ' +
-            this.studentInfoForm.get('lastname').value
-          )
-        }
-      })
-    }
-
+        this.gradesDataSource = new MatTableDataSource(this.updatedGradeData)
+      }
+    })
   }
 
   getSchoolyear(studentnumber: any) {
@@ -306,14 +266,6 @@ export class GradesComponent implements OnInit {
     this.searchForm.get('studentnumber').reset()
     this.searchForm.get('semester').reset()
     this.searchForm.get('schoolyear').reset()
-
-    this.studentInfoForm.get('studentnumber').reset()
-    this.studentInfoForm.get('firstname').reset()
-    this.studentInfoForm.get('middlename').reset()
-    this.studentInfoForm.get('lastname').reset()
-    this.studentInfoForm.get('course').reset()
-    this.studentInfoForm.get('gender').reset()
-    this.studentInfoForm.get('fullName').reset()
   }
 
   numberFilter(event: any) {

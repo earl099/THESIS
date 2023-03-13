@@ -1,0 +1,23 @@
+@import '../../../index/home/home.component.scss';
+
+div.container
+{
+  width: initial;
+}
+
+div.col
+{
+  p{
+    font-size: smaller;
+  }
+}
+
+.mat-row:hover {
+  background-color: initial;
+  cursor: default;
+}
+table
+{
+  cursor: default !important;
+  width: 1080px;
+}
