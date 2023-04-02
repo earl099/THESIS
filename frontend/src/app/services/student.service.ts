@@ -94,13 +94,11 @@ export class StudentService {
   //--- ADMIN SEARCH FUNCTION ---//
   adminSearch(): Observable<any> {
     return this.httpClient.get(`${this.baseUrl}/loa/get/all`, this.httpOptions)
-    .pipe(catchError(this.handleError<any>('Admin Loa Search')))
   }
 
   //--- USER SEARCH FUNCTION ---//
   userSearch(collegeID: any): Observable<any> {
     return this.httpClient.get(`${this.baseUrl}/loa/get/${collegeID}`, this.httpOptions)
-    .pipe(catchError(this.handleError<any>('User Loa Search')))
   }
 
   //--- DELETE FUNCTION ---//

@@ -19,11 +19,38 @@ export class ReportService {
     private toastr: ToastrService
   ) { }
 
+  //--- GET COLLEGES ---//
+  getColleges(): Observable<any> {
+    return this.httpClient
+    .get(`${this.baseUrl}/report/colleges/get`, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Get Colleges')))
+  }
+
+  //--- GET COURSES BY COLLEGE ---//
+  getCourses(college: any): Observable<any> {
+    return this.httpClient
+    .get(`${this.baseUrl}/report/courses/get/${college}`, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Get Courses')))
+  }
+
   //--- GET SCHOOLYEAR FOR REPORT TYPE ---//
   getSchoolYearbyReportType(type: string): Observable<any> {
-    return this.httpClient
-    .get(`${this.baseUrl}/${type}/get/schoolyear`, this.httpOptions)
-    .pipe(catchError(this.handleError<any>('Get School Year')))
+    if (type == 'stud_enroll') {
+      return this.httpClient
+      .get(`${this.baseUrl}/${type}/get/schoolyear`, this.httpOptions)
+      .pipe(catchError(this.handleError<any>('Get School Year')))
+    }
+    else if(type == 'shiftee') {
+      return this.httpClient
+      .get(`${this.baseUrl}/get/${type}/schoolyear`, this.httpOptions)
+      .pipe(catchError(this.handleError<any>('Get School Year')))
+    }
+    else {
+      return this.httpClient
+      .get(`${this.baseUrl}/get/schoolyear/${type}`, this.httpOptions)
+      .pipe(catchError(this.handleError<any>('Get School Year')))
+    }
+
   }
 
   //--- SEARCH STUDENTS ENROLLED ---//

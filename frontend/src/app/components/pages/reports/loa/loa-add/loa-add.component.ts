@@ -14,7 +14,7 @@ import { VariableService } from 'src/app/services/variable.service';
 export class LoaAddComponent implements OnInit {
   globalVar: any
   addLoaForm: any
-  studList: any
+  studList!: Array<any>
   enrolledStuds: any
 
   constructor(
@@ -48,7 +48,15 @@ export class LoaAddComponent implements OnInit {
         })
 
         this.studentService.adminSearch().subscribe((res) => {
-          this.studList = res.studsWithLoa
+          if(res) {
+            if(res.studsWithLoa != undefined) {
+              this.studList = res.studsWithLoa
+            }
+            else {
+              this.studList = []
+            }
+          }
+
         })
       }
     })
@@ -62,12 +70,15 @@ export class LoaAddComponent implements OnInit {
           break
         }
 
-        for (let j = 0; j < this.studList.length; j++) {
-          if(this.studList[j].studentnumber == this.addLoaForm.get('studentnumber').value) {
-            this.toastr.error('Student Already Added.')
-            break
+        if(this.studList != undefined) {
+          for (let j = 0; j < this.studList.length; j++) {
+            if(this.studList[j].studentnumber == this.addLoaForm.get('studentnumber').value) {
+              this.toastr.error('Student Already Added.')
+              break
+            }
           }
         }
+
 
         if(this.toastr.previousToastMessage != null) {
           break

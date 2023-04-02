@@ -17,7 +17,7 @@ router.get('/shiftee/:studentnumber', shifteeController.getShiftee);
 
 //--- REPORTS ---//
 //--- GET SCHOOLYEAR ---//
-router.get('/shiftee/get/schoolyear', shifteeController.getSchoolyear)
+router.get('/get/shiftee/schoolyear', shifteeController.getSchoolyear)
 
 //--- SHIFTEE SEARCH ---//
 router.post('/report/shiftee', shifteeController.advShifteeSearch)

@@ -20,11 +20,11 @@ const getColleges = async (req, res) => {
     }
 }
 
-const getCourses = async (res, res) => {
+const getCourses = async (req, res) => {
     const collegeCode = req.params.collegeCode
 
     let course
-    if(collegeCode != 'UNIV'){
+    if(collegeCode != 'ALL'){
         course = await courseModel.findAll({
             attributes: [
                 db.sequelize.fn(
