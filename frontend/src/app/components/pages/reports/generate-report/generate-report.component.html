@@ -2,8 +2,94 @@
   <div class="page__box p-3 mt-2">Generate Report</div>
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
-      <div class="container"><p>Generate Report Content Here</p></div>
+        <form [formGroup]="reportForm">
+          <div class="container">
+            <mat-form-field>
+              <mat-label>Report Type</mat-label>
+              <mat-select formControlName="reportType" (selectionChange)="getSchoolyear(reportForm.get('reportType').value)">
+                <mat-option value="stud_enroll">Students Enrolled</mat-option>
+                <mat-option value="shiftee">Shiftees</mat-option>
+                <mat-option value="loa">LOA</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
 
+
+          <div class="container" *ngIf="isAdvClicked">
+            <div class="row align-items-start">
+              <div class="col">
+                <mat-form-field>
+                  <mat-label>College</mat-label>
+                  <mat-select formControlName="collegeCode" (selectionChange)="getCourses(reportForm.get('collegeCode').value)">
+                    <mat-option *ngFor="let college of collegeList" [value]="college.collegeCode">{{college.collegeCode}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field>
+                  <mat-label>Course</mat-label>
+                  <mat-select formControlName="courseCode">
+                    <mat-option *ngFor="let course of courseList" [value]="course.courseCode">{{course.courseCode}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row align-items-start">
+              <div class="col">
+                <mat-form-field>
+                  <mat-label>Gender</mat-label>
+                  <mat-select formControlName="gender">
+                    <mat-option value="MALE">MALE</mat-option>
+                    <mat-option value="FEMALE">FEMALE</mat-option>
+                    <mat-option value="ALL">ALL</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field>
+                  <mat-label>Semester</mat-label>
+                  <mat-select formControlName="semester">
+                    <mat-option value="FIRST">FIRST</mat-option>
+                    <mat-option value="SECOND">SECOND</mat-option>
+                    <mat-option value="SUMMER">SUMMER</mat-option>
+                    <mat-option value="ALL">ALL</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="col">
+                <mat-form-field>
+                  <mat-label>School Year</mat-label>
+                  <mat-select formControlName="schoolyear">
+                    <mat-option *ngFor="let year of schoolyearList" [value]="year.schoolyear">{{year.schoolyear}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+
+
+          </div>
+
+
+          <div class="container">
+            <div class="row align-items-start">
+              <div class="col">
+                <button mat-button type="submit" class="btn btn-success" (click)="generateReport()">Generate Report</button>
+              </div>
+
+              <div class="col">
+                <button mat-button type="submit" class="btn btn-success" (click)="onAdvClick()">Advanced</button>
+              </div>
+
+              <div class="col">
+                <button mat-button routerLink="/dashboard">Back to Dashboard</button>
+              </div>
+            </div>
+          </div>
+        </form>
     </div>
   </div>
 </div>

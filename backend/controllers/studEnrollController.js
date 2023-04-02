@@ -564,8 +564,6 @@ const addTransaction = async (req, res) => {
         let divOfFees
         let scholarship
         try {
-            
-
             studEnroll = await studEnrollModel.create(studEnrollObject, { transaction })
             
             subjEnrollList = await subjEnrollModel.findAll({
@@ -614,6 +612,7 @@ const addTransaction = async (req, res) => {
                     ],
                     where: { schedcode: subjEnrollList[i].schedcode }
                 }, { transaction })
+
                 schedule.push(tmpData)
             }
 

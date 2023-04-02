@@ -17,7 +17,7 @@ router.post('/loa/delete/:studentnumber', loaController.deleteLoa)
 
 //--- REPORTS ---//
 //--- GET SCHOOLYEAR ---//
-router.get('/loa/get/schoolyear', loaController.getSchoolyear)
+router.get('/get/schoolyear/loa', loaController.getSchoolyear)
 
 //--- LOA SEARCH ---//
 router.post('/report/loa', loaController.advLoaSearch)
