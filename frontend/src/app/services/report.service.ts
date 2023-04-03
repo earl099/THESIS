@@ -55,9 +55,22 @@ export class ReportService {
 
   //--- SEARCH STUDENTS ENROLLED ---//
   advSearchByReportType(type: any, data: any): Observable<any> {
-    return this.httpClient
-    .post(`${this.baseUrl}/report/${type}`, data, this.httpOptions)
-    .pipe(catchError(this.handleError<any>('Search Operation')))
+    //if student enrolled
+    if(type == 'stud_enroll') {
+      return this.httpClient
+      .post(`${this.baseUrl}/report/${type}`, data, this.httpOptions)
+      .pipe(catchError(this.handleError<any>('Search Operation')))
+    }
+    else if(type == 'shiftee') {
+      return this.httpClient
+      .post(`${this.baseUrl}/report/get/${type}`, data, this.httpOptions)
+      .pipe(catchError(this.handleError<any>('Search Operation')))
+    }
+    else {
+      return this.httpClient
+      .post(`${this.baseUrl}/get/report/${type}`, data, this.httpOptions)
+      .pipe(catchError(this.handleError<any>('Search Operation')))
+    }
   }
 
   //--- ERROR HANDLING ---//

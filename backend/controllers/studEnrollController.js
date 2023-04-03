@@ -1,13 +1,10 @@
 "use strict"
 
-const { Op } = require('sequelize')
 const db = require('../config/sequelize')
 //validation models
 const studEnrollModel = db.studEnroll
 const subjEnrollModel = db.subjEnroll
-const courseModel = db.course
 const divOfFeesModel = db.divOfFees
-const processLogsModel = db.processLogs
 
 //models needed for assessment
 const assessListModel = db.assessList
@@ -1071,7 +1068,6 @@ const dropSubjTransaction = async (req, res) => {
     let transaction = await db.sequelize.transaction()
 
     //--- ADDED SUBJECT CHECKER ---//
-    let addedSubj = false
 
     //--- STUDENT INFO FOR REEVALUATION OF DIVISION OF FEES ---//
     const studentInfo = await studentModel.findOne({
@@ -1517,268 +1513,424 @@ const searchEnrolled = async (req, res) => {
         schoolyear,
         gender,
     } = req.body
-    let searchResult
 
+    //object for final response
+    let objRes = []
+    let studInfoResult = []
+
+    //specific college
     if(collegeCode != 'UNIV') {
-        let courseList = await courseModel.findAll({
-            attributes: [
-                db.sequelize.fn(
-                    'DISTINCT',
-                    db.sequelize.col('courseCode')
-                ),
-                'courseCode'
-            ],
-            where: { courseCollege: collegeCode }
-        })
-
-        //course is specific
+        //specific course
         if(courseCode != 'ALL') {
-            //college, course and gender are specific
-            if(gender != 'BOTH') {
-                searchResult = await studEnrollModel.findAll({
-                    attributes: [
-                        'studentnumber'
-                    ],
-                    include: [{
-                        model: studentModel,
+            //specific college, course and gender
+            if(gender != 'ALL') {
+                let enrolledResult
+
+                //sem and sy specific
+                if(semester != 'ALL' && schoolyear != 'ALL') {
+                    enrolledResult = await studEnrollModel.findAll({
                         attributes: [
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ],
+                        where: { 
+                            semester: semester, 
+                            schoolyear: schoolyear 
+                        }
+                    })
+                }
+                else {
+                    enrolledResult = await studEnrollModel.findAll({
+                        attributes: [
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ]
+                    })
+                }
+
+                for (let i = 0; i < enrolledResult.length; i++) {
+                    let infoRes = await studentModel.findOne({
+                        attributes: [
+                            'studentNumber',
                             'firstName',
                             'middleName',
                             'lastName',
-                            'gender',
-                            'course'
+                            'suffix',
+                            'course',
+                            'gender'
                         ],
                         where: {
-                            gender: gender,
-                            course: courseCode
-                        },
-                    }],
-                    where: { 
-                        semester: semester, 
-                        schoolyear: schoolyear 
-                    }
-                })
+                            studentNumber: enrolledResult[i].studentnumber,
+                            course: courseCode,
+                            gender: gender
+                        }
+                    })
+                    
+                    studInfoResult.push(infoRes)
+                    objRes.push(enrolledResult[i])
+                }
             }
+
             //college and course are specific but gender is not
             else {
-                searchResult = await studEnrollModel.findAll({
-                    attributes: [
-                        'studentnumber'
-                    ],
-                    include: [{
-                        model: studentModel,
+                let enrolledResult 
+                
+                //sem and sy specific
+                if(semester != 'ALL' && schoolyear != 'ALL') {
+                    enrolledResult = await studEnrollModel.findAll({
                         attributes: [
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ],
+                        where: { 
+                            semester: semester, 
+                            schoolyear: schoolyear 
+                        }
+                    })
+                }
+                else {
+                    enrolledResult = await studEnrollModel.findAll({
+                        attributes: [
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ]
+                    })
+                }
+
+                for (let i = 0; i < enrolledResult.length; i++) {
+                    let infoRes = await studentModel.findOne({
+                        attributes: [
+                            'studentNumber',
                             'firstName',
                             'middleName',
                             'lastName',
-                            'gender',
-                            'course'
+                            'suffix',
+                            'course',
+                            'gender'
                         ],
                         where: {
+                            studentNumber: enrolledResult[i].studentnumber,
                             course: courseCode
-                        },
-                    }],
-                    where: { 
-                        semester: semester, 
-                        schoolyear: schoolyear 
-                    }
-                })
+                        }
+                    })
+                    
+                    studInfoResult.push(infoRes)
+                    objRes.push(enrolledResult[i])
+                }
             }
         }
         else {
             //college and gender are specific, but course is not
-            if(gender != 'BOTH') {
-                searchResult = await studEnrollModel.findAll({
-                    attributes: [
-                        'studentnumber'
-                    ],
-                    include: [{
-                        model: studentModel,
+            if(gender != 'ALL') {
+                let enrolledResult
+                
+                //sem and sy specific
+                if(semester != 'ALL' && schoolyear != 'ALL') {
+                    enrolledResult = await studEnrollModel.findAll({
                         attributes: [
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ],
+                        where: { 
+                            semester: semester, 
+                            schoolyear: schoolyear 
+                        }
+                    })
+                }
+                else {
+                    enrolledResult = await studEnrollModel.findAll({
+                        attributes: [
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ]
+                    })
+                }
+
+                for (let i = 0; i < enrolledResult.length; i++) {
+                    let infoRes = await studentModel.findOne({
+                        attributes: [
+                            'studentNumber',
                             'firstName',
                             'middleName',
                             'lastName',
-                            'gender',
-                            'course'
+                            'suffix',
+                            'course',
+                            'gender'
                         ],
                         where: {
-                            gender: gender,
-                            [Op.or]: [{
-                                course: [{ 
-                                    [Op.in]: { courseList }
-                                }]
-                            }]
-                        },
-                    }],
-                    where: { 
-                        semester: semester, 
-                        schoolyear: schoolyear 
-                    }
-                })
+                            studentNumber: enrolledResult[i].studentnumber,
+                            gender: gender
+                        }
+                    })
+                    
+                    studInfoResult.push(infoRes)
+                    objRes.push(enrolledResult[i])
+                }
             }
             //college is specific, but course and gender are not
             else {
-                searchResult = await studEnrollModel.findAll({
-                    attributes: [
-                        'studentnumber'
-                    ],
-                    include: [{
-                        model: studentModel,
+                let enrolledResult
+                
+                //sem and sy specific
+                if(semester != 'ALL' && schoolyear != 'ALL') {
+                    enrolledResult = await studEnrollModel.findAll({
                         attributes: [
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ],
+                        where: { 
+                            semester: semester, 
+                            schoolyear: schoolyear 
+                        }
+                    })
+                }
+                else {
+                    enrolledResult = await studEnrollModel.findAll({
+                        attributes: [
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ]
+                    })
+                }
+
+                for (let i = 0; i < enrolledResult.length; i++) {
+                    let infoRes = await studentModel.findOne({
+                        attributes: [
+                            'studentNumber',
                             'firstName',
                             'middleName',
                             'lastName',
-                            'gender',
-                            'course'
+                            'suffix',
+                            'course',
+                            'gender'
                         ],
                         where: {
-                            [Op.or]: [{
-                                course: [{ 
-                                    [Op.in]: { courseList }
-                                }]
-                            }]
+                            studentNumber: enrolledResult[i].studentnumber
                         }
-                    }],
-                    where: { 
-                        semester: semester, 
-                        schoolyear: schoolyear 
-                    }
-                })
+                    })
+                    
+                    studInfoResult.push(infoRes)
+                    objRes.push(enrolledResult[i])
+                }
             }
         }
     }
     //college not specific
     else {
-        let courseList = await courseModel.findAll({
-            attributes: [
-                db.sequelize.fn(
-                    'DISTINCT',
-                    db.sequelize.col('courseCode')
-                ),
-                'courseCode'
-            ]
-        })
-
         //course is specific
         if(courseCode != 'ALL') {
             //gender is specific
-            if(gender != 'BOTH') {
-                searchResult = await studEnrollModel.findAll({
-                    attributes: [
-                        'studentnumber'
-                    ],
-                    include: [{
-                        model: studentModel,
+            if(gender != 'ALL') {
+                let enrolledResult
+                
+                //sem and sy specific
+                if(semester != 'ALL' && schoolyear != 'ALL') {
+                    enrolledResult = await studEnrollModel.findAll({
                         attributes: [
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ],
+                        where: { 
+                            semester: semester, 
+                            schoolyear: schoolyear 
+                        }
+                    })
+                }
+                else {
+                    enrolledResult = await studEnrollModel.findAll({
+                        attributes: [
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ]
+                    })
+                }
+
+                for (let i = 0; i < enrolledResult.length; i++) {
+                    let infoRes = await studentModel.findOne({
+                        attributes: [
+                            'studentNumber',
                             'firstName',
                             'middleName',
                             'lastName',
-                            'gender',
-                            'course'
+                            'suffix',
+                            'course',
+                            'gender'
                         ],
                         where: {
+                            studentNumber: enrolledResult[i].studentnumber,
                             gender: gender,
                             course: courseCode
-                        },
-                    }],
-                    where: { 
-                        semester: semester, 
-                        schoolyear: schoolyear 
-                    }
-                })
+                        }
+                    })
+                    
+                    studInfoResult.push(infoRes)
+                    objRes.push(enrolledResult[i])
+                }
             }
             //gender is not specific
             else {
-                searchResult = await studEnrollModel.findAll({
-                    attributes: [
-                        'studentnumber'
-                    ],
-                    include: [{
-                        model: studentModel,
+                let enrolledResult
+                
+                //sem and sy specific
+                if(semester != 'ALL' && schoolyear != 'ALL') {
+                    enrolledResult = await studEnrollModel.findAll({
                         attributes: [
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ],
+                        where: { 
+                            semester: semester, 
+                            schoolyear: schoolyear 
+                        }
+                    })
+                }
+                else {
+                    enrolledResult = await studEnrollModel.findAll({
+                        attributes: [
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ]
+                    })
+                }
+
+                for (let i = 0; i < enrolledResult.length; i++) {
+                    let infoRes = await studentModel.findOne({
+                        attributes: [
+                            'studentNumber',
                             'firstName',
                             'middleName',
                             'lastName',
-                            'gender',
-                            'course'
+                            'suffix',
+                            'course',
+                            'gender'
                         ],
                         where: {
+                            studentNumber: enrolledResult[i].studentnumber,
                             course: courseCode
-                        },
-                    }],
-                    where: { 
-                        semester: semester, 
-                        schoolyear: schoolyear 
-                    }
-                })
+                        }
+                    })
+                    
+                    studInfoResult.push(infoRes)
+                    objRes.push(enrolledResult[i])
+                }
             }
         }
         //course not specific
         else {
             //gender is specific
-            if(gender != 'BOTH') {
-                searchResult = await studEnrollModel.findAll({
-                    attributes: [
-                        'studentnumber'
-                    ],
-                    include: [{
-                        model: studentModel,
+            if(gender != 'ALL') {
+                let enrolledResult
+                
+                //sem and sy specific
+                if(semester != 'ALL' && schoolyear != 'ALL') {
+                    enrolledResult = await studEnrollModel.findAll({
                         attributes: [
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ],
+                        where: { 
+                            semester: semester, 
+                            schoolyear: schoolyear 
+                        }
+                    })
+                }
+                else {
+                    enrolledResult = await studEnrollModel.findAll({
+                        attributes: [
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ]
+                    })
+                }
+
+                for (let i = 0; i < enrolledResult.length; i++) {
+                    let infoRes = await studentModel.findOne({
+                        attributes: [
+                            'studentNumber',
                             'firstName',
                             'middleName',
                             'lastName',
-                            'gender',
-                            'course'
+                            'suffix',
+                            'course',
+                            'gender'
                         ],
                         where: {
-                            gender: gender,
-                            [Op.or]: [{
-                                course: [{ 
-                                    [Op.in]: { courseList }
-                                }]
-                            }]
-                        },
-                    }],
-                    where: { 
-                        semester: semester, 
-                        schoolyear: schoolyear 
-                    }
-                })
+                            studentNumber: enrolledResult[i].studentnumber,
+                            gender: gender
+                        }
+                    })
+                    
+                    studInfoResult.push(infoRes)
+                    objRes.push(enrolledResult[i])
+                }
             }
             //gender is not specific
             else {
-                searchResult = await studEnrollModel.findAll({
-                    attributes: [
-                        'studentnumber'
-                    ],
-                    include: [{
-                        model: studentModel,
+                let enrolledResult
+                
+                //sem and sy specific
+                if(semester != 'ALL' && schoolyear != 'ALL') {
+                    enrolledResult = await studEnrollModel.findAll({
                         attributes: [
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ],
+                        where: { 
+                            semester: semester, 
+                            schoolyear: schoolyear 
+                        }
+                    })
+                }
+                else {
+                    enrolledResult = await studEnrollModel.findAll({
+                        attributes: [
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ]
+                    })
+                }
+
+                for (let i = 0; i < enrolledResult.length; i++) {
+                    let infoRes = await studentModel.findOne({
+                        attributes: [
+                            'studentNumber',
                             'firstName',
                             'middleName',
                             'lastName',
-                            'gender',
-                            'course'
+                            'suffix',
+                            'course',
+                            'gender'
                         ],
                         where: {
-                            [Op.or]: [{
-                                course: [{ 
-                                    [Op.in]: { courseList }
-                                }]
-                            }]
+                            studentNumber: enrolledResult[i].studentnumber
                         }
-                    }],
-                    where: { 
-                        semester: semester, 
-                        schoolyear: schoolyear 
-                    }
-                })
+                    })
+                    
+                    studInfoResult.push(infoRes)
+                    objRes.push(enrolledResult[i])
+                }
             }
         }
     }
 
-    if(searchResult.length > 0) {
-        res.status(200).send({ message: 'Students Enrolled found.', searchResult: searchResult })
+    if(objRes.length > 0) {
+        res.status(200).send({ message: 'Students Enrolled found.', result: objRes, infoResult: studInfoResult })
     }
     else {
         res.status(500).send({ message: 'No Result.' })

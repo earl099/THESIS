@@ -20,6 +20,6 @@ router.get('/shiftee/:studentnumber', shifteeController.getShiftee);
 router.get('/get/shiftee/schoolyear', shifteeController.getSchoolyear)
 
 //--- SHIFTEE SEARCH ---//
-router.post('/report/shiftee', shifteeController.advShifteeSearch)
+router.post('/report/get/shiftee', shifteeController.advShifteeSearch)
 
 module.exports = router;

@@ -97,8 +97,7 @@ import { AuthInterceptor } from './shared/authguard/auth.interceptor';
 
 //CSV PARSER MODULE
 import { NgxCsvParserModule } from 'ngx-csv-parser';
-
-
+import { CsvModule } from '@ctrl/ngx-csv';
 
 
 @NgModule({
@@ -188,6 +187,7 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
 
     //CSV PARSER MODULE
     NgxCsvParserModule,
+    CsvModule
 
 
   ],
