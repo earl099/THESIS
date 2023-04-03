@@ -380,7 +380,7 @@ export class RegformReprintComponent implements OnInit {
         this.processData.get('studentnumber').setValue(this.searchForm.get('studentnumber').value)
         this.processData.get('type').setValue('Export Registration Form')
         this.processData.get('description').setValue(`Exported ${this.searchForm.get('studentnumber').value}'s Registration Form to PDF.`)
-        this.variableService.addProcess(this.processData).subscribe()
+        this.variableService.addProcess(this.processData.value).subscribe()
       }
     })
   }

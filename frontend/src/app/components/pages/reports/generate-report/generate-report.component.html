@@ -2,6 +2,7 @@
   <div class="page__box p-3 mt-2">Generate Report</div>
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
+      <div class="container" *ngIf="!isReportGenerated">
         <form [formGroup]="reportForm">
           <div class="container">
             <mat-form-field>
@@ -17,7 +18,7 @@
 
           <div class="container" *ngIf="isAdvClicked">
             <div class="row align-items-start">
-              <div class="col">
+              <div class="col" *ngIf="isAdmin">
                 <mat-form-field>
                   <mat-label>College</mat-label>
                   <mat-select formControlName="collegeCode" (selectionChange)="getCourses(reportForm.get('collegeCode').value)">
@@ -26,11 +27,19 @@
                 </mat-form-field>
               </div>
 
+              <div class="col" *ngIf="!isAdmin">
+                <mat-form-field appearance="fill">
+                  <mat-label>College</mat-label>
+                  <input matInput type="text" formControlName="collegeCode" readonly>
+                </mat-form-field>
+              </div>
+
               <div class="col">
                 <mat-form-field>
                   <mat-label>Course</mat-label>
                   <mat-select formControlName="courseCode">
                     <mat-option *ngFor="let course of courseList" [value]="course.courseCode">{{course.courseCode}}</mat-option>
+                    <mat-option value="ALL">ALL</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
@@ -65,12 +74,11 @@
                   <mat-label>School Year</mat-label>
                   <mat-select formControlName="schoolyear">
                     <mat-option *ngFor="let year of schoolyearList" [value]="year.schoolyear">{{year.schoolyear}}</mat-option>
+                    <mat-option value="ALL">ALL</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
             </div>
-
-
           </div>
 
 
@@ -90,6 +98,205 @@
             </div>
           </div>
         </form>
+      </div>
+
+      <div class="container" *ngIf="isReportGenerated">
+        <p>{{title}}</p>
+        <br>
+
+        <div class="container" *ngIf="isEnrolledReport">
+          <table mat-table [dataSource]="dataSource" matSort #enrollSort="matSort" (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
+            <ng-container matColumnDef="studentNumber">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by studentNumber"> Student Number </th>
+              <td mat-cell *matCellDef="let enrolled"> {{enrolled.studentNumber}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="firstName">
+              <th mat-header-cell *matHeaderCellDef> First Name </th>
+              <td mat-cell *matCellDef="let enrolled"> {{enrolled.firstName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="middleName">
+              <th mat-header-cell *matHeaderCellDef> Middle Name </th>
+              <td mat-cell *matCellDef="let enrolled"> {{enrolled.middleName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="lastName">
+              <th mat-header-cell *matHeaderCellDef> Last Name </th>
+              <td mat-cell *matCellDef="let enrolled"> {{enrolled.lastName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="suffix">
+              <th mat-header-cell *matHeaderCellDef> Suffix </th>
+              <td mat-cell *matCellDef="let enrolled"> {{ enrolled.suffix === '' ? '-' : enrolled.suffix }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="gender">
+              <th mat-header-cell *matHeaderCellDef> Gender </th>
+              <td mat-cell *matCellDef="let enrolled"> {{enrolled.gender}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="course">
+              <th mat-header-cell *matHeaderCellDef> Current Course </th>
+              <td mat-cell *matCellDef="let enrolled"> {{enrolled.course}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="semester">
+              <th mat-header-cell *matHeaderCellDef> Semester </th>
+              <td mat-cell *matCellDef="let enrolled"> {{enrolled.semester}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="schoolyear">
+              <th mat-header-cell *matHeaderCellDef> School Year </th>
+              <td mat-cell *matCellDef="let enrolled"> {{enrolled.schoolyear}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="enrolledColumns"></tr>
+            <tr mat-row *matRowDef="let enrolledRow; columns: enrolledColumns"></tr>
+
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+          </table>
+          <mat-paginator #enrollPaginator [pageSizeOptions]="[5]" aria-label="Select page of students"></mat-paginator>
+        </div>
+
+        <div class="container" *ngIf="isShifteeReport">
+          <table mat-table [dataSource]="dataSource1" matSort #shifteeSort="matSort" (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
+            <ng-container matColumnDef="studentNumber">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by studentNumber"> Student Number </th>
+              <td mat-cell *matCellDef="let shiftee"> {{shiftee.studentNumber}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="firstName">
+              <th mat-header-cell *matHeaderCellDef> First Name </th>
+              <td mat-cell *matCellDef="let shiftee"> {{shiftee.firstName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="middleName">
+              <th mat-header-cell *matHeaderCellDef> Middle Name </th>
+              <td mat-cell *matCellDef="let shiftee"> {{shiftee.middleName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="lastName">
+              <th mat-header-cell *matHeaderCellDef> Last Name </th>
+              <td mat-cell *matCellDef="let shiftee"> {{shiftee.lastName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="suffix">
+              <th mat-header-cell *matHeaderCellDef> Suffix </th>
+              <td mat-cell *matCellDef="let shiftee"> {{ shiftee.suffix === '' ? '-' : shiftee.suffix }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="gender">
+              <th mat-header-cell *matHeaderCellDef> Gender </th>
+              <td mat-cell *matCellDef="let shiftee"> {{shiftee.gender}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="course">
+              <th mat-header-cell *matHeaderCellDef> Current Course </th>
+              <td mat-cell *matCellDef="let shiftee"> {{shiftee.course}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="coursefrom">
+              <th mat-header-cell *matHeaderCellDef> Previous Course </th>
+              <td mat-cell *matCellDef="let shiftee"> {{shiftee.coursefrom}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="semester">
+              <th mat-header-cell *matHeaderCellDef> Semester </th>
+              <td mat-cell *matCellDef="let shiftee"> {{shiftee.semester}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="schoolyear">
+              <th mat-header-cell *matHeaderCellDef> School Year </th>
+              <td mat-cell *matCellDef="let shiftee"> {{shiftee.schoolyear}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="shifteeColumns"></tr>
+            <tr mat-row *matRowDef="let shifteeRow; columns: shifteeColumns"></tr>
+
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+          </table>
+          <mat-paginator #enrollPaginator [pageSizeOptions]="[5]" aria-label="Select page of students"></mat-paginator>
+        </div>
+
+        <div class="container" *ngIf="isLoaReport">
+          <table mat-table [dataSource]="dataSource2" matSort #loaSort="matSort" (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
+            <ng-container matColumnDef="studentNumber">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by studentNumber"> Student Number </th>
+              <td mat-cell *matCellDef="let loa"> {{loa.studentNumber}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="firstName">
+              <th mat-header-cell *matHeaderCellDef> First Name </th>
+              <td mat-cell *matCellDef="let loa"> {{loa.firstName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="middleName">
+              <th mat-header-cell *matHeaderCellDef> Middle Name </th>
+              <td mat-cell *matCellDef="let loa"> {{loa.middleName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="lastName">
+              <th mat-header-cell *matHeaderCellDef> Last Name </th>
+              <td mat-cell *matCellDef="let loa"> {{loa.lastName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="suffix">
+              <th mat-header-cell *matHeaderCellDef> Suffix </th>
+              <td mat-cell *matCellDef="let loa"> {{ loa.suffix === '' ? '-' : loa.suffix }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="gender">
+              <th mat-header-cell *matHeaderCellDef> Gender </th>
+              <td mat-cell *matCellDef="let loa"> {{loa.gender}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="course">
+              <th mat-header-cell *matHeaderCellDef> Current Course </th>
+              <td mat-cell *matCellDef="let loa"> {{loa.course}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="dateencoded">
+              <th mat-header-cell *matHeaderCellDef> Date Encoded </th>
+              <td mat-cell *matCellDef="let loa"> {{loa.dateencoded}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="semester">
+              <th mat-header-cell *matHeaderCellDef> Semester </th>
+              <td mat-cell *matCellDef="let loa"> {{loa.semester}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="schoolyear">
+              <th mat-header-cell *matHeaderCellDef> School Year </th>
+              <td mat-cell *matCellDef="let loa"> {{loa.schoolyear}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="loaColumns"></tr>
+            <tr mat-row *matRowDef="let loaRow; columns: loaColumns"></tr>
+
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+          </table>
+          <mat-paginator #enrollPaginator [pageSizeOptions]="[5]" aria-label="Select page of students"></mat-paginator>
+        </div>
+
+        <div class="container">
+          <div class="row align-items-start">
+            <div class="col">
+              <button mat-button type="submit" class="btn btn-success" (click)="generateCSV()">Export to CSV</button>
+            </div>
+
+            <div class="col">
+              <button mat-button routerLink="/dashboard">Back to Dashboard</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

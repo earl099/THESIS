@@ -20,6 +20,6 @@ router.post('/loa/delete/:studentnumber', loaController.deleteLoa)
 router.get('/get/schoolyear/loa', loaController.getSchoolyear)
 
 //--- LOA SEARCH ---//
-router.post('/report/loa', loaController.advLoaSearch)
+router.post('/get/report/loa', loaController.advLoaSearch)
 
 module.exports = router

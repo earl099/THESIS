@@ -3,7 +3,6 @@
 const db = require('../config/sequelize');
 const shifteeModel = db.shiftee;
 const studentModel = db.student
-const courseModel = db.course
 
 const addShiftee = async (req, res) => {
     const {
@@ -123,274 +122,508 @@ const advShifteeSearch = async (req, res) => {
         schoolyear,
         gender
     } = req.body
-    let searchResult
+    
+    //object for final response
+    let objRes = []
+    let studInfoResult = []
+
     //specific college
-    if (collegeCode != 'UNIV') {
-        let courseList = await courseModel.findAll({
-            attributes: [
-                db.sequelize.fn(
-                    'DISTINCT',
-                    db.sequelize.col('courseCode')
-                ),
-                'courseCode'
-            ],
-            where: { courseCollege: collegeCode }
-        })
-        
+    if(collegeCode != 'UNIV') {
         //specific course
-        if (courseCode != 'ALL') {
-            //specific gender
-            if (gender != 'BOTH') {
-                searchResult = await shifteeModel.findAll({
-                    attributes: [
-                        'studentnumber'
-                    ],
-                    where: {
-                        semester: semester,
-                        schoolyear: schoolyear
-                    },
-                    include: [{
-                        model: studentModel,
-                        attributes: [
-                            'firstName',
-                            'middleName',
-                            'lastName',
-                            'gender',
-                            'course'
-                        ],
-                        where: {
-                            gender: gender,
-                            course: courseCode
-                        }
-                    }]
-                }) 
-            } 
-            //non-specific gender
-            else {
-                searchResult = await shifteeModel.findAll({
-                    attributes: [
-                        'studentnumber'
-                    ],
-                    where: {
-                        semester: semester,
-                        schoolyear: schoolyear
-                    },
-                    include: [{
-                        model: studentModel,
-                        attributes: [
-                            'firstName',
-                            'middleName',
-                            'lastName',
-                            'gender',
-                            'course'
-                        ],
-                        where: {
-                            gender: gender,
-                            course: courseCode
-                        }
-                    }]
-                })
-            }
-        } 
-        //non-specific course
-        else {
+        if(courseCode != 'ALL') {
+            //specific college, course and gender
+            if(gender != 'ALL') {
+                let shifteeResult
 
-            //specific gender
-            if (gender != 'BOTH') {
-                searchResult = await shifteeModel.findAll({
-                    attributes: [
-                        'studentnumber'
-                    ],
-                    include: [{
-                        model: studentModel,
+                //sem and sy specific
+                if(semester != 'ALL' && schoolyear != 'ALL') {
+                    shifteeResult = await shifteeModel.findAll({
                         attributes: [
+                            db.Sequelize.fn(
+                                'DISTINCT',
+                                db.Sequelize.col('coursefrom')
+                            ),
+                            'coursefrom',
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ],
+                        where: { 
+                            semester: semester, 
+                            schoolyear: schoolyear 
+                        }
+                    })
+                }
+                else {
+                    shifteeResult = await shifteeModel.findAll({
+                        attributes: [
+                            db.Sequelize.fn(
+                                'DISTINCT',
+                                db.Sequelize.col('coursefrom')
+                            ),
+                            'coursefrom',
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ]
+                    })
+                }
+
+                for (let i = 0; i < shifteeResult.length; i++) {
+                    let infoRes = await studentModel.findOne({
+                        attributes: [
+                            'studentNumber',
                             'firstName',
                             'middleName',
                             'lastName',
-                            'gender',
-                            'course'
+                            'suffix',
+                            'course',
+                            'gender'
                         ],
                         where: {
-                            gender: gender,
-                            [Op.or]: [{
-                                course: [{ 
-                                    [Op.in]: { courseList }
-                                }]
-                            }]
-                        },
-                    }],
-                    where: { 
-                        semester: semester, 
-                        schoolyear: schoolyear 
-                    }
-                })
-            } 
-            //non-specific gender
+                            studentNumber: shifteeResult[i].studentnumber,
+                            course: courseCode,
+                            gender: gender
+                        }
+                    })
+                    
+                    studInfoResult.push(infoRes)
+                    objRes.push(shifteeResult[i])
+                }
+            }
+
+            //college and course are specific but gender is not
             else {
-                searchResult = await shifteeModel.findAll({
-                    attributes: [
-                        'studentnumber'
-                    ],
-                    include: [{
-                        model: studentModel,
+                let shifteeResult 
+                
+                //sem and sy specific
+                if(semester != 'ALL' && schoolyear != 'ALL') {
+                    shifteeResult = await shifteeModel.findAll({
                         attributes: [
+                            db.Sequelize.fn(
+                                'DISTINCT',
+                                db.Sequelize.col('coursefrom')
+                            ),
+                            'coursefrom',
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ],
+                        where: { 
+                            semester: semester, 
+                            schoolyear: schoolyear 
+                        }
+                    })
+                }
+                else {
+                    shifteeResult = await shifteeModel.findAll({
+                        attributes: [
+                            db.Sequelize.fn(
+                                'DISTINCT',
+                                db.Sequelize.col('coursefrom')
+                            ),
+                            'coursefrom',
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ]
+                    })
+                }
+
+                for (let i = 0; i < shifteeResult.length; i++) {
+                    let infoRes = await studentModel.findOne({
+                        attributes: [
+                            'studentNumber',
                             'firstName',
                             'middleName',
                             'lastName',
-                            'gender',
-                            'course'
+                            'suffix',
+                            'course',
+                            'gender'
                         ],
                         where: {
-                            [Op.or]: [{
-                                course: [{ 
-                                    [Op.in]: { courseList }
-                                }]
-                            }]
-                        },
-                    }],
-                    where: { 
-                        semester: semester, 
-                        schoolyear: schoolyear 
-                    }
-                })
+                            studentNumber: shifteeResult[i].studentnumber,
+                            course: courseCode
+                        }
+                    })
+                    
+                    studInfoResult.push(infoRes)
+                    objRes.push(shifteeResult[i])
+                }
             }
         }
-    } 
-    //non-specific college
-    else {
-        let courseList = await courseModel.findAll({
-            attributes: [
-                db.sequelize.fn(
-                    'DISTINCT',
-                    db.sequelize.col('courseCode')
-                ),
-                'courseCode'
-            ]
-        })
-
-        //course specific
-        if (courseCode != 'ALL') {
-            //gender specific
-            if (gender != 'BOTH') {
-                searchResult = await shifteeModel.findAll({
-                    attributes: [
-                        'studentnumber'
-                    ],
-                    where: {
-                        semester: semester,
-                        schoolyear: schoolyear
-                    },
-                    include: [{
-                        model: studentModel,
-                        attributes: [
-                            'firstName',
-                            'middleName',
-                            'lastName',
-                            'gender',
-                            'course'
-                        ],
-                        where: {
-                            gender: gender,
-                            course: courseCode
-                        }
-                    }]
-                })
-            } 
-            //gender non-specific
-            else {
-                searchResult = await shifteeModel.findAll({
-                    attributes: [
-                        'studentnumber'
-                    ],
-                    where: {
-                        semester: semester,
-                        schoolyear: schoolyear
-                    },
-                    include: [{
-                        model: studentModel,
-                        attributes: [
-                            'firstName',
-                            'middleName',
-                            'lastName',
-                            'gender',
-                            'course'
-                        ],
-                        where: {
-                            course: courseCode
-                        }
-                    }]
-                })
-            }
-        } 
-        //course non-specific
         else {
-            //gender specific
-            if (gender != 'BOTH') {
-                searchResult = await shifteeModel.findAll({
-                    attributes: [
-                        'studentnumber'
-                    ],
-                    include: [{
-                        model: studentModel,
+            //college and gender are specific, but course is not
+            if(gender != 'ALL') {
+                let shifteeResult
+                
+                //sem and sy specific
+                if(semester != 'ALL' && schoolyear != 'ALL') {
+                    shifteeResult = await shifteeModel.findAll({
                         attributes: [
+                            db.Sequelize.fn(
+                                'DISTINCT',
+                                db.Sequelize.col('coursefrom')
+                            ),
+                            'coursefrom',
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ],
+                        where: { 
+                            semester: semester, 
+                            schoolyear: schoolyear 
+                        }
+                    })
+                }
+                else {
+                    shifteeResult = await shifteeModel.findAll({
+                        attributes: [
+                            db.Sequelize.fn(
+                                'DISTINCT',
+                                db.Sequelize.col('coursefrom')
+                            ),
+                            'coursefrom',
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ]
+                    })
+                }
+
+                for (let i = 0; i < shifteeResult.length; i++) {
+                    let infoRes = await studentModel.findOne({
+                        attributes: [
+                            'studentNumber',
                             'firstName',
                             'middleName',
                             'lastName',
-                            'gender',
-                            'course'
+                            'suffix',
+                            'course',
+                            'gender'
                         ],
                         where: {
-                            gender: gender,
-                            [Op.or]: [{
-                                course: [{ 
-                                    [Op.in]: { courseList }
-                                }]
-                            }]
-                        },
-                    }],
-                    where: { 
-                        semester: semester, 
-                        schoolyear: schoolyear 
-                    }
-                })
-            } 
-            //gender non-specific
+                            studentNumber: shifteeResult[i].studentnumber,
+                            gender: gender
+                        }
+                    })
+                    
+                    studInfoResult.push(infoRes)
+                    objRes.push(shifteeResult[i])
+                }
+            }
+            //college is specific, but course and gender are not
             else {
-                searchResult = await shifteeModel.findAll({
-                    attributes: [
-                        'studentnumber'
-                    ],
-                    include: [{
-                        model: studentModel,
+                let shifteeResult
+                
+                //sem and sy specific
+                if(semester != 'ALL' && schoolyear != 'ALL') {
+                    shifteeResult = await shifteeModel.findAll({
                         attributes: [
+                            db.Sequelize.fn(
+                                'DISTINCT',
+                                db.Sequelize.col('coursefrom')
+                            ),
+                            'coursefrom',
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ],
+                        where: { 
+                            semester: semester, 
+                            schoolyear: schoolyear 
+                        }
+                    })
+                }
+                else {
+                    shifteeResult = await shifteeModel.findAll({
+                        attributes: [
+                            db.Sequelize.fn(
+                                'DISTINCT',
+                                db.Sequelize.col('coursefrom')
+                            ),
+                            'coursefrom',
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ]
+                    })
+                }
+
+                for (let i = 0; i < shifteeResult.length; i++) {
+                    let infoRes = await studentModel.findOne({
+                        attributes: [
+                            'studentNumber',
                             'firstName',
                             'middleName',
                             'lastName',
-                            'gender',
-                            'course'
+                            'suffix',
+                            'course',
+                            'gender'
                         ],
                         where: {
-                            [Op.or]: [{
-                                course: [{ 
-                                    [Op.in]: { courseList }
-                                }]
-                            }]
-                        },
-                    }],
-                    where: { 
-                        semester: semester, 
-                        schoolyear: schoolyear 
-                    }
-                })
+                            studentNumber: shifteeResult[i].studentnumber
+                        }
+                    })
+                    
+                    studInfoResult.push(infoRes)
+                    objRes.push(shifteeResult[i])
+                }
+            }
+        }
+    }
+    //college not specific
+    else {
+        //course is specific
+        if(courseCode != 'ALL') {
+            //gender is specific
+            if(gender != 'ALL') {
+                let shifteeResult
+                
+                //sem and sy specific
+                if(semester != 'ALL' && schoolyear != 'ALL') {
+                    shifteeResult = await shifteeModel.findAll({
+                        attributes: [
+                            db.Sequelize.fn(
+                                'DISTINCT',
+                                db.Sequelize.col('coursefrom')
+                            ),
+                            'coursefrom',
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ],
+                        where: { 
+                            semester: semester, 
+                            schoolyear: schoolyear 
+                        }
+                    })
+                }
+                else {
+                    shifteeResult = await shifteeModel.findAll({
+                        attributes: [
+                            db.Sequelize.fn(
+                                'DISTINCT',
+                                db.Sequelize.col('coursefrom')
+                            ),
+                            'coursefrom',
+                            'studentnumber',
+                            
+                            'semester',
+                            'schoolyear'
+                        ]
+                    })
+                }
+
+                for (let i = 0; i < shifteeResult.length; i++) {
+                    let infoRes = await studentModel.findOne({
+                        attributes: [
+                            'studentNumber',
+                            'firstName',
+                            'middleName',
+                            'lastName',
+                            'suffix',
+                            'course',
+                            'gender'
+                        ],
+                        where: {
+                            studentNumber: shifteeResult[i].studentnumber,
+                            gender: gender,
+                            course: courseCode
+                        }
+                    })
+                    
+                    studInfoResult.push(infoRes)
+                    objRes.push(shifteeResult[i])
+                }
+            }
+            //gender is not specific
+            else {
+                let shifteeResult
+                
+                //sem and sy specific
+                if(semester != 'ALL' && schoolyear != 'ALL') {
+                    shifteeResult = await shifteeModel.findAll({
+                        attributes: [
+                            'studentnumber',
+                            db.Sequelize.fn(
+                                'DISTINCT',
+                                db.Sequelize.col('coursefrom')
+                            ),
+                            'coursefrom',
+                            'semester',
+                            'schoolyear'
+                        ],
+                        where: { 
+                            semester: semester, 
+                            schoolyear: schoolyear 
+                        }
+                    })
+                }
+                else {
+                    shifteeResult = await shifteeModel.findAll({
+                        attributes: [
+                            db.Sequelize.fn(
+                                'DISTINCT',
+                                db.Sequelize.col('coursefrom')
+                            ),
+                            'coursefrom',
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ]
+                    })
+                }
+
+                for (let i = 0; i < shifteeResult.length; i++) {
+                    let infoRes = await studentModel.findOne({
+                        attributes: [
+                            'studentNumber',
+                            'firstName',
+                            'middleName',
+                            'lastName',
+                            'suffix',
+                            'course',
+                            'gender'
+                        ],
+                        where: {
+                            studentNumber: shifteeResult[i].studentnumber,
+                            course: courseCode
+                        }
+                    })
+                    
+                    studInfoResult.push(infoRes)
+                    objRes.push(shifteeResult[i])
+                }
+            }
+        }
+        //course not specific
+        else {
+            //gender is specific
+            if(gender != 'ALL') {
+                let shifteeResult
+                
+                //sem and sy specific
+                if(semester != 'ALL' && schoolyear != 'ALL') {
+                    shifteeResult = await shifteeModel.findAll({
+                        attributes: [
+                            'studentnumber',
+                            db.Sequelize.fn(
+                                'DISTINCT',
+                                db.Sequelize.col('coursefrom')
+                            ),
+                            'coursefrom',
+                            'semester',
+                            'schoolyear'
+                        ],
+                        where: { 
+                            semester: semester, 
+                            schoolyear: schoolyear 
+                        }
+                    })
+                }
+                else {
+                    shifteeResult = await shifteeModel.findAll({
+                        attributes: [
+                            db.Sequelize.fn(
+                                'DISTINCT',
+                                db.Sequelize.col('coursefrom')
+                            ),
+                            'coursefrom',
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ]
+                    })
+                }
+
+                for (let i = 0; i < shifteeResult.length; i++) {
+                    let infoRes = await studentModel.findOne({
+                        attributes: [
+                            'studentNumber',
+                            'firstName',
+                            'middleName',
+                            'lastName',
+                            'suffix',
+                            'course',
+                            'gender'
+                        ],
+                        where: {
+                            studentNumber: shifteeResult[i].studentnumber,
+                            gender: gender
+                        }
+                    })
+                    
+                    studInfoResult.push(infoRes)
+                    objRes.push(shifteeResult[i])
+                }
+            }
+            //gender is not specific
+            else {
+                let shifteeResult
+                
+                //sem and sy specific
+                if(semester != 'ALL' && schoolyear != 'ALL') {
+                    shifteeResult = await shifteeModel.findAll({
+                        attributes: [
+                            db.Sequelize.fn(
+                                'DISTINCT',
+                                db.Sequelize.col('coursefrom')
+                            ),
+                            'coursefrom',
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ],
+                        where: { 
+                            semester: semester, 
+                            schoolyear: schoolyear 
+                        }
+                    })
+                }
+                else {
+                    shifteeResult = await shifteeModel.findAll({
+                        attributes: [
+                            db.Sequelize.fn(
+                                'DISTINCT',
+                                db.Sequelize.col('coursefrom')
+                            ),
+                            'coursefrom',
+                            'studentnumber',
+                            'semester',
+                            'schoolyear'
+                        ]
+                    })
+                }
+
+                for (let i = 0; i < shifteeResult.length; i++) {
+                    let infoRes = await studentModel.findOne({
+                        attributes: [
+                            'studentNumber',
+                            'firstName',
+                            'middleName',
+                            'lastName',
+                            'suffix',
+                            'course',
+                            'gender'
+                        ],
+                        where: {
+                            studentNumber: shifteeResult[i].studentnumber
+                        }
+                    })
+                    
+                    studInfoResult.push(infoRes)
+                    objRes.push(shifteeResult[i])
+                }
             }
         }
     }
 
-    if(searchResult.length > 0) {
-        res.status(200).send({ message: 'Shiftees found.', searchResult: searchResult })
+    if(objRes.length > 0) {
+        res.status(200).send({ message: 'Students Enrolled found.', result: objRes, infoResult: studInfoResult })
     }
     else {
-        res.status(500).send({ message: 'No Results found.' })
+        res.status(500).send({ message: 'No Result.' })
     }
 }
 
