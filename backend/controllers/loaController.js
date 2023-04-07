@@ -65,6 +65,34 @@ const addLoa = async (req, res) => {
     }
 }
 
+const getLoaBySemAndSY = async (req, res) => {
+    const semester = req.params.semester
+    const schoolyear = req.params.schoolyear
+
+    const loa = await loaModel.findAll({
+        attributes: [
+            [
+                db.Sequelize.fn(
+                    'DISTINCT',
+                    db.Sequelize.col('studentnumber')
+                ),
+                'studentnumber'
+            ]
+        ],
+        where: {
+            semester: semester,
+            schoolyear: schoolyear
+        }
+    })
+
+    if(loa.length > 0) {
+        res.status(200).send({ message: 'Students with LOA found.', loa: loa })
+    }
+    else {
+        res.status(500).send({ message: 'Students with LOA not found' })
+    }
+}
+
 const adminGetLoa = async (req, res) => {
     const studsWithLoa = await loaModel.findAll({
         attributes: [
@@ -611,6 +639,7 @@ module.exports = {
     addLoa,
     adminGetLoa,
     userGetLoa,
+    getLoaBySemAndSY,
     deleteLoa,
     getSchoolyear,
     advLoaSearch

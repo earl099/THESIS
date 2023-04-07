@@ -76,6 +76,34 @@ const getShiftees = async (req, res) => {
     }
 }
 
+const getShifteesBySemAndSY = async (req, res) => {
+    const semester = req.params.semester
+    const schoolyear = req.params.schoolyear
+
+    const shiftees = await shifteeModel.findAll({
+        attributes: [
+            [
+                db.Sequelize.fn(
+                    'DISTINCT',
+                    db.Sequelize.col('studentnumber')
+                ),
+                'studentnumber',
+            ]
+        ],
+        where: {
+            semester: semester,
+            schoolyear: schoolyear
+        }
+    })
+
+    if(shiftees.length > 0) {
+        res.status(200).send({ message: 'Shiftees found.', shiftees: shiftees })
+    }
+    else {
+        res.status(404).send({ message: 'Shiftees not found.' })
+    }
+}
+
 const getShiftee = async (req, res) => {
     const studentnumber = req.params.studentnumber;
 
@@ -101,11 +129,13 @@ const getShiftee = async (req, res) => {
 const getSchoolyear = async (req, res) => {
     const schoolyear = await shifteeModel.findAll({
         attributes: [
-            db.Sequelize.fn(
-                'DISTINCT',
-                db.Sequelize.col('schoolyear')
-            ),
-            'schoolyear'
+            [
+                db.Sequelize.fn(
+                    'DISTINCT',
+                    db.Sequelize.col('schoolyear')
+                ),
+                'schoolyear'
+            ]
         ]
     })
 
@@ -632,6 +662,7 @@ module.exports = {
     editShiftee,
     getShiftee,
     getShiftees,
+    getShifteesBySemAndSY,
     getSchoolyear,
     advShifteeSearch
 }

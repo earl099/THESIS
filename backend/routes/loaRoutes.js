@@ -12,6 +12,9 @@ router.get('/loa/get/all', loaController.adminGetLoa)
 //--- USER LOA SEARCH ---//
 router.get('/loa/get/:collegeID', loaController.userGetLoa)
 
+//--- GET LOA BY SEMESTER AND SCHOOLYEAR ---//
+router.get('/loa/get/:semester/:schoolyear', loaController.getLoaBySemAndSY)
+
 //--- LOA DELETION ---//
 router.post('/loa/delete/:studentnumber', loaController.deleteLoa)
 

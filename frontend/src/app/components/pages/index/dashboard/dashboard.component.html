@@ -2,7 +2,29 @@
   <div class="page__box p-3 mt-2">Dashboard</div>
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
-      Dashboard Content Goes Here
+      <div class="container">
+        <div class="container">
+          <p class="fs-1">Welcome, {{uname}}!</p>
+        </div>
+        <br>
+
+        <div class="container">
+          <p class="fs-2">Status for {{globalVar[0].semester}} Semester of AY {{globalVar[0].schoolyear}}</p>
+        </div>
+      </div>
+      <br><br>
+
+      <div class="container">
+        <div class="container">
+          <p class="fs-4">Students Enrolled: {{quickData[0]}}</p>
+        </div>
+        <div class="container">
+          <p class="fs-4">Shiftees: {{quickData[1]}}</p>
+        </div>
+        <div class="container">
+          <p class="fs-4">Students with LOA: {{quickData[2]}}</p>
+        </div>
+      </div>
     </div>
   </div>
 </div>
