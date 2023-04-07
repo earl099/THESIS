@@ -405,6 +405,44 @@ export class GenerateReportComponent implements OnInit {
     }
 
     new ngxCsv(this.dataResult, 'Report-' + this.reportForm.get('reportType').value, options)
+
+    let processData: any
+    this.variableService.getIpAddress().subscribe((res) => {
+      if(res) {
+        let ipAdd = res.clientIp
+        switch (this.reportForm.get('reportType').value) {
+          case 'stud_enroll':
+            processData.get('username').setValue(localStorage.getItem('user'))
+            processData.get('ipaddress').setValue(ipAdd)
+            processData.get('pcname').setValue(window.location.hostname)
+            processData.get('studentnumber').setValue('N/A')
+            processData.get('type').setValue('Export Report')
+            processData.get('description').setValue(`Exported Report for Students Enrolled`)
+            this.variableService.addProcess(processData).subscribe()
+            break
+
+          case 'shiftee':
+            processData.get('username').setValue(localStorage.getItem('user'))
+            processData.get('ipaddress').setValue(ipAdd)
+            processData.get('pcname').setValue(window.location.hostname)
+            processData.get('studentnumber').setValue('N/A')
+            processData.get('type').setValue('Export Report')
+            processData.get('description').setValue(`Exported Report for Shiftees`)
+            this.variableService.addProcess(processData).subscribe()
+            break
+          default:
+            processData.get('username').setValue(localStorage.getItem('user'))
+            processData.get('ipaddress').setValue(ipAdd)
+            processData.get('pcname').setValue(window.location.hostname)
+            processData.get('studentnumber').setValue('N/A')
+            processData.get('type').setValue('Export Report')
+            processData.get('description').setValue(`Exported Report for LOA`)
+            this.variableService.addProcess(processData).subscribe()
+            break
+        }
+
+      }
+    })
   }
 
   applyFilter(event: Event) {

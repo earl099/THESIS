@@ -25,9 +25,16 @@ export class StudentService {
     .pipe(catchError(this.handleError<any>('Add Shiftee')))
   }
 
+  //--- GET ALL SHIFTEES ---//
   getShiftees(): Observable<any> {
     return this.httpClient
     .get(`${this.baseUrl}/shiftee/list`, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Get Shiftees')))
+  }
+
+  getShifteesBySemAndSY(semester: string, schoolyear: string): Observable<any> {
+    return this.httpClient
+    .get(`${this.baseUrl}/shiftee/list/${semester}/${schoolyear}`, this.httpOptions)
     .pipe(catchError(this.handleError<any>('Get Shiftees')))
   }
 
@@ -99,6 +106,12 @@ export class StudentService {
   //--- USER SEARCH FUNCTION ---//
   userSearch(collegeID: any): Observable<any> {
     return this.httpClient.get(`${this.baseUrl}/loa/get/${collegeID}`, this.httpOptions)
+  }
+
+  //--- GET LOA BY SEMESTER AND SCHOOLYEAR ---//
+  getLoaBySemesterAndSY(semester: string, schoolyear: string): Observable<any> {
+    return this.httpClient.get(`${this.baseUrl}/loa/get/${semester}/${schoolyear}`, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Get Loa')))
   }
 
   //--- DELETE FUNCTION ---//

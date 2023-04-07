@@ -12,6 +12,9 @@ router.put('/shiftee/edit/:studentnumber', shifteeController.editShiftee);
 //--- SHIFTEE LIST ROUTE ---//
 router.get('/shiftee/list', shifteeController.getShiftees);
 
+//--- SHIFTEES BY SEMESTER AND SCHOOLYEAR ---//
+router.get('/shiftee/list/:semester/:schoolyear', shifteeController.getShifteesBySemAndSY);
+
 //--- SHIFTEE PROFILE ROUTE ---//
 router.get('/shiftee/:studentnumber', shifteeController.getShiftee);
 
