@@ -1,18 +1,23 @@
 .page{
-  color: white;
+  color: rgb(246, 222, 4);
   background: #f1f5f9;
   &__box{
     min-height: 120px;
-    background: #1B651B;
+    background: linear-gradient(35deg, #00CC00, #009900, #006600, #003300);
     margin: -0.7rem;
-    font-size: 36px;
+    font-size: 2.8rem;
+    font-family:Arial;
+    text-shadow: 2px 2px #312E2E;
+    -webkit-text-fill-color: #FFFFFF ;
+    -webkit-text-stroke-width: 1px;
   }
   &__content{
     min-height: calc(100vh - 180px);
-    border-radius: 10px;
+    border-radius: 30px;
     margin-top: -2rem;
-    background: white;
-    color: black;
+    background: linear-gradient(135deg, #6cf921, #f7fa11);
+    color: rgb(26, 24, 24);
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 2rem;
     &-data{
       top: 50%;

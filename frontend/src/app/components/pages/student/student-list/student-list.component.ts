@@ -162,7 +162,7 @@ export class StudentListComponent implements OnInit {
                 this.processData.get('description').setValue(
                   `Shifted ${this.studentInfoForm.get('studentNumber').value}'s
                   from ${this.shifteeForm.get('coursefrom').value} to ${this.shifteeForm.get('coursefrom').value}`)
-                this.variableService.addProcess(this.processData).subscribe()
+                this.variableService.addProcess(this.processData.value).subscribe()
               }
             })
 

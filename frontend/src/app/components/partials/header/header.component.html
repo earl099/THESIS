@@ -1,26 +1,26 @@
 
 <mat-toolbar>
   <mat-toolbar-row>
-    <button mat-icon-button (click)="toggleSideBar()"><mat-icon>menu</mat-icon></button>
-    <a routerLink="/" class="logo">CvSU Enrollment System</a>
+    <button class="menu"mat-icon-button (click)="toggleSideBar()"><mat-icon>menu</mat-icon></button>
+    <a routerLink="/" class="logo">CvSU ADMIN PANEL</a>
 
     <div class="row mr-2 ml-auto">
       <ul>
         <li>
           <button mat-button [mat-menu-trigger-for]="menu" class="user mt-2 d-flex align-items-center">
-            <img src="../../../../assets/user.jpg" alt="" class="user-image mr-1 p-2" />
+            <img src="../../../../assets/images/user-transparent.png" alt="" class="user-image mr-1 p-2" />
             {{getName()}}
             <mat-icon class="user-image-icon ml-1">keyboard_arrow_down</mat-icon>
           </button>
-          <mat-menu #menu="matMenu">
+          <mat-menu #menu="matMenu" class="dropdown">
             <button mat-menu-item *ngIf="loginBtn" (click)="redirectTo('/login/user')">
-              <mat-icon>login</mat-icon> Login
+              <mat-icon>login</mat-icon> LOGIN
             </button>
             <button mat-menu-item *ngIf="loginBtn" (click)="redirectTo('/login/admin')">
-              <mat-icon>person_outline</mat-icon> Admin Login
+              <mat-icon>person_outline</mat-icon> ADMIN LOGIN
             </button>
             <button mat-menu-item *ngIf="logoutBtn" (click)="logout()">
-              <mat-icon>logout</mat-icon> Logout
+              <mat-icon class="logout-icon">logout</mat-icon> <p class="logout">Logout</p>
             </button>
           </mat-menu>
         </li>

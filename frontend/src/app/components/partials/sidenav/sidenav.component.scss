@@ -3,6 +3,15 @@
   padding: 2.6rem 1rem;
   img{
     width: 200px;
+    filter: drop-shadow(1px 1px 1px #033512);
+    filter: drop-shadow(1px 2px 1px #033512);
+    filter: drop-shadow(1px 3px 1px #033512);
+    filter: drop-shadow(1px 4px 1px #033512);
+    filter: drop-shadow(1px 5px 1px #033512);
+    filter: drop-shadow(1px 6px 1px #033512);
+    filter: drop-shadow(1px 7px 1px #033512);
+    filter: drop-shadow(1px 8px 1px #033512);    
+    filter: drop-shadow(1px 8px 1px #10101066);  
   }
 }
 
@@ -13,22 +22,25 @@
 
 mat-divider{
   border-top-width: 2px;
-  border-color: white;
+  border-color: #ffffff;
 }
 
 mat-list-item button {
   height: 44px !important;
-  font-size: 0.8rem;
-  color: whitesmoke;
+  font-size: 0.9rem;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  text-shadow: 1px 1px rgb(49, 46, 46);
+  color: #f7eded;
   margin-bottom: 4px;
+  &:hover{
+    background: #F4E807  !important;
+  }
   ::ng-deep{
 
     mat-list-item-content{
       border-radius: 5px;
       margin: 0.8rem;
-      &:hover{
-        background: #1e5a30 !important;
-      }
     }
   }
 }
@@ -37,17 +49,21 @@ mat-list-item button {
   color: #f2f5f7 !important;
   ::ng-deep{
     .mat-list-item-content{
-      background: #1e5a30 !important;
+      background-color: #00ff40 !important;
       &:hover{
-        background: #1e5a30 !important;
+        background: #00ff40 !important;
       }
     }
   }
 }
 
-.mat-subheader{
-  color: whitesmoke;
-  font-size: 0.6rem;
+h2{
+  margin: 3px;
+  font-size: 1.2rem;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  text-shadow: 1px 1px rgb(49, 46, 46);
+  color: #f7eded;
   letter-spacing: 1px;
 }
 
@@ -56,24 +72,27 @@ mat-list-item button {
   font-size: 0.8rem;
   color: whitesmoke;
   margin-bottom: 4px;
-  background-color: #1B651B !important;
+  background-color: #00ff00 !important;
   ::ng-deep{
     .mat-expansion-panel{
       border-radius: 5px;
       margin: 0.8rem;
-      background: #1B651B;
+      background: #00ff00;
       &:hover{
-        background: #1e5a30 !important;
+        background: #FFA500 !important;
       }
     }
   }
 }
 
 .mat-expansion-panel-header{
-  background: #1B651B;
-  font-size: 0.8rem;
+  background: #00ff00;
+  font-size: 1.2rem;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  text-shadow: 1px 1px rgb(49, 46, 46);
   .mat-panel-title, .mat-icon, p{
-    color: whitesmoke !important;
+    color: #f7eded !important;
   }
   p{
     margin-bottom: 0;

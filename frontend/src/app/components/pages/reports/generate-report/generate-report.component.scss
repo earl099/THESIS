@@ -1,3 +1,43 @@
 @import  '../../index/home/home.component.scss';
+@import  '../../student/grades/grades.component.scss';
 
-//FORMAT GOES HERE
+.select-container .report{
+    padding: 1.5rem;
+    width: 50%;
+    height: 100%;
+    border: 2px solid #098B09;
+    background: transparent;
+    appearance: none;
+    border-radius: 5px;
+    letter-spacing: 2px;
+    transition: 0.5s; 
+    font-size: 1.5em;
+    line-height: 3px;
+    filter: drop-shadow(1px 1px 2px #033512);
+    cursor: pointer;
+  }
+
+  .select-container .report:valid ~ .span,
+  .select-container .report:focus ~ .span{
+    color:#098B09;
+    filter: drop-shadow(1px 1px 2px #033512);
+    transform: translateX(10px) translateY(-7px);
+    font-size: 1.5em;
+    padding: 0 10px;
+    background: #FD7F0A;
+    letter-spacing: 0.2em;
+  }
+  
+  .select-container:nth-child(2) select:valid ~ .span,
+  .select-container:nth-child(2) select:focus ~ .span{
+    background: #098B09;
+    color: #FD7F0A;
+    border-radius: 2px;
+  }
+  
+  .select-container .report:valid ~ .span,
+  .select-container .report:focus ~ .span{
+    border: 1px solid rgba(236, 98, 12, 0.25);
+  }
+  
+  
