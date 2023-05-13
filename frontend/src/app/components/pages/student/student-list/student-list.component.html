@@ -16,33 +16,33 @@
         <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
           <ng-container matColumnDef="studentNumber">
             <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by studentNumber"><p class="table-title"> Student Number </p></th>
-            <td mat-cell *matCellDef="let student" (click)="redirectTo(student)" > {{student.studentNumber}} </td>
+            <td mat-cell *matCellDef="let student" (click)="redirectTo(student)" > <p class="data-content">{{student.studentNumber}}</p> </td>
           </ng-container>
 
           <ng-container matColumnDef="firstName">
             <th mat-header-cell *matHeaderCellDef><p class="table-title"> First Name </p></th>
-            <td mat-cell *matCellDef="let student" (click)="redirectTo(student)"> {{student.firstName}} </td>
+            <td mat-cell *matCellDef="let student" (click)="redirectTo(student)"> <p class="data-content">{{student.firstName}}</p> </td>
           </ng-container>
 
           <ng-container matColumnDef="middleName">
             <th mat-header-cell *matHeaderCellDef><p class="table-title"> Middle Name </p></th>
-            <td mat-cell *matCellDef="let student" (click)="redirectTo(student)"> {{student.middleName}} </td>
+            <td mat-cell *matCellDef="let student" (click)="redirectTo(student)"> <p class="data-content">{{student.middleName}}</p> </td>
           </ng-container>
 
           <ng-container matColumnDef="lastName">
             <th mat-header-cell *matHeaderCellDef><p class="table-title"> Last Name </p></th>
-            <td mat-cell *matCellDef="let student" (click)="redirectTo(student)"> {{student.lastName}} </td>
+            <td mat-cell *matCellDef="let student" (click)="redirectTo(student)"> <p class="data-content">{{student.lastName}}</p> </td>
           </ng-container>
 
           <ng-container matColumnDef="suffix">
             <th mat-header-cell *matHeaderCellDef><p class="table-title"> Suffix </p></th>
-            <td mat-cell *matCellDef="let student" (click)="redirectTo(student)"> {{student.suffix === '' ? '-' : student.suffix }} </td>
+            <td mat-cell *matCellDef="let student" (click)="redirectTo(student)"> <p class="data-content">{{student.suffix === '' ? '-' : student.suffix }}</p> </td>
           </ng-container>
 
           <ng-container matColumnDef="edit">
             <th mat-header-cell *matHeaderCellDef><p class="table-title"> Edit </p></th>
             <td mat-cell *matCellDef="let student">
-              <button mat-raised-button routerLink='/student/edit/{{student.studentNumber}}'> Edit </button>
+              <button mat-raised-button class="edit" routerLink='/student/edit/{{student.studentNumber}}'> EDIT </button>
             </td>
           </ng-container>
 
@@ -68,7 +68,7 @@
           <ng-container matColumnDef="confirmShift">
             <th mat-header-cell *matHeaderCellDef><p class="table-title"> Confirm </p></th>
             <td mat-cell *matCellDef="let student">
-              <button mat-raised-button (click)="onConfirmShift(student.studentNumber)"> Shift </button>
+              <button mat-raised-button class="confirm" (click)="onConfirmShift(student.studentNumber)"> SHIFT </button>
             </td>
           </ng-container>
 
