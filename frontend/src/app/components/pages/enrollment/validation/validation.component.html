@@ -4,12 +4,10 @@
     <div class="page__content-data position-absolute text-center">
       <div class="container" *ngIf="searchVisibility">
         <ng-container [formGroup]="searchForm">
-          <form action="">
             <div class="input-container">
             <input type="text" formControlName="studentnumber" autocomplete="off" (keypress)="numberFilter($event)">
             <span class="student">Student Number</span>
           </div>
-          </form>
           <br>
 
             <div class="select-container">
@@ -23,7 +21,7 @@
             </div>
           <br>
 
-            <div class="input-container">
+            <div class="input-container1">
             <input type="text" formControlName="schoolyear" autocomplete="off">
             <span class="school-year">School Year</span>
             </div>

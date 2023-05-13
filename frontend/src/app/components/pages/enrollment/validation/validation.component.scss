@@ -1,52 +1,96 @@
 @import '../../index/home/home.component.scss';
 @import '../../student/grades/grades.component.scss';
 
-.input-container{
-    position: relative;
-  }
-  
-  .input-container input{
-    padding: 0.9rem;
-    padding-bottom: 5px;
-    width: 50%;
-    height: 100%;
-    border: 2px solid #098B09;
-    background: linear-gradient(135deg, #6cf921, #f7fa11);
-    border-radius: 5px;
-    letter-spacing: 2px;
-    outline: none;
-    transition: 0.5s; 
-    font-size: 1.5em;
-    filter: drop-shadow(1px 1px 2px #033512);
-  }
-  
-  .input-container .school-year{
-    position: absolute;
-    color: #006600;
-    filter: drop-shadow(1px 1px 2px #033512);
-    left: 200px;
-    padding: -10px;
-    pointer-events: none;
-    text-transform: uppercase;
-    transition: 0.5s;  
-    font-family: monospace;
-  }
-  
-  .input-container input:focus ~ .school-year{
-    color:#098B09;
-    filter: drop-shadow(1px 1px 2px #033512);
-    transform: translateX(10px) translateY(-7px);
-    font-size: 1.5em;
-    padding: 0 10px;
-    background: #FD7F0A;
-    letter-spacing: 0.2em;
-  }
-  
-  .input-container:nth-child(2) input:focus ~ .school-year{
-    background: #098B09;
-    color: #FD7F0A;
-    border-radius: 2px;
-  }
+table {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  width: 1000px;
+}
 
-  
+.input-container1{
+  position: relative;
+}
 
+.input-container1 input{
+  padding: 1rem;
+  padding-bottom: 5px;
+  width: 50%;
+  height: 100%;
+  border: 2px solid #098B09;
+  background: linear-gradient(135deg, #6cf921, #f7fa11);
+  border-radius: 5px;
+  letter-spacing: 2px;
+  outline: none;
+  transition: 0.5s; 
+  font-size: 1em;
+  filter: drop-shadow(1px 1px 2px #033512);
+}
+
+.input-container .student, .input-container1 .school-year{
+  position: absolute;
+  color: #006600;
+  filter: drop-shadow(1px 1px 2px #033512);
+  left: 130px;
+  padding: 2px;
+  pointer-events: none;
+  text-transform: uppercase;
+  transition: 0.5s;  
+  font-family: monospace;
+  font-size: 0.7em; 
+}
+
+.input-container input:focus ~ .student, .input-container1 input:focus ~ .school-year, .input-container input:focus ~ .student{
+  color:#098B09;
+  filter: drop-shadow(1px 1px 2px #033512);
+  transform: translateX(10px) translateY(-7px);
+  font-size: 0.9em;
+  padding: 3 10px;
+  background: #FD7F0A;
+  letter-spacing: 0.2em;
+}
+
+.input-container1:nth-child(2) input:focus ~ .school-year{
+  background: #098B09;
+  color: #FD7F0A;
+  border-radius: 2px;
+}
+
+.select-container select{
+  padding: 1.6rem;
+  padding-bottom: 8px;
+  width: 50%;
+  height: 100%;
+  border: 2px solid #098B09;
+  background: linear-gradient(135deg, #6cf921, #f7fa11);
+  appearance: none;
+  border-radius: 5px;
+  letter-spacing: 2px;
+  transition: 0.5s; 
+  font-size: 0.9em;
+  filter: drop-shadow(1px 1px 2px #033512);
+  cursor: pointer;
+}
+
+.select-container .span{
+  position: absolute;
+  color: #006600;
+  filter: drop-shadow(1px 1px 2px #033512);
+  left: 130px;
+  padding: 2px;
+  pointer-events: none;
+  text-transform: uppercase;
+  transition: 0.5s;  
+  font-family: monospace;
+  font-size: 0.7em; 
+}
+
+.select:focus ~ .span{
+  color:#098B09;
+  filter: drop-shadow(1px 1px 2px #033512);
+  transform: translateX(10px) translateY(-7px);
+  font-size: 0.9em;
+  padding: 3 10px;
+  background: #FD7F0A;
+  letter-spacing: 0.2em;
+}

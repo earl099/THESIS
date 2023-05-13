@@ -4,10 +4,12 @@
     <div class="page__content-data position-absolute text-center">
       <div class="container"><p>Student List</p></div>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Filter</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Enter a filter" #input>
-      </mat-form-field>
+      <form action="">
+        <div class="input-container">
+        <input (keyup)="applyFilter($event)" placeholder="ENTER A FILTER" #input>
+        <span class="filter">Filter</span>
+        </div>
+      </form>
 
       <div class="container">
         <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
