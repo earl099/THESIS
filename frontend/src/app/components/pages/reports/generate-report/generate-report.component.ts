@@ -418,7 +418,7 @@ export class GenerateReportComponent implements OnInit {
             processData.get('studentnumber').setValue('N/A')
             processData.get('type').setValue('Export Report')
             processData.get('description').setValue(`Exported Report for Students Enrolled`)
-            this.variableService.addProcess(processData).subscribe()
+            this.variableService.addProcess(processData.value).subscribe()
             break
 
           case 'shiftee':

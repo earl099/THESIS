@@ -4,38 +4,41 @@
     <div class="page__content-data position-absolute text-center">
       <div class="container" *ngIf="searchVisibility">
         <form [formGroup]="searchForm">
-          <mat-form-field>
-            <mat-label>Student Number</mat-label>
-            <input matInput #studentnumber type="text" formControlName="studentnumber" autocomplete="off" (keypress)="numberFilter($event)" (change)="getSchoolyear(studentnumber.value)">
-          </mat-form-field>
+  
+          <div class="input-container">
+            <input #studentnumber type="text" formControlName="studentnumber" autocomplete="off" (keypress)="numberFilter($event)" (change)="getSchoolyear(studentnumber.value)">
+            <span class="student">Student Number</span>
+          </div>
           <br>
 
-          <mat-form-field>
-            <mat-label>Semester</mat-label>
-            <mat-select formControlName="semester">
-              <mat-option value="FIRST">FIRST</mat-option>
-              <mat-option value="SECOND">SECOND</mat-option>
-              <mat-option value="SUMMER">SUMMER</mat-option>
-            </mat-select>
-          </mat-form-field>
+          <div class="select-container">
+            <select class="select" formControlName="semester" value="">
+              <option class="option" value="FIRST">FIRST</option>
+              <option class="option" value="SECOND">SECOND</option>
+              <option class="option" value="SUMMER">SUMMER</option>
+              </select>
+              <span class="custom-arrow"></span>
+              <span class="span">Semester</span>
+            </div>
           <br>
 
-          <mat-form-field>
-            <mat-label>School Year</mat-label>
-            <mat-select formControlName="schoolyear">
-              <mat-option *ngFor="let year of schoolyear" [value]="year.schoolyear">{{year.schoolyear}}</mat-option>
-            </mat-select>
-          </mat-form-field>
+          <div class="select-container1">
+            <select class="select" formControlName="schoolyear">
+              <option class="option" *ngFor="let year of schoolyear" [value]="year.schoolyear">{{year.schoolyear}}</option>
+              </select>
+              <span class="custom-arrow"></span>
+              <span class="span">School Year</span>
+            </div>
           <br>
 
           <div class="container">
             <div class="row align-items-start">
               <div class="col">
-                <button mat-button type="submit" class="btn btn-success" (click)="generateCog()">Generate CoG</button>
+                <button type="submit" class="generate-button" (click)="generateCog()">Generate</button>
               </div>
 
               <div class="col">
-                <button mat-button routerLink="/dashboard">Back to Dashboard</button>
+                <button class="dashboard-button" routerLink="/dashboard">Dashboard</button>
               </div>
             </div>
           </div>

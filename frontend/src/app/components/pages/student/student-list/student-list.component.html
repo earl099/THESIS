@@ -2,70 +2,72 @@
   <div class="page__box p-3 mt-2">Student List</div>
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
-      <div class="container"><p>Student List</p></div>
+      <div class="container"><p>STUDENT LIST</p></div>
+      <br>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Filter</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Enter a filter" #input>
-      </mat-form-field>
+      <form action="">
+        <div class="input-container">
+        <input (keyup)="applyFilter($event)" placeholder="ENTER A FILTER" #input>
+        <span class="filter">Filter</span>
+        </div>
+      </form>
+      <br>
+      <br>
 
-      <div class="container">
+      <div class="table-responsive">
         <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
           <ng-container matColumnDef="studentNumber">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by studentNumber"> Student Number </th>
-            <td mat-cell *matCellDef="let student" (click)="redirectTo(student)" > {{student.studentNumber}} </td>
+            <th mat-header-cell mat-sort-header *matHeaderCellDef class="hide-arrow" sortActionDescription="Sort by studentNumber"><p class="table-title"> Student Number </p></th>
+            <td mat-cell *matCellDef="let student" (click)="redirectTo(student)" > <p class="data-content">{{student.studentNumber}}</p> </td>
           </ng-container>
 
           <ng-container matColumnDef="firstName">
-            <th mat-header-cell *matHeaderCellDef> First Name </th>
-            <td mat-cell *matCellDef="let student" (click)="redirectTo(student)"> {{student.firstName}} </td>
+            <th mat-header-cell *matHeaderCellDef><p class="table-title"> First Name </p></th>
+            <td mat-cell *matCellDef="let student" (click)="redirectTo(student)"> <p class="data-content">{{student.firstName}}</p> </td>
           </ng-container>
 
           <ng-container matColumnDef="middleName">
-            <th mat-header-cell *matHeaderCellDef> Middle Name </th>
-            <td mat-cell *matCellDef="let student" (click)="redirectTo(student)"> {{student.middleName}} </td>
+            <th mat-header-cell *matHeaderCellDef><p class="table-title"> Middle Name </p></th>
+            <td mat-cell *matCellDef="let student" (click)="redirectTo(student)"> <p class="data-content">{{student.middleName}}</p> </td>
           </ng-container>
 
           <ng-container matColumnDef="lastName">
-            <th mat-header-cell *matHeaderCellDef> Last Name </th>
-            <td mat-cell *matCellDef="let student" (click)="redirectTo(student)"> {{student.lastName}} </td>
+            <th mat-header-cell *matHeaderCellDef><p class="table-title"> Last Name </p></th>
+            <td mat-cell *matCellDef="let student" (click)="redirectTo(student)"> <p class="data-content">{{student.lastName}}</p> </td>
           </ng-container>
 
           <ng-container matColumnDef="suffix">
-            <th mat-header-cell *matHeaderCellDef> Suffix </th>
-            <td mat-cell *matCellDef="let student" (click)="redirectTo(student)"> {{student.suffix === '' ? '-' : student.suffix }} </td>
+            <th mat-header-cell *matHeaderCellDef><p class="table-title"> Suffix </p></th>
+            <td mat-cell *matCellDef="let student" (click)="redirectTo(student)"> <p class="data-content">{{student.suffix === '' ? '-' : student.suffix }}</p> </td>
           </ng-container>
 
           <ng-container matColumnDef="edit">
-            <th mat-header-cell *matHeaderCellDef> Edit </th>
+            <th mat-header-cell *matHeaderCellDef><p class="table-title"> Edit </p></th>
             <td mat-cell *matCellDef="let student">
-              <button mat-raised-button routerLink='/student/edit/{{student.studentNumber}}'> Edit </button>
+              <button mat-raised-button class="edit" routerLink='/student/edit/{{student.studentNumber}}'> EDIT </button>
             </td>
           </ng-container>
 
           <ng-container matColumnDef="shiftTo">
-            <th mat-header-cell *matHeaderCellDef> Shift to Course </th>
+            <th mat-header-cell *matHeaderCellDef><p class="table-title"> Shift to Course </p></th>
             <td mat-cell *matCellDef="let student">
               <form [formGroup]="studentInfoForm">
-                <mat-form-field>
-                  <mat-select #course>
-                    <mat-option
+                  <select class="select" #course>
+                    <option class="option"
                     *ngFor="let item of curricula" [value]="item.course"
                     (onSelectionChange)="initChangeCourse(student.studentNumber, student.course, item.course)"
                     >
                       {{ item.course }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </form>
-
+                    </option>
+                  </select>
+                </form>
             </td>
           </ng-container>
 
           <ng-container matColumnDef="confirmShift">
-            <th mat-header-cell *matHeaderCellDef> Confirm </th>
+            <th mat-header-cell *matHeaderCellDef><p class="table-title"> Confirm </p></th>
             <td mat-cell *matCellDef="let student">
-              <button mat-raised-button (click)="onConfirmShift(student.studentNumber)"> Shift </button>
+              <button mat-raised-button class="confirm" (click)="onConfirmShift(student.studentNumber)"> SHIFT </button>
             </td>
           </ng-container>
 

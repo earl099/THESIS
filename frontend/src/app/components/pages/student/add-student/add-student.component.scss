@@ -9,4 +9,146 @@ form{
 input{
   font-size: medium;
   margin-left: 100px;
+  display: none;
 }
+
+label{
+  cursor: pointer;
+  display: block;
+  padding: 15px;
+  border-radius: 15px;
+  margin: 10px 0px;
+  transition: all 0.3s ease;
+  background-color: #23AC31;
+  font-weight: bold;
+  font-size: 1.5rem;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #000;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0.8px 0.8px rgb(226, 219, 219);
+  text-decoration: none;
+  transition: 0.3s ease;
+  border: 2px solid #085108;
+  transform-style: preserve-3d;
+  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), 150ms cubic-bezier(0, 0, 0.58, 1);
+}
+
+label::before{
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  border-radius: inherit;
+  background: #34A840;
+  box-shadow: 0 0 0 2px #085108, 0 0.200em 0 0 #636262;
+  transform: translate3d(0, 0.75em, -1em);
+  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
+}
+
+label:hover{
+  background-color: #16D629;
+  box-shadow: 0 0 5px #16D629;
+  box-shadow: 0 0 20px #16D629;
+  box-shadow: 0 0 60px #16D629;
+  box-shadow: 0 0 150px #16D629;
+  transform: translate(0, 0.25em);
+}
+
+label:hover::before{
+  box-shadow: 0 0 0 2px #636262, 0 0.25em #7e7c7c;
+  transform: translate3d(0, 0.5em, -1em);
+}
+
+label:active{
+  background-color: #1B8526;
+  transform: translate(0em, 0.75em);
+}
+
+label:active::before{
+  box-shadow: 0 0 0 2px #B18597, 0 0 #FFE3E2;
+  transform: translate3d(0, 0, -1em);
+}
+
+label::after{
+  box-sizing: border-box;
+}
+
+.upload{
+  font-size: 30px;
+}
+
+.import-button, .list-button{
+  background: none;
+  border: 2px solid   #F95D03;
+  border-radius: 5px;
+  font-family: "monserrat", sans-serif;
+  filter: drop-shadow(1px 1px 1px #033512);
+  text-transform: uppercase;
+  padding: 12px 20px;
+  min-width: 200px;
+  margin: 10px;
+  cursor: pointer;
+  transition: color 0.4s linear; 
+  position: relative;
+  color:rgb(26, 24, 24);
+}
+
+.import-button:hover{
+  color: #FFFFFF;
+} 
+
+.list-button:hover{
+  color: #FFFFFF;
+} 
+
+.import-button::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background:  #D8821B; 
+  z-index: -1;
+  transition: transform 0.5s;
+  transform-origin: 0 0;
+  transition-timing-function: cubic-bezier(0.5, 1.6, 0.4, 0.7);
+}
+
+.list-button::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #D8821B; 
+  z-index: -1;
+  transition: transform 0.5s;
+  transform-origin: 0 0;
+  transition-timing-function: cubic-bezier(0.5, 1.6, 0.4, 0.7);
+}
+
+.import-button::before{
+  transform: scaleX(0);
+}
+
+.list-button::before{
+  transform: scaleY(0);
+}
+
+.import-button:hover::before{
+  transform: scaleX(1);
+}
+
+.list-button:hover::before{
+  transform: scaleY(1);
+}
+
+
+
+
+
