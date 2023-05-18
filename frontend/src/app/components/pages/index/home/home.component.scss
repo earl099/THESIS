@@ -1,6 +1,6 @@
 .page{
   color: rgb(246, 222, 4);
-  background: #f1f5f9;
+  background: #F1F5F9;
   &__box{
     min-height: 120px;
     background: linear-gradient(35deg, #00CC00, #009900, #006600, #003300);
@@ -8,15 +8,16 @@
     font-size: 2.8rem;
     font-family:Arial;
     text-shadow: 2px 2px #312E2E;
-    -webkit-text-fill-color: #FFFFFF ;
+    -webkit-text-fill-color: #F1F5F9;
     -webkit-text-stroke-width: 1px;
   }
   &__content{
     min-height: calc(100vh - 180px);
+    border: 5px solid #1A1818;
     border-radius: 30px;
     margin-top: -2rem;
-    background: linear-gradient(135deg, #6cf921, #f7fa11);
-    color: rgb(26, 24, 24);
+    background: #E5E5E5;
+    color: #1A1818;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 2rem;
     &-data{
@@ -44,7 +45,7 @@ table {
   margin-right: auto;
 }
 
-.mat-row:hover {
+/*.mat-row:hover {
   background-color: #E8EAF6;
   cursor: pointer;
-}
+}*/

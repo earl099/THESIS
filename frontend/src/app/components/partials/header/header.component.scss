@@ -1,10 +1,10 @@
 .mat-toolbar{
-  background: linear-gradient(35deg, #00CC00, #009900, #006600, #003300);
+  background: #006600;
 }
 
 .logo{
   text-decoration: none;
-  color: #FFFFFF;
+  color: #F1F5F9;
   font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-weight: 0;
   letter-spacing: 0em;
@@ -17,7 +17,7 @@
   content: '';
   height: 2px;
   width: 0%;
-  background-color: #ffffff;
+  background-color: #F1F5F9;
   display: block;
   transition: .5s ease-in-out;
 }
@@ -26,20 +26,20 @@
   content: '';
   height: 2px;
   width: 100%;
-  background-color: #ffffff;
+  background-color: #F1F5F9;
   display: block;
  } 
 
 
 a:hover{
-  color: #ffcc00;
+  color: #FFCC00;
   transition: ease-in-out;
 }
  
 ul{
   li{
     list-style: none;
-    color: #FFFFFF;
+    color: #F1F5F9;
     font-weight: bold;
   }
 }
@@ -55,7 +55,7 @@ ul{
 
 .menu{
   border: 0;
-  color: #FFFFFF;
+  color: #F1F5F9;
   text-shadow: 1px 1px rgb(49, 46, 46);
   outline:none;
   background: #32CD32;
@@ -66,29 +66,29 @@ ul{
 }
 
 .menu:hover{
-  color:  #ffcc00;
+  color:  #FFCC00;
 }
 
 .user-image-icon{
-  color: #FFFFFF;
+  color: #F1F5F9;
   font-weight: bold;
   text-shadow: 1px 1px rgb(49, 46, 46);
 }
 
 .user-image-icon:hover{
-  color:  #ffcc00;
+  color:  #FFCC00;
 }
 
 .user{
   font-size: 17px;
-  color:#FFFFFF;
+  color:#F1F5F9;
 }
 
 .user-image{
   border-radius: 50%;
   width: 50px;
   height: 50px;
-  background-color: #FFA500;
+  background-color: #FFCC00;
 }
 
 .user-image-icon{
@@ -97,9 +97,9 @@ ul{
 }
 
 ::ng-deep .dropdown{
-  background-color: #00FF00;
+  background-color: #F1F5F9;
   &:hover{
-    background: #FFA500;
+    background: #FFCC00;
   }
   width: 150px;
   .mat-menu-content{
@@ -109,7 +109,7 @@ ul{
 
 .logout{
   letter-spacing: 2px;
-  font-size: 1.4rem;
+  font-size: 1rem;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   font-weight: bold;
 }

@@ -22,19 +22,21 @@
 
 mat-divider{
   border-top-width: 2px;
-  border-color: #ffffff;
+  border-color: #F7EDED;
 }
 
 mat-list-item button {
   height: 44px !important;
+  padding-right: 10px;
+  padding-bottom: 5px;
   font-size: 0.9rem;
   font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-weight: bold;
   text-shadow: 1px 1px rgb(49, 46, 46);
-  color: #f7eded;
+  color: #F7EDED;
   margin-bottom: 4px;
   &:hover{
-    background: #F4E807  !important;
+    background: #FFA500  !important;
   }
   ::ng-deep{
 
@@ -45,17 +47,7 @@ mat-list-item button {
   }
 }
 
-.list-item-active{
-  color: #f2f5f7 !important;
-  ::ng-deep{
-    .mat-list-item-content{
-      background-color: #00ff40 !important;
-      &:hover{
-        background: #00ff40 !important;
-      }
-    }
-  }
-}
+
 
 h2{
   margin: 3px;
@@ -63,30 +55,30 @@ h2{
   font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-weight: bold;
   text-shadow: 1px 1px rgb(49, 46, 46);
-  color: #f7eded;
+  color: #F7EDED;
   letter-spacing: 1px;
 }
 
 .mat-accordion{
   height: 44px !important;
   font-size: 0.8rem;
-  color: whitesmoke;
+  color: #F7EDED;
   margin-bottom: 4px;
-  background-color: #00ff00 !important;
+  background-color: #FFA500 !important;
   ::ng-deep{
     .mat-expansion-panel{
       border-radius: 5px;
       margin: 0.8rem;
-      background: #00ff00;
+      background: #FFA500;
       &:hover{
-        background: #FFA500 !important;
+        background: #009900 !important;
       }
     }
   }
 }
 
 .mat-expansion-panel-header{
-  background: #00ff00;
+  background: #FFA500;
   font-size: 1.2rem;
   font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-weight: bold;

@@ -38,13 +38,11 @@
   transform: translateX(10px) translateY(-7px);
   font-size: 0.9em;
   padding: 3 10px;
-  background: #FD7F0A;
   letter-spacing: 0.2em;
 }
 
 .input-container:nth-child(2) input:focus ~ .student{
   background: #098B09;
-  color: #FD7F0A;
   border-radius: 2px;
 }
 
@@ -119,13 +117,11 @@
   transform: translateX(10px) translateY(-7px);
   font-size: 0.9em;
   padding: 0 10px;
-  background: #FD7F0A;
   letter-spacing: 0.2em;
 }
 
 .select-container:nth-child(2) .select:focus ~ .span{
   background: #098B09;
-  color: #FD7F0A;
   border-radius: 2px;
 }
 
@@ -164,13 +160,11 @@
   transform: translateX(10px) translateY(-7px);
   font-size: 0.9em;
   padding: 0 10px;
-  background: #FD7F0A;
   letter-spacing: 0.2em;
 }
 
 .select-container1:nth-child(2) .select:focus ~ .span{
   background: #098B09;
-  color: #FD7F0A;
   border-radius: 2px;
 }
 
@@ -181,7 +175,7 @@ table {
   width: 1000px;
 }
 
-.button1, .button2, .button3{
+.completion-button, .update-button, .dashboard-button{
   background: none;
   border: 2px solid   #F95D03;
   border-radius: 5px;
@@ -197,19 +191,19 @@ table {
   color:rgb(26, 24, 24);
 }
 
-.button1:hover{
+.completion-button:hover{
   color: #FFFFFF;
 } 
 
-.button2:hover{
+.update-button:hover{
   color: #FFFFFF;
-}
+} 
 
-.button3:hover{
+.dashboard-button:hover{
   color: #FFFFFF;
-}
+} 
 
-.button1::before{
+.completion-button::before{
   content: "";
   position: absolute;
   left: 0;
@@ -223,7 +217,7 @@ table {
   transition-timing-function: cubic-bezier(0.5, 1.6, 0.4, 0.7);
 }
 
-.button2::before{
+.update-button::before{
   content: "";
   position: absolute;
   left: 0;
@@ -237,7 +231,7 @@ table {
   transition-timing-function: cubic-bezier(0.5, 1.6, 0.4, 0.7);
 }
 
-.button3::before{
+.dashboard-button::before{
   content: "";
   position: absolute;
   left: 0;
@@ -251,28 +245,27 @@ table {
   transition-timing-function: cubic-bezier(0.5, 1.6, 0.4, 0.7);
 }
 
-.button1::before{
+.completion-button::before{
   transform: scaleX(0);
 }
 
-.button2::before{
+.update-button::before{
   transform: scaleY(0);
 }
 
-.button3::before{
+.dashboard-button::before{
   transform: scaleX(0);
 }
 
-.button1:hover::before{
+.completion-button:hover::before{
   transform: scaleX(1);
 }
 
-.button2:hover::before{
+.update-button:hover::before{
   transform: scaleY(1);
 }
 
-.button3:hover::before{
+.dashboard-button:hover::before{
   transform: scaleX(1);
 }
-
 

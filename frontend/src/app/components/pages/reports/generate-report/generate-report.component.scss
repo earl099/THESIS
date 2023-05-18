@@ -40,15 +40,286 @@
   transform: translateX(10px) translateY(-7px);
   font-size: 1.5em;
   padding: 0 10px;
-  background: #FD7F0A;
   letter-spacing: 0.2em;
 }
 
 .select-container:nth-child(2) .select:focus ~ .span{
   background: #098B09;
-  color: #FD7F0A;
   border-radius: 2px;
 }
+
+/*advanced section*/
+
+.col{
+  position: relative;
+}
+
+.col select{
+    padding: 1.6rem;
+    padding-bottom: 8px;
+    width: 100%;
+    height: 100%;
+    border: 2px solid #098B09;
+    background: linear-gradient(135deg, #6cf921, #f7fa11);
+    appearance: none;
+    border-radius: 5px;
+    letter-spacing: 2px;
+    transition: 0.5s; 
+    font-size: 1.5em;
+    filter: drop-shadow(1px 1px 2px #033512);
+    cursor: pointer;
+  }
+
+  .col .college {
+    position: absolute;
+    color: #006600;
+    filter: drop-shadow(1px 1px 2px #033512);
+    left: 75px;
+    padding: 2px;
+    pointer-events: none;
+    text-transform: uppercase;
+    transition: 0.5s;  
+    font-family: monospace;
+    font-size: 1.2em; 
+}
+
+.select:focus~.college{
+  color:#098B09;
+  filter: drop-shadow(1px 1px 2px #033512);
+  transform: translateX(10px) translateY(-7px);
+  font-size: 1.5em;
+  padding: 0 10px;
+  letter-spacing: 0.2em;
+}
+
+.col:nth-child(2) .select:focus ~ .course{
+  background: #098B09;
+  border-radius: 2px;
+}
+
+.col .course {
+  position: absolute;
+  color: #006600;
+  filter: drop-shadow(1px 1px 2px #033512);
+  left: 75px;
+  padding: 2px;
+  pointer-events: none;
+  text-transform: uppercase;
+  transition: 0.5s;  
+  font-family: monospace;
+  font-size: 1.2em; 
+}
+
+.select:focus~.course{
+color:#098B09;
+filter: drop-shadow(1px 1px 2px #033512);
+transform: translateX(10px) translateY(-7px);
+font-size: 1.5em;
+padding: 0 10px;
+letter-spacing: 0.2em;
+}
+
+.col:nth-child(2) .select:focus ~ .course{
+background: #098B09;
+border-radius: 2px;
+}
+
+.col{
+  position: relative;
+}
+
+.col select{
+    padding: 1.6rem;
+    padding-bottom: 8px;
+    width: 75%;
+    height: 100%;
+    border: 2px solid #098B09;
+    background: linear-gradient(135deg, #6cf921, #f7fa11);
+    appearance: none;
+    border-radius: 5px;
+    letter-spacing: 2px;
+    transition: 0.5s; 
+    font-size: 1.5em;
+    filter: drop-shadow(1px 1px 2px #033512);
+    cursor: pointer;
+  }
+
+  .col .gender {
+    position: absolute;
+    color: #006600;
+    filter: drop-shadow(1px 1px 2px #033512);
+    left: 75px;
+    padding: 2px;
+    pointer-events: none;
+    text-transform: uppercase;
+    transition: 0.5s;  
+    font-family: monospace;
+    font-size: 1.2em; 
+}
+
+.select:focus~.gender{
+  color:#098B09;
+  filter: drop-shadow(1px 1px 2px #033512);
+  transform: translateX(10px) translateY(-7px);
+  font-size: 1.5em;
+  padding: 0 10px;
+  letter-spacing: 0.2em;
+}
+
+.col:nth-child(2) .select:focus ~ .gender{
+  background: #098B09;
+  border-radius: 2px;
+}
+
+.col .semester {
+  position: absolute;
+  color: #006600;
+  filter: drop-shadow(1px 1px 2px #033512);
+  left: 75px;
+  padding: 2px;
+  pointer-events: none;
+  text-transform: uppercase;
+  transition: 0.5s;  
+  font-family: monospace;
+  font-size: 1.2em; 
+}
+
+.select:focus~.semester{
+color:#098B09;
+filter: drop-shadow(1px 1px 2px #033512);
+transform: translateX(10px) translateY(-7px);
+font-size: 1.5em;
+padding: 0 10px;
+letter-spacing: 0.2em;
+}
+
+.col:nth-child(2) .select:focus ~ .semester{
+background: #098B09;
+border-radius: 2px;
+}
+
+.col .school-year {
+  position: absolute;
+  color: #006600;
+  filter: drop-shadow(1px 1px 2px #033512);
+  left: 75px;
+  padding: 2px;
+  pointer-events: none;
+  text-transform: uppercase;
+  transition: 0.5s;  
+  font-family: monospace;
+  font-size: 1.2em; 
+}
+
+.select:focus~.school-year{
+color:#098B09;
+filter: drop-shadow(1px 1px 2px #033512);
+transform: translateX(10px) translateY(-7px);
+font-size: 1.5em;
+padding: 0 10px;
+letter-spacing: 0.2em;
+}
+
+.col:nth-child(2) .select:focus ~ .school-year{
+background: #098B09;
+border-radius: 2px;
+}
+
+.generate-button, .advanced-button, .dashboard-button{
+  background: none;
+  border: 2px solid   #F95D03;
+  border-radius: 5px;
+  font-family: "monserrat", sans-serif;
+  filter: drop-shadow(1px 1px 1px #033512);
+  text-transform: uppercase;
+  padding: 12px 20px;
+  min-width: 200px;
+  margin: 10px;
+  cursor: pointer;
+  transition: color 0.4s linear; 
+  position: relative;
+  color:rgb(26, 24, 24);
+}
+
+.generate-button:hover{
+  color: #FFFFFF;
+} 
+
+.advanced-button:hover{
+  color: #FFFFFF;
+}
+
+.dashboard-button:hover{
+  color: #FFFFFF;
+}
+
+.generate-button::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #D8821B; 
+  z-index: -1;
+  transition: transform 0.5s;
+  transform-origin: 0 0;
+  transition-timing-function: cubic-bezier(0.5, 1.6, 0.4, 0.7);
+}
+
+.advanced-button::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background:  #D8821B; 
+  z-index: -1;
+  transition: transform 0.5s;
+  transform-origin: 0 0;
+  transition-timing-function: cubic-bezier(0.5, 1.6, 0.4, 0.7);
+}
+
+.dashboard-button::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #D8821B; 
+  z-index: -1;
+  transition: transform -0.5s;
+  transform-origin: 0 0;
+  transition-timing-function: cubic-bezier(0.5, 1.6, 0.4, 0.7);
+}
+
+.generate-button::before{
+  transform: scaleY(0);
+}
+
+.advanced-button::before{
+  transform: scaleX(0);
+}
+
+.dashboard-button::before{
+  transform: scaleX(0);
+}
+
+.generate-button:hover::before{
+  transform: scaleY(1);
+}
+
+.advanced-button:hover::before{
+  transform: scaleX(1);
+}
+
+.dashboard-button:hover::before{
+  transform: scaleX(1);
+}
+
+
 
   
   

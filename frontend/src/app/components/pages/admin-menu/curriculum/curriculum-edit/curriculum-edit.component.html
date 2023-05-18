@@ -4,41 +4,44 @@
     <div class="page__content-data position-absolute text-center">
       <form [formGroup]="angForm">
 
-        <mat-form-field appearance="fill">
-          <mat-label>Course</mat-label>
-          <input matInput type="text" formControlName="course">
-        </mat-form-field>
+
+        <div class="input-container">
+          <input type="text" formControlName="course">
+            <span class="course">Course</span>
+          </div>
         <br>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Major</mat-label>
-          <input matInput type="text" formControlName="coursemajor">
-        </mat-form-field>
+
+        <div class="input-container1"> 
+          <input type="text" formControlName="coursemajor">
+          <span class="major">Major</span>
+          </div>
         <br>
 
-        <mat-form-field appearance="fill">
-          <mat-label>School Year</mat-label>
-          <input matInput type="text" formControlName="schoolyear" readonly>
-        </mat-form-field>
+        <div class="input-container2">
+          <input type="text" formControlName="schoolyear" readonly>
+          <span class="school-year">School Year</span>
+        </div>
         <br>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Active Curriculum</mat-label>
-          <mat-select formControlName="activecurriculum">
-            <mat-option value="1">Yes</mat-option>
-            <mat-option value="0">No</mat-option>
-          </mat-select>
-        </mat-form-field>
+        <div class="select-container">
+          <select class="select" formControlName="activecurriculum">
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+          <span class="custom-arrow"></span>
+          <span class="active">Active Curriculum</span>
+        </div>
         <br>
 
         <div class="container">
           <div class="row align-items-start">
             <div class="col">
-              <button mat-button type="submit" class="btn btn-success" (click)="onEditCurriculum(id, angForm)">Edit User</button>
+              <button mat-button type="submit" class="edit-button" (click)="onEditCurriculum(id, angForm)">EDIT CURRICULUM</button>
             </div>
 
             <div class="col">
-              <button mat-button routerLink="/curriculum/list">Back to List</button>
+              <button mat-button class="list-button" routerLink="/curriculum/list">BACK TO LIST</button>
             </div>
           </div>
         </div>

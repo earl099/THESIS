@@ -22,12 +22,15 @@
           <div class="container" *ngIf="isAdvClicked">
             <div class="row align-items-start">
               <div class="col" *ngIf="isAdmin">
-                <mat-form-field>
-                  <mat-label>College</mat-label>
-                  <mat-select formControlName="collegeCode" (selectionChange)="getCourses(reportForm.get('collegeCode').value)">
-                    <mat-option *ngFor="let college of collegeList" [value]="college.collegeCode">{{college.collegeCode}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
+                <div class="college-container">
+              <form action="">
+                  <select class="select" formControlName="collegeCode" (selectionChange)="getCourses(reportForm.get('collegeCode').value)">
+                    <option class="option" *ngFor="let college of collegeList" [value]="college.collegeCode">{{college.collegeCode}}</option>
+                    </select>
+                    <span class="custom-arrow"></span>
+                    <span class="college">College</span>
+                </form>
+              </div>
               </div>
 
               <div class="col" *ngIf="!isAdmin">
@@ -37,66 +40,72 @@
                 </mat-form-field>
               </div>
 
-              <div class="col">
-                <mat-form-field>
-                  <mat-label>Course</mat-label>
-                  <mat-select formControlName="courseCode">
-                    <mat-option *ngFor="let course of courseList" [value]="course.courseCode">{{course.courseCode}}</mat-option>
-                    <mat-option value="ALL">ALL</mat-option>
-                  </mat-select>
-                </mat-form-field>
+              <div class="col">    
+                <form action="">
+                  <select class="select" formControlName="courseCode">
+                    <option *ngFor="let course of courseList" [value]="course.courseCode">{{course.courseCode}}</option>
+                    <option class="option" value="ALL">ALL</option>
+                  </select>
+                  <span class="custom-arrow"></span>
+                  <span class="course">Course</span>
+                </form>
               </div>
             </div>
+            <br>
 
             <div class="row align-items-start">
               <div class="col">
-                <mat-form-field>
-                  <mat-label>Gender</mat-label>
-                  <mat-select formControlName="gender">
-                    <mat-option value="MALE">MALE</mat-option>
-                    <mat-option value="FEMALE">FEMALE</mat-option>
-                    <mat-option value="ALL">ALL</mat-option>
-                  </mat-select>
-                </mat-form-field>
+                <form action="">
+                  <select class="select" formControlName="gender">
+                    <option class="option" value="MALE">MALE</option>
+                    <option class="option" value="FEMALE">FEMALE</option>
+                    <option class="option" value="ALL">ALL</option>
+                  </select>
+                  <span class="custom-arrow"></span>
+                  <span class="gender">Gender</span>
+                </form>
               </div>
 
               <div class="col">
-                <mat-form-field>
-                  <mat-label>Semester</mat-label>
-                  <mat-select formControlName="semester">
-                    <mat-option value="FIRST">FIRST</mat-option>
-                    <mat-option value="SECOND">SECOND</mat-option>
-                    <mat-option value="SUMMER">SUMMER</mat-option>
-                    <mat-option value="ALL">ALL</mat-option>
-                  </mat-select>
-                </mat-form-field>
+                <form action="">
+                  <select class="select" formControlName="semester">
+                    <option class="select" value="FIRST">FIRST</option>
+                    <option class="select" value="SECOND">SECOND</option>
+                    <option class="select" value="SUMMER">SUMMER</option>
+                    <option class="select" value="ALL">ALL</option>
+                  </select>
+                  <span class="custom-arrow"></span>
+                  <span class="semester">Semester</span>
+                </form>
               </div>
 
               <div class="col">
-                <mat-form-field>
-                  <mat-label>School Year</mat-label>
-                  <mat-select formControlName="schoolyear">
-                    <mat-option *ngFor="let year of schoolyearList" [value]="year.schoolyear">{{year.schoolyear}}</mat-option>
-                    <mat-option value="ALL">ALL</mat-option>
-                  </mat-select>
-                </mat-form-field>
+                <form action="">
+                  <select class="select" formControlName="schoolyear">
+                    <option *ngFor="let year of schoolyearList" [value]="year.schoolyear">{{year.schoolyear}}</option>
+                    <option class="option" value="ALL">ALL</option>
+                  </select>
+                  <span class="custom-arrow"></span>
+                  <span class="school-year">School Year</span>
+                </form>
               </div>
             </div>
           </div>
+          <br>
 
 
           <div class="container">
             <div class="row align-items-start">
               <div class="col">
-                <button mat-button type="submit" class="button1" (click)="generateReport()">Generate</button>
+                <button mat-button type="submit" class="generate-button" (click)="generateReport()">Generate</button>
               </div>
 
               <div class="col">
-                <button mat-button type="submit" class="button2" (click)="onAdvClick()">Advanced</button>
+                <button mat-button type="submit" class="advanced-button" (click)="onAdvClick()">Advanced</button>
               </div>
 
               <div class="col">
-                <button mat-button class="button3" routerLink="/dashboard">Dashboard</button>
+                <button mat-button class="dashboard-button" routerLink="/dashboard">Dashboard</button>
               </div>
             </div>
           </div>

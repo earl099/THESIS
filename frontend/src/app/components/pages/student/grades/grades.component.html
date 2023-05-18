@@ -33,15 +33,15 @@
           <div class="container">
             <div class="row align-items-start">
               <div class="col">
-                <button mat-button type="submit" class="button1" (click)="generateData(false)">Completion</button>
+                <button mat-button type="submit" class="completion-button" (click)="generateData(false)">Completion</button>
               </div>
 
               <div class="col" *ngIf="adminVisibility">
-                <button mat-button type="submit" class="button2" (click)="generateData(true)" >Update</button>
+                <button mat-button type="submit" class="update-button" (click)="generateData(true)" >Update</button>
               </div>
 
               <div class="col">
-                <button mat-button class="button3" routerLink="/dashboard">Dashboard</button>
+                <button mat-button class="dashboard-button" routerLink="/dashboard">Dashboard</button>
               </div>
             </div>
           </div>

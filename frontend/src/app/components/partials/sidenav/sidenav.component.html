@@ -8,11 +8,13 @@
 
     <h2 matSubheader ="mt-2">MODULES</h2>
 
+    <br>
+
     <!--HOME/DASHBOARD MENUS-->
     <mat-list-item *ngIf="loginBtn">
       <button mat-button routerLink="/home" routerLinkActive="list-item-active">
-        <mat-icon matListItemIcon>home</mat-icon>
-        <div matListItemTitle>Home</div>
+        <mat-icon matListItemIcon>home</mat-icon>HOME
+        
       </button>
     </mat-list-item>
 
@@ -192,8 +194,8 @@
     <!--LOGIN/ADMIN LOGIN/LOGOUT BUTTONS-->
     <mat-list-item *ngIf="loginBtn" >
       <button mat-button *ngIf="loginBtn" routerLink="/login/user" routerLinkActive="list-item-active">
-        <mat-icon matListItemIcon>login</mat-icon>
-        <div matListItemTitle>LOGIN</div>
+        <mat-icon matListItemIcon>login</mat-icon>LOGIN
+        
       </button>
     </mat-list-item>
 

@@ -6,8 +6,8 @@
         <label for="singleFile">UPLOAD SCHEDULE LIST &nbsp;<mat-icon class="upload">upload</mat-icon></label>
         <input mat-input #fileImportInput id="singleFile" type="file" (change)="fileChangeListener($event)" accept=".csv">
         <br><br>
-        <button mat-button class="import" (click)="importSchedules()">Import Schedules</button>
-        <button mat-button class="list" routerLink="/schedule/list">Back to list</button>
+        <button mat-button class="import-button" (click)="importSchedules()">Import Schedules</button>
+        <button mat-button class="list-button" routerLink="/schedule/list">Back to list</button>
       </div>
     </div>
   </div>

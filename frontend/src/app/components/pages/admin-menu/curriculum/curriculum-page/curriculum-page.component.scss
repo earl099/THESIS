@@ -1,6 +1,34 @@
 @import '../../../index/home/home.component.scss';
 
-div.details
-{
-  font-size: large;
+.curriculum-content{
+  width: 100%;
+
+
+  
+  background-color: #009900;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+  border-radius: 30px;
 }
+
+h1, p{
+  text-align: center;
+}
+
+.item p{
+  display: inline-block;
+  margin: 5px 0;
+  font-size: 0.7em;
+}
+
+.content, .data{
+  width: 50%;
+  text-align: left;
+}
+
+hr{
+  height: 5px;
+  background-color: #FFCC00;
+}
+

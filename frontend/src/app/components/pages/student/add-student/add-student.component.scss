@@ -80,7 +80,7 @@ label::after{
   font-size: 30px;
 }
 
-.import, .list{
+.import-button, .list-button{
   background: none;
   border: 2px solid   #F95D03;
   border-radius: 5px;
@@ -96,15 +96,15 @@ label::after{
   color:rgb(26, 24, 24);
 }
 
-.import:hover{
+.import-button:hover{
   color: #FFFFFF;
 } 
 
-.list:hover{
+.list-button:hover{
   color: #FFFFFF;
-}
+} 
 
-.import::before{
+.import-button::before{
   content: "";
   position: absolute;
   left: 0;
@@ -118,7 +118,7 @@ label::after{
   transition-timing-function: cubic-bezier(0.5, 1.6, 0.4, 0.7);
 }
 
-.list::before{
+.list-button::before{
   content: "";
   position: absolute;
   left: 0;
@@ -132,19 +132,23 @@ label::after{
   transition-timing-function: cubic-bezier(0.5, 1.6, 0.4, 0.7);
 }
 
-.import::before{
+.import-button::before{
   transform: scaleX(0);
 }
 
-.list::before{
+.list-button::before{
   transform: scaleY(0);
 }
 
-.import:hover::before{
+.import-button:hover::before{
   transform: scaleX(1);
 }
 
-.list:hover::before{
+.list-button:hover::before{
   transform: scaleY(1);
 }
+
+
+
+
 

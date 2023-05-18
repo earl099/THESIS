@@ -2,20 +2,22 @@
   <div class="page__box p-3 mt-2">Student List</div>
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
-      <div class="container"><p>Student List</p></div>
+      <div class="container"><p>STUDENT LIST</p></div>
+      <br>
 
       <form action="">
         <div class="input-container">
         <input (keyup)="applyFilter($event)" placeholder="ENTER A FILTER" #input>
-        <label class="filter">Filter</label>
+        <span class="filter">Filter</span>
         </div>
       </form>
+      <br>
       <br>
 
       <div class="table-responsive">
         <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
           <ng-container matColumnDef="studentNumber">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by studentNumber"><p class="table-title"> Student Number </p></th>
+            <th mat-header-cell mat-sort-header *matHeaderCellDef class="hide-arrow" sortActionDescription="Sort by studentNumber"><p class="table-title"> Student Number </p></th>
             <td mat-cell *matCellDef="let student" (click)="redirectTo(student)" > <p class="data-content">{{student.studentNumber}}</p> </td>
           </ng-container>
 
@@ -50,18 +52,15 @@
             <th mat-header-cell *matHeaderCellDef><p class="table-title"> Shift to Course </p></th>
             <td mat-cell *matCellDef="let student">
               <form [formGroup]="studentInfoForm">
-                <mat-form-field>
-                  <mat-select #course>
-                    <mat-option
+                  <select class="select" #course>
+                    <option class="option"
                     *ngFor="let item of curricula" [value]="item.course"
                     (onSelectionChange)="initChangeCourse(student.studentNumber, student.course, item.course)"
                     >
                       {{ item.course }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </form>
-
+                    </option>
+                  </select>
+                </form>
             </td>
           </ng-container>
 

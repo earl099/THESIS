@@ -2,41 +2,38 @@
   <div class="page__box p-3 mt-2">Curriculum Profile</div>
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
-      <div class="container"><p>Curriculum Profile</p></div>
-      <div class="container">
-        <div class="details">
+      <div class="curriculum-content"><header>
+        <h1>CURRICULUM CONTENT</h1></header><hr>
+      
+        <section>
 
-          <div >
-            <span>{{identifiers[0]}}: </span>
-            <span>{{curriculum.course}}</span>
-          </div>
-          <br>
+          <article class="item">
+            <p class="content">{{identifiers[0]}}:</p>
+            <p class="data">{{curriculum.course}}</p>
+          </article>
+            
+          <article class="item">
+            <p class="content">{{identifiers[1]}}:</p>
+            <p class="data">{{curriculum.coursemajor}}</p>
+          </article>
+        
+          <article class="item">
+            <p class="content">{{identifiers[2]}}:</p>
+            <p class="data">{{curriculum.schoolyear}}</p>
+          </article>
 
-          <div>
-            <span>{{identifiers[1]}}: </span>
-            <span>{{curriculum.coursemajor}}</span>
-          </div>
-          <br>
-
-          <div>
-            <span>{{identifiers[2]}}: </span>
-            <span>{{curriculum.schoolyear}}</span>
-          </div>
-          <br>
-
-          <div>
-            <span>{{identifiers[3]}}: </span>
-            <span>{{curriculum.activecurriculum === 0 ? 'No' : 'Yes'}}</span>
-          </div>
-          <br>
-
-          <div>
-            <button mat-raised-button routerLink='/curriculum/content/{{curriculum.id}}'> Curriculum Subjects </button>
-            <button mat-raised-button routerLink='/curriculum/edit/{{curriculum.id}}'> Edit Curriculum </button>
-            <button mat-raised-button routerLink='/curriculum/list'> Back to List </button>
-          </div>
+          <article class="item">
+            <p class="content">{{identifiers[3]}}:</p>
+            <p class="data">{{curriculum.activecurriculum === 0 ? 'No' : 'Yes'}}</p>
+          </article>
+         </section><hr>
+         
+        <div>
+            <button mat-raised-button class="curriculum-button" routerLink='/curriculum/content/{{curriculum.id}}'> CURRICULUM SUBJECTS </button>
+            <button mat-raised-button class="edit-button" routerLink='/curriculum/edit/{{curriculum.id}}'> EDIT CURRICULUM </button>
+            <button mat-raised-button class="list-button" routerLink='/curriculum/list'> BACK TO LIST </button>
+       </div>   
         </div>
       </div>
     </div>
   </div>
-</div>
