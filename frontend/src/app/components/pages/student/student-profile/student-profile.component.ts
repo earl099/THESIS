@@ -18,7 +18,7 @@ export class StudentProfileComponent implements OnInit {
     'Name',
     'Course',
     'Address',
-    'Sex',
+    'Gender',
     'Birthday',
     'Status',
     'Religion',

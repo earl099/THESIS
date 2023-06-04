@@ -1,0 +1,35 @@
+<br>
+<div class="container">
+  <form [formGroup]="addLoaForm" autocomplete="off" class="text-center h-100 mw">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Student Number</mat-label>
+            <input #studnum matInput type="text" formControlName="studentnumber" (keypress)="numberFilter($event)" (change)="getCourse(studnum.value)" required autocomplete="off">
+          </mat-form-field>
+        </div>
+
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Course</mat-label>
+            <input matInput type="course" formControlName="course" [value]="addLoaForm.get('course').value" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <br>
+
+    <div class="row align-items-start">
+      <div class="col">
+        <button mat-raised-button type="submit" class="btn btn-success" (click)="confirmAdd()">Confirm Add</button>
+      </div>
+      <div class="col">
+        <button mat-raised-button (click)="closeDialog()">Close Dialog</button>
+      </div>
+    </div>
+    <br>
+  </form>
+</div>
+
+

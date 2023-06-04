@@ -26,7 +26,7 @@ export class VariableEditComponent implements OnInit {
       semester: new FormControl({ value: '', disabled: true }),
       schoolyear: new FormControl({ value: '', disabled: true }),
       ksemester: new FormControl({ value: '', disabled: true }),
-      kschoolyear: new FormControl({ value: '', disabled: false }),
+      kschoolyear: new FormControl({ value: '', disabled: true }),
       mycampus: new FormControl({ value: '', disabled: true }),
       hrmohead: new FormControl({ value: '', disabled: false }),
       hrmodesignation: new FormControl({ value: '', disabled: false }),

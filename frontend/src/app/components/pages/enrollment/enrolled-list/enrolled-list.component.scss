@@ -1,0 +1,38 @@
+@import '../../index/home/home.component.scss';
+
+table {
+  overflow: visible !important;
+}
+
+th {
+  text-align: center;
+}
+
+div.container {
+  text-align: center;
+  div.container {
+    text-align: left;
+  }
+}
+
+mat-card {
+  background-color: #439a43;
+}
+mat-card-actions {
+  align-self: center;
+  button {
+    width: 15rem;
+  }
+}
+
+div.col {
+  text-align: center;
+  padding-left: 2rem;
+}
+
+p {
+  text-align: left;
+  &.right {
+    text-align: right;
+  }
+}

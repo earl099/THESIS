@@ -9,6 +9,8 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { CurriculumService } from 'src/app/services/curriculum.service';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { VariableService } from 'src/app/services/variable.service';
+import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
+import { ReportService } from 'src/app/services/report.service';
 
 @Component({
   selector: 'app-student-list',
@@ -17,6 +19,9 @@ import { VariableService } from 'src/app/services/variable.service';
 })
 export class StudentListComponent implements OnInit {
   processData: any
+
+  csvRecords: any;
+  header: boolean = true;
 
   columns: string[] = [
     'studentNumber',
@@ -33,7 +38,7 @@ export class StudentListComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   //--- DATA FOR DISPLAYING IN THE LIST ---//
-  curricula: any = [];
+  courseList: any = [];
   students: any = [];
   globalVars: any;
 
@@ -46,11 +51,13 @@ export class StudentListComponent implements OnInit {
 
   constructor(
     private studentService: StudentService,
+    private reportService: ReportService,
     private curriculumService: CurriculumService,
     private variableService: VariableService,
     private fb: FormBuilder,
     private router: Router,
     private toastr: ToastrService,
+    private csvParser: NgxCsvParser,
     private _liveAnnouncer: LiveAnnouncer
   ) {
 
@@ -80,12 +87,8 @@ export class StudentListComponent implements OnInit {
     })
 
     this.getStudents();
-    this.getCurricula();
+    this.getCourseList();
     this.getVariables();
-  }
-
-  redirectTo(student: any): void {
-    this.router.navigate([`student/profile/${student.studentNumber}`]);
   }
 
   getStudents() {
@@ -100,11 +103,11 @@ export class StudentListComponent implements OnInit {
     })
   }
 
-  getCurricula() {
-    this.curriculumService.getCurricula().subscribe((res) => {
+  getCourseList() {
+    this.reportService.getCourses('ALL').subscribe((res) => {
       if(res) {
-        this.curricula = res.curricula;
-        //console.log(this.curricula)
+        this.courseList = res.course;
+        console.log(this.courseList)
       }
     })
   }
@@ -134,8 +137,8 @@ export class StudentListComponent implements OnInit {
   }
 
   onConfirmShift(studentNumber: any) {
-    console.log(this.studentInfoForm.value)
-    console.log(this.shifteeForm.value)
+    //console.log(this.studentInfoForm.value)
+    //console.log(this.shifteeForm.value)
 
     if(this.studentInfoForm.get('studentNumber').value == null || this.shifteeForm.get('studentnumber').value == null) {
       this.toastr.error('Shiftee course is invalid.')
@@ -162,7 +165,7 @@ export class StudentListComponent implements OnInit {
                 this.processData.get('description').setValue(
                   `Shifted ${this.studentInfoForm.get('studentNumber').value}'s
                   from ${this.shifteeForm.get('coursefrom').value} to ${this.shifteeForm.get('coursefrom').value}`)
-                this.variableService.addProcess(this.processData).subscribe()
+                this.variableService.addProcess(this.processData.value).subscribe()
               }
             })
 
@@ -171,6 +174,70 @@ export class StudentListComponent implements OnInit {
           }
         })
       }
+    }
+  }
+
+  fileChangeListener($event: any) {
+    const files = $event.srcElement.files;
+    this.header = (this.header as unknown as string) === 'true' ||
+    this.header === true;
+
+    this.csvParser
+    .parse(files[0], {
+      header: this.header,
+      delimiter: ',',
+      encoding: 'utf8'
+    })
+    .pipe()
+    .subscribe({
+      next: (result): void => {
+        //console.log('Result:', result);
+        this.csvRecords = result;
+        //console.log(this.csvRecords);
+      },
+      error: (error: NgxCSVParserError) => {
+        console.log('Error:', error)
+      }
+    })
+  }
+
+  importStudents() {
+    if(confirm("Are you sure you want to import this data?")) {
+      if(this.csvRecords == null) {
+        alert("No data imported.");
+        window.location.reload();
+      }
+      else{
+        for (let i = 0; i < this.csvRecords.length; i++) {
+          this.studentService.addStudent(this.csvRecords[i]).pipe().subscribe((res) => {
+            if(res) {
+              this.variableService.getIpAddress().subscribe((res) => {
+                if(res) {
+                  let ipAdd = res.clientIp
+
+                  this.processData.get('username').setValue(localStorage.getItem('user'))
+                  this.processData.get('ipaddress').setValue(ipAdd)
+                  this.processData.get('pcname').setValue(window.location.hostname)
+                  this.processData.get('studentnumber').setValue(this.csvRecords[i].studentnumber)
+                  this.processData.get('type').setValue('Add Student')
+                  this.processData.get('description').setValue(`Added ${this.csvRecords[i].studentnumber} to the database`)
+                  this.variableService.addProcess(this.processData.value).subscribe()
+                }
+              })
+
+
+              if(i == this.csvRecords.length - 1) {
+                this.toastr.success(res.message);
+              }
+            }
+          });
+        }
+        this.toastr.success('Students Added Successfully.')
+        this.getStudents()
+      }
+    }
+    else {
+      window.location.reload()
     }
   }
 

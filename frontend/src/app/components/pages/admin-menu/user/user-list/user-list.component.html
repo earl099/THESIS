@@ -2,54 +2,101 @@
   <div class="page__box p-3 mt-2">Accounts List</div>
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
-      <div class="container"><p>Accounts List</p></div>
 
-      <div class="pt-3">
-        <button mat-raised-button routerLink="/account/add">Add User</button>
-      </div>
+
       <br>
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <mat-form-field appearance="fill" class="input-width">
+              <mat-label>Filter</mat-label>
+              <input matInput (keyup)="applyFilter($event)" placeholder="Enter a filter" #input>
+            </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Filter</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Enter a filter" #input>
-      </mat-form-field>
+            <div class="container table table-responsive">
+              <table mat-table [dataSource]="dataSource">
+                <ng-container matColumnDef="collegeID">
+                  <th mat-header-cell *matHeaderCellDef> College ID </th>
+                  <td mat-cell *matCellDef="let user" (click)="redirectTo(user)"> {{user.collegeID}} </td>
+                </ng-container>
 
-      <div class="container table table-responsive">
-        <table mat-table [dataSource]="dataSource">
-          <ng-container matColumnDef="collegeID">
-            <th mat-header-cell *matHeaderCellDef> College ID </th>
-            <td mat-cell *matCellDef="let user" (click)="redirectTo(user)"> {{user.collegeID}} </td>
-          </ng-container>
+                <ng-container matColumnDef="username">
+                  <th mat-header-cell *matHeaderCellDef> User Name </th>
+                  <td mat-cell *matCellDef="let user" (click)="redirectTo(user)"> {{user.username}} </td>
+                </ng-container>
 
-          <ng-container matColumnDef="username">
-            <th mat-header-cell *matHeaderCellDef> User Name </th>
-            <td mat-cell *matCellDef="let user" (click)="redirectTo(user)"> {{user.username}} </td>
-          </ng-container>
+                <ng-container matColumnDef="edit">
+                  <th mat-header-cell *matHeaderCellDef> Edit </th>
+                  <td mat-cell *matCellDef="let user">
+                    <button mat-raised-button routerLink='/account/edit/{{user.collegeID}}'> Edit </button>
+                  </td>
+                </ng-container>
 
-          <ng-container matColumnDef="edit">
-            <th mat-header-cell *matHeaderCellDef> Edit </th>
-            <td mat-cell *matCellDef="let user">
-              <button mat-raised-button routerLink='/account/edit/{{user.collegeID}}'> Edit </button>
-            </td>
-          </ng-container>
+                <ng-container matColumnDef="delete">
+                  <th mat-header-cell *matHeaderCellDef> Delete </th>
+                  <td mat-cell *matCellDef="let user">
+                    <button mat-raised-button (click)="onDeleteUser(user.collegeID)"> Delete </button>
+                  </td>
+                </ng-container>
 
-          <ng-container matColumnDef="delete">
-            <th mat-header-cell *matHeaderCellDef> Delete </th>
-            <td mat-cell *matCellDef="let user">
-              <button mat-raised-button (click)="onDeleteUser(user.collegeID)"> Delete </button>
-            </td>
-          </ng-container>
+                <tr mat-header-row *matHeaderRowDef="columns"></tr>
+                <tr mat-row *matRowDef="let row; columns: columns;" ></tr>
 
-          <tr mat-header-row *matHeaderRowDef="columns"></tr>
-          <tr mat-row *matRowDef="let row; columns: columns;" ></tr>
+                <tr class="mat-row" *matNoDataRow>
+                  <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+                </tr>
+              </table>
+              <mat-paginator [pageSizeOptions]="[5]" aria-label="Select page of users"></mat-paginator>
+            </div>
+          </div>
 
-          <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
-          </tr>
-        </table>
-        <mat-paginator [pageSizeOptions]="[5]" aria-label="Select page of users"></mat-paginator>
+          <div class="col">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>ADD ACCOUNT</mat-card-title>
+              </mat-card-header>
+
+              <mat-card-content>
+                <form [formGroup]="addForm">
+                  <mat-form-field appearance="fill">
+                    <mat-label>College ID</mat-label>
+                    <mat-select formControlName="collegeID">
+                      <mat-option value="UNIV">UNIV</mat-option>
+                      <mat-option *ngFor="let college of collegeList" [value]="college.collegeCode">{{college.collegeCode}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <br>
+
+                  <mat-form-field appearance="fill">
+                    <mat-label>User Name</mat-label>
+                    <input matInput type="text" formControlName="username">
+                  </mat-form-field>
+                  <br>
+
+                  <mat-form-field appearance="fill">
+                    <mat-label>Password</mat-label>
+                    <input matInput type="password" formControlName="password">
+                  </mat-form-field>
+                  <br>
+
+                  <mat-form-field appearance="fill">
+                    <mat-label>Email</mat-label>
+                    <input matInput type="email" formControlName="email">
+                  </mat-form-field>
+                </form>
+              </mat-card-content>
+
+              <mat-card-actions>
+                <div class="pt-3">
+                  <button mat-raised-button (click)="addUser()">Add User</button>
+                </div>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+        </div>
       </div>
     </div>
+
   </div>
 </div>
 

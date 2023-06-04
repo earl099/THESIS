@@ -2,154 +2,177 @@
   <div class="page__box p-3 mt-2">Edit Student</div>
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
-      <form [formGroup]="angForm" (ngSubmit)="onEditStudent(linkStudentNumber, angForm)">
-        <mat-form-field appearance="fill">
-          <mat-label>Student Number</mat-label>
-          <input matInput type="text" formControlName="studentNumber" readonly>
-        </mat-form-field>
+      <mat-card>
+        <mat-card-header>
+          <h1>ACCOUNT PROFILE</h1>
+        </mat-card-header>
 
-        <div class="container">
-          <div class="row align-items-start">
-            <div class="col">
+        <mat-card-content>
+          <div class="info">
+            <form [formGroup]="angForm" (ngSubmit)="onEditStudent(linkStudentNumber, angForm)">
+              <img src="../../../../../assets/user.png" alt="student-pic">
+              <h2>Student Information</h2>
               <mat-form-field appearance="fill">
-                <mat-label>First Name</mat-label>
-                <input matInput type="text" formControlName="firstName" class="uppercase">
+                <mat-label>Student Number</mat-label>
+                <input matInput type="text" formControlName="studentNumber" readonly>
               </mat-form-field>
+
+              <div class="container">
+                <div class="row">
+                  <div class="col">
+                    <mat-form-field appearance="fill">
+                      <mat-label>First Name</mat-label>
+                      <input matInput type="text" formControlName="firstName" class="uppercase">
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Middle Name</mat-label>
+                      <input matInput type="text" formControlName="middleName"class="uppercase">
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Last Name</mat-label>
+                      <input matInput type="text" formControlName="lastName" class="uppercase">
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Suffix</mat-label>
+                      <input matInput type="text" formControlName="suffix" class="uppercase">
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <div class="container">
+                <div class="row align-items-start">
+                  <div class="col">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Street</mat-label>
+                      <input matInput type="text" formControlName="street" class="uppercase">
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Barangay</mat-label>
+                      <input matInput type="text" formControlName="barangay" class="uppercase">
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Municipality</mat-label>
+                      <input matInput type="text" formControlName="municipality" class="uppercase">
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Province</mat-label>
+                      <input matInput type="text" formControlName="province" class="uppercase">
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <div class="container">
+                <div class="row align-items-start">
+                  <div class="col">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Choose a date</mat-label>
+                      <input matInput formControlName="dateOfBirth" [matDatepicker]="datepicker">
+                      <mat-hint>MM/DD/YYYY</mat-hint>
+                      <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                      <mat-datepicker #datepicker>
+                        <mat-datepicker-actions>
+                          <button mat-button matDatepickerCancel>Cancel</button>
+                          <button mat-raised-button color="primary" matDatepickerApply>Apply</button>
+                        </mat-datepicker-actions>
+                      </mat-datepicker>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Gender</mat-label>
+                      <mat-select formControlName="gender" required>
+                        <mat-option value="MALE">MALE</mat-option>
+                        <mat-option value="FEMALE">FEMALE</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Citizenship</mat-label>
+                      <input matInput type="text" formControlName="citizenship" class="uppercase">
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <div class="container">
+                <div class="row align-items-start">
+                  <div class="col">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Status</mat-label>
+                      <input matInput type="text" formControlName="status" class="uppercase">
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Guardian</mat-label>
+                      <input matInput type="text" formControlName="guardian" class="uppercase">
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Contact Number</mat-label>
+                      <input matInput type="text" formControlName="mobilePhone">
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Email</mat-label>
+                      <input matInput type="text" formControlName="email">
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col">
+                    <mat-form-field appearance="fill">
+                      <mat-label>High School</mat-label>
+                      <input matInput type="text" formControlName="highschool" class="uppercase">
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </mat-card-content>
+        <br>
+
+        <mat-card-actions>
+          <div class="row">
+            <div class="col">
+              <button mat-raised-button type="submit" class="btn btn-success">Confirm Edit</button>
             </div>
-
             <div class="col">
-              <mat-form-field appearance="fill">
-                <mat-label>Middle Name</mat-label>
-                <input matInput type="text" formControlName="middleName"class="uppercase">
-              </mat-form-field>
-            </div>
-
-            <div class="col">
-              <mat-form-field appearance="fill">
-                <mat-label>Last Name</mat-label>
-                <input matInput type="text" formControlName="lastName" class="uppercase">
-              </mat-form-field>
-            </div>
-
-            <div class="col">
-              <mat-form-field appearance="fill">
-                <mat-label>Suffix</mat-label>
-                <input matInput type="text" formControlName="suffix" class="uppercase">
-              </mat-form-field>
+              <button mat-raised-button routerLink="/student/list">Back to List</button>
             </div>
           </div>
-        </div>
+        </mat-card-actions>
+        <br>
+      </mat-card>
 
-        <div class="container">
-          <div class="row align-items-start">
-            <div class="col">
-              <mat-form-field appearance="fill">
-                <mat-label>Street</mat-label>
-                <input matInput type="text" formControlName="street" class="uppercase">
-              </mat-form-field>
-            </div>
-
-            <div class="col">
-              <mat-form-field appearance="fill">
-                <mat-label>Barangay</mat-label>
-                <input matInput type="text" formControlName="barangay" class="uppercase">
-              </mat-form-field>
-            </div>
-
-            <div class="col">
-              <mat-form-field appearance="fill">
-                <mat-label>Municipality</mat-label>
-                <input matInput type="text" formControlName="municipality" class="uppercase">
-              </mat-form-field>
-            </div>
-
-            <div class="col">
-              <mat-form-field appearance="fill">
-                <mat-label>Province</mat-label>
-                <input matInput type="text" formControlName="province" class="uppercase">
-              </mat-form-field>
-            </div>
-          </div>
-        </div>
-
-        <div class="container">
-          <div class="row align-items-start">
-            <div class="col">
-              <mat-form-field appearance="fill">
-                <mat-label>Choose a date</mat-label>
-                <input matInput formControlName="dateOfBirth" [matDatepicker]="datepicker">
-                <mat-hint>MM/DD/YYYY</mat-hint>
-                <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
-                <mat-datepicker #datepicker>
-                  <mat-datepicker-actions>
-                    <button mat-button matDatepickerCancel>Cancel</button>
-                    <button mat-raised-button color="primary" matDatepickerApply>Apply</button>
-                  </mat-datepicker-actions>
-                </mat-datepicker>
-              </mat-form-field>
-            </div>
-
-            <div class="col">
-              <mat-form-field appearance="fill">
-                <mat-label>Gender</mat-label>
-                <mat-select formControlName="gender" required>
-                  <mat-option value="MALE">MALE</mat-option>
-                  <mat-option value="FEMALE">FEMALE</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-
-            <div class="col">
-              <mat-form-field appearance="fill">
-                <mat-label>Citizenship</mat-label>
-                <input matInput type="text" formControlName="citizenship" class="uppercase">
-              </mat-form-field>
-            </div>
-          </div>
-        </div>
-
-        <div class="container">
-          <div class="row align-items-start">
-            <div class="col">
-              <mat-form-field appearance="fill">
-                <mat-label>Status</mat-label>
-                <input matInput type="text" formControlName="status" class="uppercase">
-              </mat-form-field>
-            </div>
-
-            <div class="col">
-              <mat-form-field appearance="fill">
-                <mat-label>Guardian</mat-label>
-                <input matInput type="text" formControlName="guardian" class="uppercase">
-              </mat-form-field>
-            </div>
-
-            <div class="col">
-              <mat-form-field appearance="fill">
-                <mat-label>Contact Number</mat-label>
-                <input matInput type="text" formControlName="mobilePhone">
-              </mat-form-field>
-            </div>
-
-            <div class="col">
-              <mat-form-field appearance="fill">
-                <mat-label>Email</mat-label>
-                <input matInput type="text" formControlName="email">
-              </mat-form-field>
-            </div>
-
-            <div class="col">
-              <mat-form-field appearance="fill">
-                <mat-label>High School</mat-label>
-                <input matInput type="text" formControlName="highschool" class="uppercase">
-              </mat-form-field>
-            </div>
-          </div>
-        </div>
-
-        <button mat-button type="submit" class="btn btn-success">Confirm Edit</button>
-        <button mat-button routerLink="/student/list">Back to List</button>
-      </form>
     </div>
   </div>
 </div>

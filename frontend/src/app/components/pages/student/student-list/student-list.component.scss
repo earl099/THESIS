@@ -1,14 +1,24 @@
 @import "../../index/home/home.component.scss";
 
+//FORMAT GOES HERE
 table {
   position: relative;
   margin-left: auto;
   margin-right: auto;
+  width: 80rem;
 }
+
+
 
 .mat-row:hover {
   background-color: #E8EAF6;
   cursor: pointer;
 }
 
-//FORMAT GOES HERE
+input#singleFile {
+  font-size: medium;
+}
+
+mat-form-field.filter {
+  width: 30rem;
+}

@@ -1,7 +1,6 @@
-import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -9,6 +8,12 @@ import { ToastrService } from 'ngx-toastr';
 import { ReportService } from 'src/app/services/report.service';
 import { VariableService } from 'src/app/services/variable.service';
 import { ngxCsv } from 'ngx-csv/ngx-csv';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { Router } from '@angular/router';
+import { EnrollmentService } from 'src/app/services/enrollment.service';
+import { StudentService } from 'src/app/services/student.service';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-generate-report',
@@ -21,6 +26,10 @@ export class GenerateReportComponent implements OnInit {
 
   //report search parameters
   reportForm: any
+
+  //loa specific forms
+  filterForm: any
+  processLogForm: any
 
   //booleans for checking
   isAdvClicked!: boolean
@@ -74,8 +83,10 @@ export class GenerateReportComponent implements OnInit {
     'dateencoded',
     'gender',
     'semester',
-    'schoolyear'
+    'schoolyear',
+    'delete'
   ]
+
   //table paginator and sorter for the table
   @ViewChild('enrollPaginator') enrollPaginator!: MatPaginator;
   @ViewChild('enrollSort') enrollSort!: MatSort;
@@ -92,15 +103,22 @@ export class GenerateReportComponent implements OnInit {
 
   constructor(
     private reportService: ReportService,
+    private studentService: StudentService,
     private variableService: VariableService,
     private fb: FormBuilder,
     private toastr: ToastrService,
-    private _liveAnnouncer: LiveAnnouncer
+    private _liveAnnouncer: LiveAnnouncer,
+    private dialog: MatDialog
   ) { }
 
   //on initialize
   ngOnInit(): void {
     this.globalVar = this.variableService.getLegend().subscribe()
+
+    this.processLogForm = this.fb.group({
+      encoder: new FormControl({ value: '', disabled: false }),
+      ipaddress: new FormControl({ value: '', disabled: false })
+    })
 
     this.reportForm = this.fb.group({
       reportType: new FormControl({ value: '', disabled: false }),
@@ -111,6 +129,15 @@ export class GenerateReportComponent implements OnInit {
       gender: new FormControl({ value: '', disabled: false }),
       semester: new FormControl({ value: '', disabled: false }),
       schoolyear: new FormControl({ value: '', disabled: false })
+    })
+
+    //filter for loa
+    this.filterForm = this.fb.group({
+      collegeCode: new FormControl({ value: localStorage.getItem('token'), disabled: false }),
+      courseCode: new FormControl({ value: 'ALL', disabled: false }),
+      gender: new FormControl({ value: 'ALL', disabled: false }),
+      semester: new FormControl({ value: 'ALL', disabled: false }),
+      schoolyear: new FormControl({ value: 'ALL', disabled: false })
     })
 
     this.isReportGenerated = false
@@ -256,7 +283,6 @@ export class GenerateReportComponent implements OnInit {
               }
 
               //adding data to data result
-
               switch (this.reportForm.get('reportType').value) {
                 case 'stud_enroll':
                   for (let i = 0; i < enrolledData.length; i++) {
@@ -343,10 +369,15 @@ export class GenerateReportComponent implements OnInit {
               let tmpData2 = res.infoResult
               let finalData = []
               for (let i = 0; i < tmpData.length; i++) {
-                Object.assign(tmpData[i], tmpData2[i])
-                finalData.push(tmpData[i])
+                if(tmpData2[i] == null) {
+                  continue
+                }
+                else {
+                  Object.assign(tmpData[i], tmpData2[i])
+                  finalData.push(tmpData[i])
+                }
+
               }
-              finalData.forEach(item => delete item.studentnumber)
 
               if(this.reportForm.get('reportType').value != 'shiftee') {
                 finalData.forEach(item => { item.courseto = '' })
@@ -365,12 +396,12 @@ export class GenerateReportComponent implements OnInit {
                 for (let i = 0; i < finalData.length; i++) {
                   this.dataResult.push(finalData[i])
                 }
+                console.log(this.dataResult)
 
                 //setting table data source and paginator and sorter
-                this.dataSource = new MatTableDataSource(this.dataResult)
-                this.dataSource.paginator = this.enrollPaginator
-                this.dataSource.sort = this.enrollSort
-
+                this.dataSource2 = new MatTableDataSource(this.dataResult)
+                this.dataSource2.paginator = this.enrollPaginator
+                this.dataSource2.sort = this.enrollSort
                 this.isReportGenerated = true
               }
             }
@@ -418,7 +449,7 @@ export class GenerateReportComponent implements OnInit {
             processData.get('studentnumber').setValue('N/A')
             processData.get('type').setValue('Export Report')
             processData.get('description').setValue(`Exported Report for Students Enrolled`)
-            this.variableService.addProcess(processData).subscribe()
+            this.variableService.addProcess(processData.value).subscribe()
             break
 
           case 'shiftee':
@@ -428,7 +459,7 @@ export class GenerateReportComponent implements OnInit {
             processData.get('studentnumber').setValue('N/A')
             processData.get('type').setValue('Export Report')
             processData.get('description').setValue(`Exported Report for Shiftees`)
-            this.variableService.addProcess(processData).subscribe()
+            this.variableService.addProcess(processData.value).subscribe()
             break
           default:
             processData.get('username').setValue(localStorage.getItem('user'))
@@ -437,11 +468,104 @@ export class GenerateReportComponent implements OnInit {
             processData.get('studentnumber').setValue('N/A')
             processData.get('type').setValue('Export Report')
             processData.get('description').setValue(`Exported Report for LOA`)
-            this.variableService.addProcess(processData).subscribe()
+            this.variableService.addProcess(processData.value).subscribe()
             break
         }
 
       }
+    })
+  }
+
+  filterLoa() {
+    this.reportForm.get('reportType').setValue('loa')
+
+    if(
+      this.filterForm.get('collegeCode').value == '' ||
+      this.filterForm.get('collegeCode').value == 'ALL'
+    ) {
+      this.filterForm.get('collegeCode').setValue('ALL')
+    }
+
+    this.getCourses(this.filterForm.get('collegeCode').value)
+
+    if(
+      this.filterForm.get('courseCode').value == '' ||
+      this.filterForm.get('courseCode').value == 'ALL'
+    ) {
+      this.filterForm.get('courseCode').setValue('ALL')
+    }
+
+    if(
+      this.filterForm.get('gender').value == '' ||
+      this.filterForm.get('gender').value == 'ALL'
+    ) {
+      this.filterForm.get('gender').setValue('ALL')
+    }
+
+    if(
+      this.filterForm.get('semester').value == '' ||
+      this.filterForm.get('semester').value == 'ALL'
+    ) {
+      this.filterForm.get('semester').setValue('ALL')
+    }
+
+    if(
+      this.filterForm.get('schoolyear').value == '' ||
+      this.filterForm.get('schoolyear').value == 'ALL'
+    ) {
+      this.filterForm.get('schoolyear').setValue('ALL')
+    }
+
+    this.reportService.advSearchByReportType(this.reportForm.get('reportType').value, this.filterForm.value).subscribe({
+      next: (res) => {
+        if(res) {
+          let tmpData = res.result
+          let tmpData2 = res.infoResult
+          let finalData = []
+          for(let i = 0; i < tmpData2.length; i++) {
+            if(tmpData2[i] == null) {
+              continue
+            }
+            else {
+              Object.assign(tmpData[i], tmpData2[i])
+              finalData.push(tmpData[i])
+            }
+          }
+
+          this.dataSource2.disconnect()
+          this.dataSource2 = new MatTableDataSource(finalData)
+        }
+      }
+    })
+  }
+
+  deleteLoa(studentnumber: any, data: any) {
+    console.log(studentnumber)
+    if(confirm('Are you sure you want to remove this record?')) {
+      this.variableService.getIpAddress().subscribe((res) => {
+        if(res) {
+          data.encoder = localStorage.getItem('user')
+          data.ipaddress = res.clientIp
+
+          this.studentService.deleteLoa(studentnumber, data).subscribe((res) => {
+            if(res) {
+              this.toastr.success('Record Deleted.')
+              this.dataSource2.disconnect()
+              this.generateReport()
+            }
+          })
+        }
+      })
+    }
+    else {
+      this.toastr.info('Deletion Cancelled')
+    }
+  }
+
+  openAddLoaDialog() {
+    const dialogRef = this.dialog.open(AddLoaDialog)
+    dialogRef.afterClosed().subscribe(() => {
+      this.generateReport()
     })
   }
 
@@ -464,5 +588,140 @@ export class GenerateReportComponent implements OnInit {
     } else {
       this._liveAnnouncer.announce('Sorting cleared');
     }
+  }
+}
+
+// ADD LOA DIALOG
+@Component({
+  selector: 'addLoa-Dialog',
+  templateUrl: './addLoaDialog.html',
+  styleUrls:['./generate-report.component.scss'],
+  standalone: true,
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatButtonModule,
+    MatDialogModule
+  ]
+})
+export class AddLoaDialog implements OnInit {
+  globalVar: any
+  addLoaForm: any
+  studList!: Array<any>
+  enrolledStuds: any
+
+  constructor(
+    private fb: FormBuilder,
+    private enrollmentService: EnrollmentService,
+    private studentService: StudentService,
+    private variableService: VariableService,
+    private toastr: ToastrService,
+    private dialogRef: MatDialogRef<AddLoaDialog>
+  ) {}
+
+  ngOnInit(): void {
+    this.addLoaForm = this.fb.group({
+      studentnumber: new FormControl({ value: '', disabled: false }),
+      course: new FormControl({ value: '', disabled: false }),
+      semester: new FormControl({ value: '', disabled: false }),
+      schoolyear: new FormControl({ value: '', disabled: false }),
+      encoder: new FormControl({ value: '', disabled: false }),
+      username: new FormControl({ value: '', disabled: false }),
+      ipaddress: new FormControl({ value: '', disabled: false })
+    })
+
+    this.variableService.getLegend().subscribe((res) => {
+      if(res) {
+        this.globalVar = res.legend[0]
+
+        this.enrollmentService.getStudsEnroll(this.globalVar.semester, this.globalVar.schoolyear).subscribe((res) => {
+          if(res) {
+            this.enrolledStuds = res.studsEnroll
+          }
+        })
+
+        this.studentService.adminSearch().subscribe((res) => {
+          if(res) {
+            if(res.studsWithLoa != undefined) {
+              this.studList = res.studsWithLoa
+            }
+            else {
+              this.studList = []
+            }
+          }
+
+        })
+      }
+    })
+  }
+
+  confirmAdd() {
+    if(confirm('Are you sure you want to add this record to the list of students with LOA?')) {
+      for (let i = 0; i < this.enrolledStuds.length; i++) {
+        if(this.enrolledStuds[i].studentnumber == this.addLoaForm.get('studentnumber').value) {
+          this.toastr.error('Student is enrolled.')
+          break
+        }
+
+        if(this.studList != undefined) {
+          for (let j = 0; j < this.studList.length; j++) {
+            if(this.studList[j].studentnumber == this.addLoaForm.get('studentnumber').value) {
+              this.toastr.error('Student Already Added.')
+              break
+            }
+          }
+        }
+
+
+        if(this.toastr.previousToastMessage != null) {
+          break
+        }
+        else {
+          if(i == this.enrolledStuds.length - 1) {
+            this.variableService.getIpAddress().subscribe((res) => {
+              if(res) {
+
+                this.addLoaForm.get('semester').setValue(this.globalVar.semester)
+                this.addLoaForm.get('schoolyear').setValue(this.globalVar.schoolyear)
+                this.addLoaForm.get('encoder').setValue(window.location.hostname)
+                this.addLoaForm.get('username').setValue(localStorage.getItem('user'))
+                this.addLoaForm.get('ipaddress').setValue(res.clientIp)
+
+                this.studentService.addLoa(this.addLoaForm.value).subscribe((res) => {
+                  if(res) {
+                    this.toastr.success('Added LOA Record')
+                    this.closeDialog()
+                  }
+                })
+              }
+            })
+          }
+        }
+      }
+    }
+  }
+
+  getCourse(studnum: any) {
+    this.studentService.getStudent(studnum).subscribe((res) => {
+      if(res) {
+        this.addLoaForm.get('course').setValue(res.student.course)
+      }
+    })
+  }
+
+  numberFilter(event: any) {
+    var charCode = (event.which) ? event.which : event.keyCode;
+    // Only Numbers 0-9
+    if ((charCode < 48 || charCode > 57)) {
+      event.preventDefault();
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  closeDialog() {
+    this.dialogRef.close()
   }
 }

@@ -98,9 +98,6 @@ const adminLogin = async (req, res) => {
         catch(e) {
             console.log('Error');
         }
-        
-        
-       
     }
 }
 

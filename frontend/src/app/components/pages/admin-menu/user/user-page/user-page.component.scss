@@ -1,3 +1,43 @@
 @import '../../../index/home/home.component.scss';
 
 //FORMAT GOES HERE
+div.container {
+  top: 75% !important;
+}
+
+div {
+  button {
+    width: 20rem;
+  }
+}
+
+mat-card {
+  background-color: #439a43;
+  mat-card-actions {
+    align-self: center;
+  }
+}
+
+div.row {
+  .col {
+    .container {
+      padding: 3rem;
+      img {
+        width: 25rem;
+      }
+    }
+  }
+}
+
+
+mat-form-field {
+  width: 20rem;
+}
+
+div.col {
+  h1 {
+    margin-top: .9rem;
+    text-align: left;
+    font-size: large;
+  }
+}

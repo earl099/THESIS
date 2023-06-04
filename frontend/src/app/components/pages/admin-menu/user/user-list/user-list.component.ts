@@ -1,10 +1,12 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { ReportService } from 'src/app/services/report.service';
 import { UserService } from 'src/app/services/user.service';
 
 
@@ -23,13 +25,17 @@ export class UserListComponent implements OnInit {
     'edit',
     'delete'
   ]
+  collegeList: any
+  addForm: any
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private router: Router,
+    private fb: FormBuilder,
     private userService: UserService,
+    private reportService: ReportService,
     private toastr: ToastrService,
     private _liveAnnouncer: LiveAnnouncer
   ) {
@@ -37,7 +43,17 @@ export class UserListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.addForm = this.fb.group({
+      collegeID: new FormControl(''),
+      username: new FormControl(''),
+      email: new FormControl('', Validators.email),
+      password: new FormControl(''),
+      isAdmin: new FormControl('')
+    })
+
     this.getUsers();
+
   }
 
 
@@ -45,13 +61,61 @@ export class UserListComponent implements OnInit {
   getUsers() {
     this.userService.getAllUsers().subscribe((res) => {
       if(res) {
-        this.toastr.success(res.message);
         this.users = res.users;
         this.dataSource = new MatTableDataSource(this.users);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       }
     });
+
+    this.reportService.getColleges().subscribe((res) => {
+      if(res) {
+        this.collegeList = res.college
+      }
+    })
+  }
+
+  addUser() {
+    if(confirm('Confirm Add?')) {
+      if(this.addForm.get('collegeID').value != 'UNIV') {
+        this.addForm.get('isAdmin').setValue(false)
+      }
+      else {
+        this.addForm.get('isAdmin').setValue(true)
+      }
+
+      for(let i = 0; i < this.users.length; i++) {
+        if(
+          this.addForm.get('collegeID').value == '' ||
+          this.addForm.get('username').value == '' ||
+          this.addForm.get('password').value == '' ||
+          this.addForm.get('email').value == ''
+        )
+        {
+          this.toastr.error('Please fill out all fields.')
+          break
+        }
+
+        if(this.addForm.get('collegeID').value == this.users[i].collegeID) {
+          this.toastr.error('College account already exists.')
+          break
+        }
+        else {
+          if(i == this.users.length - 1) {
+            this.userService.addUser(this.addForm.value).subscribe((res) => {
+              if(res) {
+                this.getUsers()
+                this.addForm.get('collegeID').setValue('')
+                this.addForm.get('username').setValue('')
+                this.addForm.get('email').setValue('')
+                this.addForm.get('password').setValue('')
+                this.addForm.get('isAdmin').setValue('')
+              }
+            })
+          }
+        }
+      }
+    }
   }
 
   onDeleteUser(collegeID: string) {
