@@ -8,4 +8,45 @@ table {
   width: 1000px;
 }
 
+input.profile {
+  width: 25rem;
+  height: 2rem;
+}
 
+div.row {
+  div.col {
+    h2 {
+      text-align: left;
+    }
+  }
+}
+
+div.row.fs-6 {
+  div.col {
+    text-align: left;
+    &.right-align {
+      text-align: right;
+    }
+  }
+}
+
+mat-card-header img {
+  width: 15rem;
+}
+
+mat-card {
+  background-color: #439a43;
+  &.search {
+    width: 25rem;
+    mat-form-field {
+      width: 20rem;
+    }
+  }
+
+  &.profile {
+    width: 40rem;
+    button {
+      width: 11rem;
+    }
+  }
+}

@@ -1,3 +1,21 @@
 @import  '../../index/home/home.component.scss';
 
 //FORMAT GOES HERE
+mat-card {
+  background-color: #439a43;
+}
+
+button {
+  width: 15rem;
+}
+
+td {
+  button {
+    width: 100%;
+  }
+}
+
+form.mw {
+  width: 35rem;
+  overflow: visible;
+}

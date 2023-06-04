@@ -1,10 +1,37 @@
 @import '../../index/home/home.component.scss';
 
-mat-form-field {
-  input.uppercase{
-    text-transform: uppercase;
+mat-card {
+  background-color: #439a43;
+
+  mat-card-content {
+    div.info form {
+      img {
+        width: 15rem !important;
+      }
+    }
+
   }
-  input:read-only {
-    color: gray;
+
+  div {
+    &.info {
+      display: contents;
+    }
+    mat-form-field {
+      input.uppercase{
+        text-transform: uppercase;
+      }
+      input:read-only {
+        color: gray;
+      }
+    }
+  }
+
+  mat-card-actions {
+    align-self: center;
+    button {
+      width: 15rem;
+    }
   }
 }
+
+

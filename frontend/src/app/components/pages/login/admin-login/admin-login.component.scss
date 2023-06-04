@@ -3,5 +3,37 @@
 //FORMAT GOES HERE
 form
 {
-  font-size: 20px;
+  font-size: medium;
+  height: 20rem;
+}
+
+mat-card {
+  opacity: 95%;
+  width: 25rem;
+}
+
+mat-form-field {
+  width: 20rem;
+}
+
+.page__content {
+  background-image: url('../../../../../assets/dashboardbg.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.mat-mdc-raised-button .mat-mdc-focus-indicator {
+  background-color: #439a43;
+}
+
+.mat-mdc-raised-button:not(:disabled) {
+  width: 15rem;
+}
+
+.mat-mdc-tab:not(.mat-mdc-tab-disabled) .mdc-tab-indicator__content--underline, .mat-mdc-tab-link:not(.mat-mdc-tab-disabled) .mdc-tab-indicator__content--underline {
+  border-color: var(--mdc-tab-indicator-active-indicator-color, #439a43) !important;
+}
+
+.mat-mdc-tab:not(.mat-mdc-tab-disabled).mdc-tab--active .mdc-tab__text-label, .mat-mdc-tab-link:not(.mat-mdc-tab-disabled).mdc-tab--active .mdc-tab__text-label {
+  color: #439a43;
 }

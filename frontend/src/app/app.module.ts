@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 
 //ANGULAR MATERIAL IMPORTS
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -29,6 +30,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatStepperModule } from '@angular/material/stepper'
 import { MatRadioModule } from '@angular/material/radio';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatDialogModule } from '@angular/material/dialog';
 
 //BACKEND IMPORTS
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -40,20 +42,16 @@ import { SidenavComponent } from './components/partials/sidenav/sidenav.componen
 
 
 //BASE COMPONENTS
-import { HomeComponent } from './components/pages/index/home/home.component';
 import { DashboardComponent } from './components/pages/index/dashboard/dashboard.component';
 
 //STUDENT COMPONENTS
 import { StudentListComponent } from './components/pages/student/student-list/student-list.component';
-import { AddStudentComponent } from './components/pages/student/add-student/add-student.component';
 import { StudentProfileComponent } from './components/pages/student/student-profile/student-profile.component';
 import { EditStudentComponent } from './components/pages/student/edit-student/edit-student.component';
 
 //ADMIN MENU COMPONENTS
-import { AddUserComponent } from './components/pages/admin-menu/user/add-user/add-user.component';
 import { UserPageComponent } from './components/pages/admin-menu/user/user-page/user-page.component';
 import { UserListComponent } from './components/pages/admin-menu/user/user-list/user-list.component';
-import { EditUserComponent } from './components/pages/admin-menu/user/edit-user/edit-user.component';
 import { CurriculumAddComponent } from './components/pages/admin-menu/curriculum/curriculum-add/curriculum-add.component';
 import { CurriculumEditComponent } from './components/pages/admin-menu/curriculum/curriculum-edit/curriculum-edit.component';
 import { CurriculumListComponent } from './components/pages/admin-menu/curriculum/curriculum-list/curriculum-list.component';
@@ -68,29 +66,18 @@ import { VariableEditComponent } from './components/pages/admin-menu/variable-ed
 import { InstallPageComponent } from './components/pages/admin-menu/install-page/install-page.component';
 
 //ENROLLMENT COMPONENTS
-import { ValidationComponent } from './components/pages/enrollment/validation/validation.component';
-import { AddingComponent } from './components/pages/enrollment/adding/adding.component';
-import { DroppingComponent } from './components/pages/enrollment/dropping/dropping.component';
-import { ChangingComponent } from './components/pages/enrollment/changing/changing.component';
-import { RegformReprintComponent } from './components/pages/enrollment/reprint/regform-reprint/regform-reprint.component';
-import { CogReprintComponent } from './components/pages/enrollment/reprint/cog-reprint/cog-reprint.component';
+import { AssessedListComponent } from './components/pages/enrollment/assessed-list/assessed-list.component';
+import { EnrolledListComponent } from './components/pages/enrollment/enrolled-list/enrolled-list.component';
 
 //SCHEDULE COMPONENTS
-import { AddScheduleComponent } from './components/pages/schedule/add-schedule/add-schedule.component';
-import { EditScheduleComponent } from './components/pages/schedule/edit-schedule/edit-schedule.component';
 import { ListScheduleComponent } from './components/pages/schedule/list-schedule/list-schedule.component';
 import { ScheduleProfileComponent } from './components/pages/schedule/schedule-profile/schedule-profile.component';
 
 //LOGIN COMPONENTS
-import { UserLoginComponent } from './components/pages/login/user-login/user-login.component';
 import { AdminLoginComponent } from './components/pages/login/admin-login/admin-login.component';
 
 //REPORTS COMPONENTS
 import { GenerateReportComponent } from './components/pages/reports/generate-report/generate-report.component';
-import { LoaListComponent } from './components/pages/reports/loa/loa-list/loa-list.component';
-import { LoaAddComponent } from './components/pages/reports/loa/loa-add/loa-add.component';
-import { ShifteeListComponent } from './components/pages/reports/shiftee/shiftee-list/shiftee-list.component';
-import { ShifteeAddComponent } from './components/pages/reports/shiftee/shiftee-add/shiftee-add.component';
 import { GradesComponent } from './components/pages/student/grades/grades.component';
 import { ToastrModule } from 'ngx-toastr';
 import { AuthInterceptor } from './shared/authguard/auth.interceptor';
@@ -98,7 +85,6 @@ import { AuthInterceptor } from './shared/authguard/auth.interceptor';
 //CSV PARSER MODULE
 import { NgxCsvParserModule } from 'ngx-csv-parser';
 import { CsvModule } from '@ctrl/ngx-csv';
-
 
 @NgModule({
   declarations: [
@@ -110,25 +96,10 @@ import { CsvModule } from '@ctrl/ngx-csv';
     StudentProfileComponent,
     UserPageComponent,
     SidenavComponent,
-    HomeComponent,
     DashboardComponent,
-    AddStudentComponent,
-    EditUserComponent,
-    ValidationComponent,
-    AddingComponent,
-    DroppingComponent,
-    ChangingComponent,
-    AddScheduleComponent,
-    EditScheduleComponent,
-    UserLoginComponent,
     AdminLoginComponent,
     ListScheduleComponent,
     GenerateReportComponent,
-    ShifteeAddComponent,
-    ShifteeListComponent,
-    LoaListComponent,
-    LoaAddComponent,
-    AddUserComponent,
     CurriculumAddComponent,
     CurriculumEditComponent,
     CurriculumListComponent,
@@ -142,8 +113,8 @@ import { CsvModule } from '@ctrl/ngx-csv';
     ContentEditComponent,
     ContentListComponent,
     ContentPageComponent,
-    RegformReprintComponent,
-    CogReprintComponent
+    AssessedListComponent,
+    EnrolledListComponent,
   ],
   imports: [
     BrowserModule,
@@ -155,6 +126,7 @@ import { CsvModule } from '@ctrl/ngx-csv';
     // ANGULAR MATERIAL IMPORTS
     MatAutocompleteModule,
     MatTableModule,
+    MatCardModule,
     MatSidenavModule,
     MatToolbarModule,
     MatMenuModule,
@@ -174,6 +146,7 @@ import { CsvModule } from '@ctrl/ngx-csv';
     MatStepperModule,
     MatRadioModule,
     MatTabsModule,
+    MatDialogModule,
 
     //BACKEND IMPORTS
     HttpClientModule,
@@ -187,9 +160,9 @@ import { CsvModule } from '@ctrl/ngx-csv';
 
     //CSV PARSER MODULE
     NgxCsvParserModule,
-    CsvModule
+    CsvModule,
 
-
+    //POPOVER MODULE
   ],
   providers: [
     {

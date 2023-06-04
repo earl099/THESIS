@@ -754,7 +754,6 @@ const addSubjTransaction = async (req, res) => {
     const addedSubjValue = await divOfFeesModel.findOne({
         attributes: [ 'addedSubj' ],
         where: { studentnumber: studentnumber, semester: semester, schoolyear: schoolyear }
-
     })
 
     //CREATING THE ADDED SUBJECTS OBJECT

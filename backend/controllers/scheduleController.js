@@ -251,15 +251,19 @@ const getSchedule = async (req, res) => {
     }
 }
 
-//--- GET SCHEDULE BY STUDENT NUMBER, SEMESTER AND SCHOOL YEAR ---//
-const getScheduleBySemSY = async (req, res) => {
+//--- GET SCHEDULES BY SEMESTER AND SCHOOL YEAR ---//
+const getSchedulesBySemSY = async (req, res) => {
     const semester = req.params.semester
     const schoolyear = req.params.schoolyear
 
-    const schedule = await scheduleModel.findAll({
+    const schedules = await scheduleModel.findAll({
         attributes: [
             'schedcode',
             'subjectCode',
+            'semester',
+            'schoolyear',
+            'slots',
+            'subjectype',
             'units',
             'section',
             'instructor',
@@ -287,8 +291,8 @@ const getScheduleBySemSY = async (req, res) => {
         }
     })
 
-    if(schedule) {
-        res.status(200).send({ message: 'Schedule found.', schedule: schedule })
+    if(schedules) {
+        res.status(200).send({ message: 'Schedule found.', schedules: schedules })
     }
     else {
         res.status(500).send({ message: 'Schedule not found.' })
@@ -333,7 +337,7 @@ module.exports = {
     editSchedule,
     getSchedules,
     getSchedule,
-    getScheduleBySemSY,
+    getSchedulesBySemSY,
     getSchoolyear,
     deleteSchedule
 }

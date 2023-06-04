@@ -13,7 +13,8 @@ import { VariableService } from 'src/app/services/variable.service';
 export class DashboardComponent implements OnInit {
   globalVar!: Array<any>
   uname: any
-  quickData: Array<number> = [0,0,0]
+  //QUICK DATA FOR STUDENTS ENROLLED, SHIFTEES, LOA, MALE/FEMALE STUDENTS ENROLLED,
+  quickData: Array<number> = [0,0,0,0,0]
 
 
   constructor(
@@ -32,7 +33,12 @@ export class DashboardComponent implements OnInit {
     }
     this.globalVar = ['']
 
-    this.uname = localStorage?.getItem('user')
+    this.userService.getUser(this.userService.getToken()).subscribe((res) => {
+      if(res) {
+        this.uname = res.user.username
+      }
+    })
+
     this.variableService.getLegend().subscribe((res) => {
       if(res) {
         let globalTmpData = res.legend
@@ -66,8 +72,7 @@ export class DashboardComponent implements OnInit {
         this.studentService.getLoaBySemesterAndSY(this.globalVar[0].semester, this.globalVar[0].schoolyear).subscribe((res) => {
           if(res) {
             let tmpData = res.loa
-            console.log(tmpData)
-            
+
             if(tmpData.length < 1) {
               this.quickData[2] = 0
             }
@@ -78,7 +83,5 @@ export class DashboardComponent implements OnInit {
         })
       }
     })
-
-
   }
 }

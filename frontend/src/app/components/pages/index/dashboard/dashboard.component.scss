@@ -1,3 +1,19 @@
 @import "../home/home.component.scss";
 
 //FORMAT GOES HERE
+.page__content {
+  background-image: url('../../../../../assets/dashboardbg.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+mat-card {
+  opacity: 80%;
+  mat-card-header {
+    color: darkgreen;
+  }
+
+  mat-card-header, mat-card-content {
+    opacity: 100% !important;
+  }
+}
