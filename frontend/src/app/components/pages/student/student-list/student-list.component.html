@@ -14,7 +14,7 @@
           <div class="col">
             <div class="row">
               <div class="col">
-                <input mat-button #fileImportInput id="singleFile" type="file" (change)="fileChangeListener($event)" accept=".csv">
+                <input mat-raised-button #fileImportInput id="singleFile" type="file" (change)="fileChangeListener($event)" accept=".csv">
                 <button mat-raised-button (click)="importStudents()">Import Students</button>
               </div>
             </div>

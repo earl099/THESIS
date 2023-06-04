@@ -60,6 +60,6 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     this.dataService.deleteToken();
-    window.location.href = '/home';
+    window.location.href = '/login';
   }
 }

@@ -56,6 +56,6 @@ export class SidenavComponent implements OnInit {
 
   logout() {
     this.dataService.deleteToken();
-    window.location.href = window.location.href;
+    this.router.navigate(['/login'])
   }
 }
