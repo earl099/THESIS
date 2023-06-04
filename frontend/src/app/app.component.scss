@@ -5,11 +5,11 @@
 }
 
 mat-drawer{
-  width: 300px;
-  background: #1B651B;
+  z-index: 1;
+  background: #006600;
+  width: 300px;  
 }
 
 mat-drawer-container{
   height: 100%;
 }
-

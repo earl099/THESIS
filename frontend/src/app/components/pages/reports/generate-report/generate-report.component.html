@@ -3,6 +3,7 @@
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
       <div class="container" *ngIf="!isReportGenerated">
+<<<<<<< HEAD
         <mat-card>
           <mat-card-content>
             <form [formGroup]="reportForm">
@@ -80,6 +81,36 @@
                     </mat-form-field>
                   </div>
                 </div>
+=======
+        <form [formGroup]="reportForm">
+
+          
+          <div class="select-container">
+              <select class="select" formControlName="reportType" (selectionChange)="getSchoolyear(reportForm.get('reportType').value)">
+                <option class="option" value="stud_enroll">STUDENTS ENROLLED</option>
+                <option class="option" value="shiftee">SHIFTEES</option>
+                <option class="option" value="loa">LOA</option>
+              </select>
+              <span class="custom-arrow"></span>
+              <span class="span">Report Type</span>
+            </div>
+            
+            <br><br>
+          
+
+          <div class="container" *ngIf="isAdvClicked">
+            <div class="row align-items-start">
+              <div class="col" *ngIf="isAdmin">
+                <div class="college-container">
+              <form action="">
+                  <select class="select" formControlName="collegeCode" (selectionChange)="getCourses(reportForm.get('collegeCode').value)">
+                    <option class="option" *ngFor="let college of collegeList" [value]="college.collegeCode">{{college.collegeCode}}</option>
+                    </select>
+                    <span class="custom-arrow"></span>
+                    <span class="college">College</span>
+                </form>
+              </div>
+>>>>>>> 7f981994ccd5ab80218212183ea410b71a8155d7
               </div>
             </form>
           </mat-card-content>
@@ -91,6 +122,7 @@
                   <button mat-raised-button type="submit" class="btn btn-success" (click)="generateReport()">Generate Report</button>
                 </div>
 
+<<<<<<< HEAD
                 <div class="col">
                   <button mat-raised-button type="submit" class="btn btn-success" (click)="onAdvClick()" *ngIf="reportForm.get('reportType').value != 'loa'">Advanced</button>
                 </div>
@@ -103,6 +135,78 @@
           </mat-card-actions>
         </mat-card>
 
+=======
+              <div class="col">    
+                <form action="">
+                  <select class="select" formControlName="courseCode">
+                    <option *ngFor="let course of courseList" [value]="course.courseCode">{{course.courseCode}}</option>
+                    <option class="option" value="ALL">ALL</option>
+                  </select>
+                  <span class="custom-arrow"></span>
+                  <span class="course">Course</span>
+                </form>
+              </div>
+            </div>
+            <br>
+
+            <div class="row align-items-start">
+              <div class="col">
+                <form action="">
+                  <select class="select" formControlName="gender">
+                    <option class="option" value="MALE">MALE</option>
+                    <option class="option" value="FEMALE">FEMALE</option>
+                    <option class="option" value="ALL">ALL</option>
+                  </select>
+                  <span class="custom-arrow"></span>
+                  <span class="gender">Gender</span>
+                </form>
+              </div>
+
+              <div class="col">
+                <form action="">
+                  <select class="select" formControlName="semester">
+                    <option class="select" value="FIRST">FIRST</option>
+                    <option class="select" value="SECOND">SECOND</option>
+                    <option class="select" value="SUMMER">SUMMER</option>
+                    <option class="select" value="ALL">ALL</option>
+                  </select>
+                  <span class="custom-arrow"></span>
+                  <span class="semester">Semester</span>
+                </form>
+              </div>
+
+              <div class="col">
+                <form action="">
+                  <select class="select" formControlName="schoolyear">
+                    <option *ngFor="let year of schoolyearList" [value]="year.schoolyear">{{year.schoolyear}}</option>
+                    <option class="option" value="ALL">ALL</option>
+                  </select>
+                  <span class="custom-arrow"></span>
+                  <span class="school-year">School Year</span>
+                </form>
+              </div>
+            </div>
+          </div>
+          <br>
+
+
+          <div class="container">
+            <div class="row align-items-start">
+              <div class="col">
+                <button mat-button type="submit" class="generate-button" (click)="generateReport()">Generate</button>
+              </div>
+
+              <div class="col">
+                <button mat-button type="submit" class="advanced-button" (click)="onAdvClick()">Advanced</button>
+              </div>
+
+              <div class="col">
+                <button mat-button class="dashboard-button" routerLink="/dashboard">Dashboard</button>
+              </div>
+            </div>
+          </div>
+        </form>
+>>>>>>> 7f981994ccd5ab80218212183ea410b71a8155d7
       </div>
 
       <div class="container" *ngIf="isReportGenerated">

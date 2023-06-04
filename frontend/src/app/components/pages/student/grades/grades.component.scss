@@ -1,6 +1,173 @@
 @import '../../index/home/home.component.scss';
 
-//FORMAT GOES HERE
+.input-container{
+  position: relative;
+}
+
+.input-container input{
+  padding: 1rem;
+  padding-bottom: 5px;
+  width: 50%;
+  height: 100%;
+  border: 2px solid #098B09;
+  background: linear-gradient(135deg, #6cf921, #f7fa11);
+  border-radius: 5px;
+  letter-spacing: 2px;
+  outline: none;
+  transition: 0.5s; 
+  font-size: 1em;
+  filter: drop-shadow(1px 1px 2px #033512);
+}
+
+.input-container .student{
+  position: absolute;
+  color: #006600;
+  filter: drop-shadow(1px 1px 2px #033512);
+  left: 200px;
+  padding: 2px;
+  pointer-events: none;
+  text-transform: uppercase;
+  transition: 0.5s;  
+  font-family: monospace;
+  font-size: 0.7em; 
+}
+
+.input-container input:focus ~ .student{
+  color:#098B09;
+  filter: drop-shadow(1px 1px 2px #033512);
+  transform: translateX(10px) translateY(-7px);
+  font-size: 0.9em;
+  padding: 3 10px;
+  letter-spacing: 0.2em;
+}
+
+.input-container:nth-child(2) input:focus ~ .student{
+  background: #098B09;
+  border-radius: 2px;
+}
+
+.select-container, .select-container1{
+  position: relative;
+}
+
+.select-container select{
+  padding: 1.6rem;
+  padding-bottom: 8px;
+  width: 50%;
+  height: 100%;
+  border: 2px solid #098B09;
+  background: linear-gradient(135deg, #6cf921, #f7fa11);
+  appearance: none;
+  border-radius: 5px;
+  letter-spacing: 2px;
+  transition: 0.5s; 
+  font-size: 0.9em;
+  filter: drop-shadow(1px 1px 2px #033512);
+  cursor: pointer;
+}
+
+.custom-arrow{
+  position: absolute;
+  top: 0;
+  right: 25%;
+  display: block;
+  background-color: transparent;
+  border-radius: 0 5px 5px 0;
+  border-left: 2px solid #098B09;
+  filter: drop-shadow(1px 1px 1px #033512);
+  height: 98%;
+  width: 32px; 
+  pointer-events: none;
+}
+
+.custom-arrow::after{
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  top: 55%;
+}
+
+.custom-arrow::after{
+  display: block;
+  border-top: 8px solid #098B09;
+  border-right: 8px solid transparent;
+  border-left: 8px solid transparent;
+}
+
+.select-container .span {
+    position: absolute;
+    color: #006600;
+    filter: drop-shadow(1px 1px 2px #033512);
+    left: 200px;
+    padding: 2px;
+    pointer-events: none;
+    text-transform: uppercase;
+    transition: 0.5s;  
+    font-family: monospace;
+    font-size: 0.7em; 
+}
+
+.select:focus~.span{
+  color:#098B09;
+  filter: drop-shadow(1px 1px 2px #033512);
+  transform: translateX(10px) translateY(-7px);
+  font-size: 0.9em;
+  padding: 0 10px;
+  letter-spacing: 0.2em;
+}
+
+.select-container:nth-child(2) .select:focus ~ .span{
+  background: #098B09;
+  border-radius: 2px;
+}
+
+.select-container1 .select{
+  padding: 1.6rem;
+  padding-bottom: 8px;
+  width: 50%;
+  height: 100%;
+  border: 2px solid #098B09;
+  background: linear-gradient(135deg, #6cf921, #f7fa11);
+  appearance: none;
+  border-radius: 5px;
+  letter-spacing: 2px;
+  transition: 0.5s; 
+  font-size: 0.9em;
+  filter: drop-shadow(1px 1px 2px #033512);
+  cursor: pointer;
+}
+
+.select-container1 .span{
+  position: absolute;
+  color: #006600;
+  filter: drop-shadow(1px 1px 2px #033512);
+  left: 200px;
+  padding: 2px;
+  pointer-events: none;
+  text-transform: uppercase;
+  transition: 0.5s;  
+  font-family: monospace;
+  font-size: 0.7em; 
+}
+
+.select-container1 .select:focus ~ .span{
+  color:#098B09;
+  filter: drop-shadow(1px 1px 2px #033512);
+  transform: translateX(10px) translateY(-7px);
+  font-size: 0.9em;
+  padding: 0 10px;
+  letter-spacing: 0.2em;
+}
+
+.select-container1:nth-child(2) .select:focus ~ .span{
+  background: #098B09;
+  border-radius: 2px;
+}
+
 table {
   position: relative;
   margin-left: auto;
@@ -8,9 +175,104 @@ table {
   width: 1000px;
 }
 
+<<<<<<< HEAD
 input.profile {
   width: 25rem;
   height: 2rem;
+=======
+.completion-button, .update-button, .dashboard-button{
+  background: none;
+  border: 2px solid   #F95D03;
+  border-radius: 5px;
+  font-family: "monserrat", sans-serif;
+  filter: drop-shadow(1px 1px 1px #033512);
+  text-transform: uppercase;
+  padding: 12px 20px;
+  min-width: 200px;
+  margin: 10px;
+  cursor: pointer;
+  transition: color 0.4s linear; 
+  position: relative;
+  color:rgb(26, 24, 24);
+}
+
+.completion-button:hover{
+  color: #FFFFFF;
+} 
+
+.update-button:hover{
+  color: #FFFFFF;
+} 
+
+.dashboard-button:hover{
+  color: #FFFFFF;
+} 
+
+.completion-button::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background:  #D8821B; 
+  z-index: -1;
+  transition: transform 0.5s;
+  transform-origin: 0 0;
+  transition-timing-function: cubic-bezier(0.5, 1.6, 0.4, 0.7);
+}
+
+.update-button::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #D8821B; 
+  z-index: -1;
+  transition: transform 0.5s;
+  transform-origin: 0 0;
+  transition-timing-function: cubic-bezier(0.5, 1.6, 0.4, 0.7);
+}
+
+.dashboard-button::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #D8821B; 
+  z-index: -1;
+  transition: transform -0.5s;
+  transform-origin: 0 0;
+  transition-timing-function: cubic-bezier(0.5, 1.6, 0.4, 0.7);
+}
+
+.completion-button::before{
+  transform: scaleX(0);
+}
+
+.update-button::before{
+  transform: scaleY(0);
+}
+
+.dashboard-button::before{
+  transform: scaleX(0);
+}
+
+.completion-button:hover::before{
+  transform: scaleX(1);
+}
+
+.update-button:hover::before{
+  transform: scaleY(1);
+}
+
+.dashboard-button:hover::before{
+  transform: scaleX(1);
+>>>>>>> 7f981994ccd5ab80218212183ea410b71a8155d7
 }
 
 div.row {

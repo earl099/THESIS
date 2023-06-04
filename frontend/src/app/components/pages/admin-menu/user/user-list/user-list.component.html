@@ -2,8 +2,24 @@
   <div class="page__box p-3 mt-2">Accounts List</div>
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
+<<<<<<< HEAD
 
 
+=======
+      <div class="container"><p>ACCOUNTS LIST</p></div>
+
+      <div class="account-container">
+        <button mat-raised-button class="account-button" routerLink="/account/add"><mat-icon>add</mat-icon>Add User</button>
+      </div>
+      <br><br>
+
+      <form action="">
+        <div class="input-container">
+        <input (keyup)="applyFilter($event)" placeholder="ENTER A FILTER" #input>
+        <span class="filter">Filter</span>
+      </div>
+      </form>
+>>>>>>> 7f981994ccd5ab80218212183ea410b71a8155d7
       <br>
       <div class="container">
         <div class="row">
@@ -13,6 +29,7 @@
               <input matInput (keyup)="applyFilter($event)" placeholder="Enter a filter" #input>
             </mat-form-field>
 
+<<<<<<< HEAD
             <div class="container table table-responsive">
               <table mat-table [dataSource]="dataSource">
                 <ng-container matColumnDef="collegeID">
@@ -41,6 +58,33 @@
 
                 <tr mat-header-row *matHeaderRowDef="columns"></tr>
                 <tr mat-row *matRowDef="let row; columns: columns;" ></tr>
+=======
+      <div class="table-responsive">
+        <table mat-table [dataSource]="dataSource">
+          <ng-container matColumnDef="collegeID">
+            <th mat-header-cell *matHeaderCellDef><p class="table-title">College ID</p></th>
+            <td mat-cell *matCellDef="let user" (click)="redirectTo(user)"><p class="data-content">{{user.collegeID}}</p></td>
+          </ng-container>
+
+          <ng-container matColumnDef="username">
+            <th mat-header-cell *matHeaderCellDef><p class="table-title">User Name</p></th>
+            <td mat-cell *matCellDef="let user" (click)="redirectTo(user)"><p class="data-content">{{user.username}}</p></td>
+          </ng-container>
+
+          <ng-container matColumnDef="edit">
+            <th mat-header-cell *matHeaderCellDef><p class="table-title">Edit</p></th>
+            <td mat-cell *matCellDef="let user">
+              <button mat-raised-button class="edit" routerLink='/account/edit/{{user.collegeID}}'>EDIT</button>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="delete">
+            <th mat-header-cell *matHeaderCellDef><p class="table-title">Delete</p></th>
+            <td mat-cell *matCellDef="let user">
+              <button mat-raised-button class="delete" (click)="onDeleteUser(user.collegeID)">DELETE</button>
+            </td>
+          </ng-container>
+>>>>>>> 7f981994ccd5ab80218212183ea410b71a8155d7
 
                 <tr class="mat-row" *matNoDataRow>
                   <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
