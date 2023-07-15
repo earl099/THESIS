@@ -2,7 +2,8 @@
 
 const db = require('../config/sequelize');
 const shifteeModel = db.shiftee;
-const studentModel = db.student
+const studentModel = db.student;
+const courseModel = db.course
 
 const addShiftee = async (req, res) => {
     const {
@@ -145,6 +146,9 @@ const getSchoolyear = async (req, res) => {
 }
 
 const advShifteeSearch = async (req, res) => {
+    let courseList
+    let finalCourseList = []
+
     const {
         collegeCode,
         courseCode,
@@ -156,6 +160,57 @@ const advShifteeSearch = async (req, res) => {
     //object for final response
     let objRes = []
     let studInfoResult = []
+
+    //list for checking if student is in course list
+    if(collegeCode != 'ALL') {
+        if(courseCode != 'ALL') {
+            courseList = await courseModel.findAll({
+                attributes: [
+                    db.sequelize.fn(
+                        'DISTINCT',
+                        db.sequelize.col('courseCode')
+                    ),
+                    'courseCode',
+                    'courseCollege'
+                ],
+                where: {
+                    courseCollege: collegeCode,
+                    courseCode: courseCode
+                }
+            })
+        }
+        else {
+            courseList = await courseModel.findAll({
+                attributes: [
+                    db.sequelize.fn(
+                        'DISTINCT',
+                        db.sequelize.col('courseCode')
+                    ),
+                    'courseCode',
+                    'courseCollege'
+                ],
+                where: {
+                    courseCollege: collegeCode
+                }
+            })
+        }
+    }
+    else {
+        courseList = await courseModel.findAll({
+            attributes: [
+                db.sequelize.fn(
+                    'DISTINCT',
+                    db.sequelize.col('courseCode')
+                ),
+                'courseCode',
+                'courseCollege'
+            ]
+        })
+    }
+
+    for(let i = 0; i < courseList.length; i++) {
+        finalCourseList.push(courseList[i].courseCode) 
+    }
 
     //specific college
     if(collegeCode != 'UNIV') {
@@ -179,8 +234,9 @@ const advShifteeSearch = async (req, res) => {
                             'schoolyear'
                         ],
                         where: { 
-                            semester: semester, 
-                            schoolyear: schoolyear 
+                            semester: semester,
+                            schoolyear: schoolyear,
+                            courseto: courseCode
                         }
                     })
                 }
@@ -195,7 +251,10 @@ const advShifteeSearch = async (req, res) => {
                             'studentnumber',
                             'semester',
                             'schoolyear'
-                        ]
+                        ],
+                        where: {
+                            courseto: courseCode
+                        }
                     })
                 }
 
@@ -241,7 +300,8 @@ const advShifteeSearch = async (req, res) => {
                         ],
                         where: { 
                             semester: semester, 
-                            schoolyear: schoolyear 
+                            schoolyear: schoolyear,
+                            courseto: courseCode
                         }
                     })
                 }
@@ -256,7 +316,10 @@ const advShifteeSearch = async (req, res) => {
                             'studentnumber',
                             'semester',
                             'schoolyear'
-                        ]
+                        ],
+                        where: {
+                            courseto: courseCode
+                        }
                     })
                 }
 
@@ -302,7 +365,8 @@ const advShifteeSearch = async (req, res) => {
                         ],
                         where: { 
                             semester: semester, 
-                            schoolyear: schoolyear 
+                            schoolyear: schoolyear,
+                            courseto: finalCourseList
                         }
                     })
                 }
@@ -317,7 +381,10 @@ const advShifteeSearch = async (req, res) => {
                             'studentnumber',
                             'semester',
                             'schoolyear'
-                        ]
+                        ],
+                        where: {
+                            courseto: finalCourseList
+                        }
                     })
                 }
 
@@ -361,7 +428,8 @@ const advShifteeSearch = async (req, res) => {
                         ],
                         where: { 
                             semester: semester, 
-                            schoolyear: schoolyear 
+                            schoolyear: schoolyear,
+                            courseto: finalCourseList
                         }
                     })
                 }
@@ -376,7 +444,10 @@ const advShifteeSearch = async (req, res) => {
                             'studentnumber',
                             'semester',
                             'schoolyear'
-                        ]
+                        ],
+                        where: {
+                            courseto: finalCourseList
+                        }
                     })
                 }
 

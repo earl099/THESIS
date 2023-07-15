@@ -44,6 +44,9 @@ module.exports = (sequelize, DataTypes) => {
         subjectTitle: {
             type: DataTypes.STRING
         },
+        labunits: {
+            type: DataTypes.INTEGER(2)
+        },
         id: {
             primaryKey: true,
             type: DataTypes.INTEGER(11),

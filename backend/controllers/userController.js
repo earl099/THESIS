@@ -43,7 +43,12 @@ const userLogin = async (req, res) => {
                 'password',
                 'hashedPassword'
             ],
-            where: { [Op.not]: [{ collegeID: 'UNIV' }] , isAdmin: 0 }
+            where: { 
+                [Op.not]: [{ collegeID: 'UNIV' }] , 
+                isAdmin: 0,
+                username: username,
+                password: password
+            }
         });
 
         if(user) {
@@ -76,7 +81,10 @@ const adminLogin = async (req, res) => {
                     'password',
                     'hashedPassword'
                 ],
-                where: { collegeID: 'UNIV', isAdmin: 1 }
+                where: { 
+                    collegeID: 'UNIV', 
+                    isAdmin: 1 
+                }
             });
             
             if(user) {

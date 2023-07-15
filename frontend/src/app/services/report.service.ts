@@ -45,6 +45,11 @@ export class ReportService {
       .get(`${this.baseUrl}/get/${type}/schoolyear`, this.httpOptions)
       .pipe(catchError(this.handleError<any>('Get School Year')))
     }
+    else if(type == 'assessed') {
+      return this.httpClient
+      .get(`${this.baseUrl}/report/get/${type}/schoolyear`, this.httpOptions)
+      .pipe(catchError(this.handleError<any>('Get School Year')))
+    }
     else {
       return this.httpClient
       .get(`${this.baseUrl}/get/schoolyear/${type}`, this.httpOptions)
@@ -64,6 +69,11 @@ export class ReportService {
     else if(type == 'shiftee') {
       return this.httpClient
       .post(`${this.baseUrl}/report/get/${type}`, data, this.httpOptions)
+      .pipe(catchError(this.handleError<any>('Search Operation')))
+    }
+    else if(type == 'assessed') {
+      return this.httpClient
+      .post(`${this.baseUrl}/report/get/type/${type}`, data, this.httpOptions)
       .pipe(catchError(this.handleError<any>('Search Operation')))
     }
     else {

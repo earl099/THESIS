@@ -97,11 +97,11 @@
                 <div class="container">
                   <div class="row align-items-start">
                     <div class="col">
-                      <button mat-raised-button type="submit" class="btn btn-success" (click)="generateData(false)">Completion</button>
+                      <button mat-raised-button type="submit" class="btn btn-success" (click)="generateData(false)" [disabled]="courseCheck(studentInfoForm.get('course').value)">Completion</button>
                     </div>
 
                     <div class="col" *ngIf="adminVisibility">
-                      <button mat-raised-button type="submit" class="btn btn-success" (click)="generateData(true)" >Update</button>
+                      <button mat-raised-button type="submit" class="btn btn-success" (click)="generateData(true)" >Update Grade</button>
                     </div>
 
                     <div class="col">

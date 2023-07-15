@@ -8,8 +8,6 @@ table {
   width: 80rem;
 }
 
-
-
 .mat-row:hover {
   background-color: #E8EAF6;
   cursor: pointer;
@@ -20,5 +18,9 @@ input#singleFile {
 }
 
 mat-form-field.filter {
-  width: 30rem;
+  width: 15rem;
+}
+
+.container.hidden {
+  overflow-y: hidden;
 }

@@ -13,17 +13,87 @@
 
           <mat-card-content class="mx-4 mb-5">
             <div class="container">
-              <p class="fs-2">Status for <strong>{{globalVar[0].semester}}</strong> Semester of AY <strong>{{globalVar[0].schoolyear}}</strong></p>
+              <p class="fs-3">Status for <strong>{{globalVar[0].semester}}</strong> Semester of AY <strong>{{globalVar[0].schoolyear}}</strong></p>
             </div>
             <br>
             <div class="container">
-              <p class="fs-4"><strong>Students Enrolled: </strong> {{quickData[0]}}</p>
-            </div>
-            <div class="container">
-              <p class="fs-4"><strong>Shiftees: </strong> {{quickData[1]}}</p>
-            </div>
-            <div class="container">
-              <p class="fs-4"><strong>Students with LOA: </strong> {{quickData[2]}}</p>
+              <div class="row">
+                <div class="col">
+                  <mat-card class="content fs-5">
+                    <mat-card-content>
+                      <strong>{{quickData[0]}}</strong>
+                      <br>
+                      Students Enrolled
+                    </mat-card-content>
+                  </mat-card>
+                </div>
+
+                <div class="col">
+                  <mat-card class="content fs-5">
+                    <mat-card-content>
+                      <strong>{{quickData[3]}}</strong>
+                      <br>
+                      Male Enrolled
+                    </mat-card-content>
+                  </mat-card>
+                </div>
+
+                <div class="col">
+                  <mat-card class="content fs-5">
+                    <mat-card-content>
+                      <strong>{{quickData[4]}}</strong>
+                      <br>
+                      Female Enrolled
+                    </mat-card-content>
+                  </mat-card>
+                </div>
+              </div>
+              <br>
+
+              <div class="row">
+                <div class="col">
+                  <mat-card class="content fs-5">
+                    <mat-card-content>
+                      <strong>{{quickData[1]}}</strong>
+                      <br>
+                      Shiftees
+                    </mat-card-content>
+                  </mat-card>
+                </div>
+
+                <div class="col">
+                  <mat-card class="content fs-5">
+                    <mat-card-content>
+                      <strong>{{quickData[2]}}</strong>
+                      <br>
+                      Students with LOA
+                    </mat-card-content>
+                  </mat-card>
+                </div>
+
+                <div class="col">
+                  <mat-card class="content fs-5">
+                    <mat-card-content>
+                      <strong>({{quickData[0]}}/{{quickData[6]}}) {{quickData[5] | number: '1.2-2'}}%</strong>
+                      <br>
+                      Validated/Assessed
+                    </mat-card-content>
+                  </mat-card>
+                </div>
+              </div>
+              <br>
+
+              <div class="row center">
+                <div class="col">
+                  <mat-card class="content fs-5">
+                    <mat-card-content>
+                      <strong>{{quickData[6]}}</strong>
+                      <br>
+                      Assessed Students
+                    </mat-card-content>
+                  </mat-card>
+                </div>
+              </div>
             </div>
           </mat-card-content>
         </mat-card>

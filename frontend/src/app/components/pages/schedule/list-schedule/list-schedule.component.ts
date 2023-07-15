@@ -5,8 +5,10 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { ngxCsv } from 'ngx-csv';
 import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
 import { ToastrService } from 'ngx-toastr';
+import { EnrollmentService } from 'src/app/services/enrollment.service';
 import { ScheduleService } from 'src/app/services/schedule.service';
 import { VariableService } from 'src/app/services/variable.service';
 
@@ -16,13 +18,12 @@ import { VariableService } from 'src/app/services/variable.service';
   styleUrls: ['./list-schedule.component.scss']
 })
 export class ListScheduleComponent implements OnInit {
-  globalVar: any
-  
+  globalVar: any = [{}]
+
   columns: string[] = [
     'schedcode',
     'subjectCode',
-    'semester',
-    'schoolyear',
+    'subjectTitle',
     'edit',
     'view'
   ]
@@ -30,6 +31,7 @@ export class ListScheduleComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort
 
+  titles: any = []
   schedules: any = [];
   dataSource!: MatTableDataSource<any>;
   isShown: boolean = false
@@ -66,6 +68,7 @@ export class ListScheduleComponent implements OnInit {
     private fb: FormBuilder,
     private toastr: ToastrService,
     private variableService: VariableService,
+    private enrollmentService: EnrollmentService,
     private csvParser: NgxCsvParser,
     private _liveAnnouncer: LiveAnnouncer
   ) { }
@@ -116,9 +119,21 @@ export class ListScheduleComponent implements OnInit {
           if(res) {
             this.toastr.success(res.message);
             this.schedules = res.schedules;
-            this.dataSource = new MatTableDataSource(this.schedules);
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
+            for(let i = 0; i < this.schedules.length; i++) {
+              this.enrollmentService.getSubjectTitle(this.schedules[i].subjectCode).subscribe((res) => {
+                this.titles.push(res.subject)
+                Object.assign(this.schedules[i], this.titles[i])
+
+                if(i == this.schedules.length - 1) {
+                  this.dataSource = new MatTableDataSource(this.schedules);
+                  this.dataSource.paginator = this.paginator;
+                  this.dataSource.sort = this.sort;
+                }
+              })
+            }
+
+
+
           }
         })
       }
@@ -390,6 +405,60 @@ export class ListScheduleComponent implements OnInit {
     else {
       this.angForm.get('ok4').setValue(this.scheduleCheckers[3])
     }
+  }
+
+  downloadTemplate() {
+    let columns = [
+      'schedcode',
+      'subjectCode',
+      'units',
+      'semester',
+      'schoolyear',
+      'slots',
+      'subjectype',
+      'section',
+      'instructor',
+      'tuition',
+      'graded',
+      'gradeddate',
+      'timein1',
+      'timeout1',
+      'day1',
+      'room1',
+      'timein2',
+      'timeout2',
+      'day2',
+      'room2',
+      'timein3',
+      'timeout3',
+      'day3',
+      'room3',
+      'timein4',
+      'timeout4',
+      'day4',
+      'room4',
+      'ok1',
+      'ok2',
+      'ok3',
+      'ok4',
+      'oras',
+      'ojt',
+      'petition',
+      'thesis',
+      'labunits',
+      'internet',
+      'residency',
+      'encodegrade',
+      'gradingpart',
+      'id',
+    ]
+
+    let options = {
+      headers: columns,
+      showLabels: true
+    }
+
+    new ngxCsv({}, 'schedule-list-template', options)
   }
 
   applyFilter(event: Event) {

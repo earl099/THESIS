@@ -18,8 +18,10 @@ import { ToastrService } from 'ngx-toastr';
 import { map, Observable, startWith } from 'rxjs';
 import { EnrollmentService } from 'src/app/services/enrollment.service';
 import { GradesService } from 'src/app/services/grades.service';
+import { ReportService } from 'src/app/services/report.service';
 import { ScheduleService } from 'src/app/services/schedule.service';
 import { StudentService } from 'src/app/services/student.service';
+import { UserService } from 'src/app/services/user.service';
 import { VariableService } from 'src/app/services/variable.service';
 
 export interface DialogData {
@@ -36,6 +38,7 @@ export class EnrolledListComponent implements OnInit {
   globalVar: any
 
   processData: any
+  courseList: any = []
 
   columns: string[] = [
     'studentnumber',
@@ -43,6 +46,7 @@ export class EnrolledListComponent implements OnInit {
     'middleName',
     'lastName',
     'suffix',
+    'course',
     'action',
     'confirm'
   ]
@@ -123,6 +127,8 @@ export class EnrolledListComponent implements OnInit {
     private toastr: ToastrService,
     private _liveAnnouncer: LiveAnnouncer,
     private variableService: VariableService,
+    private userService: UserService,
+    private reportService: ReportService,
     private studentService: StudentService,
     private scheduleService: ScheduleService,
     private enrollmentService: EnrollmentService
@@ -252,7 +258,8 @@ export class EnrolledListComponent implements OnInit {
                       firstName: tmpData2.firstName,
                       middleName: tmpData2.middleName,
                       lastName: tmpData2.lastName,
-                      suffix: tmpData2.suffix
+                      suffix: tmpData2.suffix,
+                      course: tmpData2.course
                     })
                   )
 
@@ -263,6 +270,13 @@ export class EnrolledListComponent implements OnInit {
               })
             }
 
+            let check = this.userService.getToken()
+            this.reportService.getCourses(check).subscribe((res) => {
+              if(res) {
+                this.courseList = res.course
+                //console.log(this.courseList)
+              }
+            })
           }
         })
       }
@@ -270,10 +284,14 @@ export class EnrolledListComponent implements OnInit {
 
   }
 
+  setOperation(value: any) {
+    this.operationData.get('type').setValue(value)
+  }
+
   //--- TABLE BUTTON STARTS HERE ---//
   showOperation(operation: any, studentnumber: any) {
     this.operationData.get('studentnumber').setValue(studentnumber)
-
+    console.log(operation)
     switch (operation) {
       case 'ADD':
         this.isAddOpen = true
@@ -305,6 +323,11 @@ export class EnrolledListComponent implements OnInit {
         break;
     }
 
+  }
+
+  //--- COURSE CHECKING STARTS HERE ---//
+  courseCheck(course: any) {
+    return !this.courseList.find((item: any) => item.courseCode === course)
   }
 
   //--- ADDING SECTION STARTS HERE ---//
@@ -375,9 +398,6 @@ export class EnrolledListComponent implements OnInit {
         })
       }
     })
-
-
-
   }
 
   //FUNCTION FOR SEARCHING AND ADDING TO ADDED SCHEDULE FORM
@@ -1049,7 +1069,6 @@ export class EnrolledListComponent implements OnInit {
   openDialog(studentnumber: any) {
     const dialogRef = this.dialog.open(CogDialog, {
       data: { studentnumber: studentnumber }
-
     })
   }
 
@@ -1153,8 +1172,9 @@ export class CogDialog implements OnInit {
 
   totalUnits: number = 0
   totalCreditUnits: number = 0
-  passingPercentage: number = 0
   aveGrade: number = 0
+  passingPercentage: number = 0
+
   scholarshipList: string[] = [
     'FULL ACADEMIC',
     'PARTIAL ACADEMIC',
@@ -1215,119 +1235,130 @@ export class CogDialog implements OnInit {
   }
 
   generateCog() {
-    this.searchVisibility = false
-    this.resultVisibility = true
+    let totalUnits: number = 0
+    let totalCreditUnits: number = 0
+    let aveGrade: number = 0
+
+    if(this.searchForm.get('semester').value == '' || this.searchForm.get('schoolyear').value == '') {
+      this.toastr.error('Please fill out all fields.')
+    }
+    else {
+      this.searchVisibility = false
+      this.resultVisibility = true
+
+      this.studentService.getStudent(this.searchForm.get('studentnumber').value).subscribe((res) => {
+        if(res) {
+          this.resultStudInfo.get('studentnumber').setValue(res.student.studentNumber)
+          this.resultStudInfo.get('firstname').setValue(res.student.firstName)
+          this.resultStudInfo.get('middlename').setValue(res.student.middleName.charAt(0))
+          this.resultStudInfo.get('lastname').setValue(res.student.lastName)
+          this.resultStudInfo.get('course').setValue(res.student.course)
+        }
+      })
+
+      this.gradesService.getGradeByStudNumSemSY(
+        this.searchForm.get('studentnumber').value,
+        this.searchForm.get('semester').value,
+        this.searchForm.get('schoolyear').value
+      ).subscribe((res) => {
+        if(res) {
+          let creditunitsControl = { creditUnits: '0' }
+          this.resultGradesList = res.grades
+
+          for(let i = 0; i < this.resultGradesList.length; i++) {
+            let gradeCounter = this.resultGradesList.length
+            this.resultGradesList[i] = Object.assign(this.resultGradesList[i], creditunitsControl)
+            this.enrollmentService.getSubjectTitle(this.resultGradesList[i].subjectcode).subscribe((res) => {
+              let tmpData: any
+              if(res) {
+                tmpData = res.subject
+                this.resultGradesList[i] = Object.assign(this.resultGradesList[i], tmpData)
+                //credit units
+                if(
+                  this.resultGradesList[i].mygrade == 'INC' ||
+                  this.resultGradesList[i].mygrade == 'S'
+                ) {
+                  if(this.resultGradesList[i].makeupgrade == '-') {
+                    this.resultGradesList[i].creditUnits = '0'
+                  }
+                  else {
+                    this.resultGradesList[i].creditUnits = this.resultGradesList[i].units
+                  }
 
 
-    this.studentService.getStudent(this.searchForm.get('studentnumber').value).subscribe((res) => {
-      if(res) {
-        this.resultStudInfo.get('studentnumber').setValue(res.student.studentNumber)
-        this.resultStudInfo.get('firstname').setValue(res.student.firstName)
-        this.resultStudInfo.get('middlename').setValue(res.student.middleName.charAt(0))
-        this.resultStudInfo.get('lastname').setValue(res.student.lastName)
-        this.resultStudInfo.get('course').setValue(res.student.course)
-      }
-    })
-
-    this.gradesService.getGradeByStudNumSemSY(
-      this.searchForm.get('studentnumber').value,
-      this.searchForm.get('semester').value,
-      this.searchForm.get('schoolyear').value
-    ).subscribe((res) => {
-      if(res) {
-        let creditunitsControl = { creditUnits: '0' }
-        this.resultGradesList = res.grades
-
-        for(let i = 0; i < this.resultGradesList.length; i++) {
-          let gradeCounter = this.resultGradesList.length
-          this.resultGradesList[i] = Object.assign(this.resultGradesList[i], creditunitsControl)
-          this.enrollmentService.getSubjectTitle(this.resultGradesList[i].subjectcode).subscribe((res) => {
-            let tmpData: any
-            if(res) {
-              tmpData = res.subject
-              this.resultGradesList[i] = Object.assign(this.resultGradesList[i], tmpData)
-              //credit units
-              if(
-                this.resultGradesList[i].mygrade == 'INC' ||
-                this.resultGradesList[i].mygrade == 'S'
-              ) {
-                if(this.resultGradesList[i].makeupgrade == '-') {
-                  this.resultGradesList[i].creditUnits = '0'
                 }
                 else {
                   this.resultGradesList[i].creditUnits = this.resultGradesList[i].units
                 }
 
 
-              }
-              else {
-                this.resultGradesList[i].creditUnits = this.resultGradesList[i].units
-              }
-
-
-              //grade
-              if(!Number.isNaN(Number(this.resultGradesList[i].mygrade))) {
-                this.aveGrade += Number(this.resultGradesList[i].mygrade)
-              }
-              this.totalUnits += Number(this.resultGradesList[i].units)
-              this.totalCreditUnits += Number(this.resultGradesList[i].creditUnits)
-              this.passingPercentage = (this.totalCreditUnits / this.totalUnits) * 100
-
-
-              if(i == this.resultGradesList.length - 1) {
-                this.resultDataSource = new MatTableDataSource(this.resultGradesList)
-
-                if(this.aveGrade >= 1 && this.aveGrade <= 1.45) {
-                  for(let j = 0; j < this.resultGradesList.length; j++){
-                    if(
-                      this.resultGradesList[j].mygrade == 'INC' ||
-                      this.resultGradesList[j].mygrade == 'US' ||
-                      this.resultGradesList[j].mygrade == '4.00' ||
-                      this.resultGradesList[j].mygrade == '5.00'
-                    ) {
-                      this.scholarship = this.scholarshipList[2]
-                      break
-                    }
-                    else {
-                      this.scholarship = this.scholarshipList[0]
-                    }
-                  }
-
-                }
-                else if(this.aveGrade >= 1.46 && this.aveGrade <= 1.75) {
-                  for(let j = 0; j < this.resultGradesList.length; j++){
-                    if(
-                      this.resultGradesList[j].mygrade == 'INC' ||
-                      this.resultGradesList[j].mygrade == 'US' ||
-                      this.resultGradesList[j].mygrade == '4.00' ||
-                      this.resultGradesList[j].mygrade == '5.00'
-                    ) {
-                      this.scholarship = this.scholarshipList[2]
-                      break
-                    }
-                    else {
-                      this.scholarship = this.scholarshipList[1]
-                    }
-                  }
+                //grade
+                if(!Number.isNaN(Number(this.resultGradesList[i].mygrade))) {
+                  aveGrade += Number(this.resultGradesList[i].mygrade)
                 }
                 else {
-                  this.scholarship = this.scholarshipList[2]
+                  aveGrade += Number(this.resultGradesList[i].makeupgrade)
                 }
-                for(let k = 0; k < this.resultGradesList.length; k++) {
-                  if(Number.isNaN(this.resultGradesList[k].mygrade)) {
-                    gradeCounter -= 1
+                totalUnits += Number(this.resultGradesList[i].units)
+                this.totalUnits = totalUnits
+
+                totalCreditUnits += Number(this.resultGradesList[i].creditUnits)
+                this.totalCreditUnits = totalCreditUnits
+                this.passingPercentage = (totalCreditUnits / totalUnits) * 100
+
+
+                if(i == this.resultGradesList.length - 1) {
+                  this.resultDataSource = new MatTableDataSource(this.resultGradesList)
+
+                  if(aveGrade >= 1 && aveGrade <= 1.45) {
+                    for(let j = 0; j < this.resultGradesList.length; j++){
+                      if(
+                        this.resultGradesList[j].mygrade == 'INC' ||
+                        this.resultGradesList[j].mygrade == 'US' ||
+                        this.resultGradesList[j].mygrade == '4.00' ||
+                        this.resultGradesList[j].mygrade == '5.00'
+                      ) {
+                        this.scholarship = this.scholarshipList[2]
+                        break
+                      }
+                      else {
+                        this.scholarship = this.scholarshipList[0]
+                      }
+                    }
+
                   }
+                  else if(aveGrade >= 1.46 && aveGrade <= 1.75) {
+                    for(let j = 0; j < this.resultGradesList.length; j++){
+                      if(
+                        this.resultGradesList[j].mygrade == 'INC' ||
+                        this.resultGradesList[j].mygrade == 'US' ||
+                        this.resultGradesList[j].mygrade == '4.00' ||
+                        this.resultGradesList[j].mygrade == '5.00'
+                      ) {
+                        this.scholarship = this.scholarshipList[2]
+                        break
+                      }
+                      else {
+                        this.scholarship = this.scholarshipList[1]
+                      }
+                    }
+                  }
+                  else {
+                    this.scholarship = this.scholarshipList[2]
+                  }
+
+                  aveGrade /= gradeCounter
+                  this.aveGrade = aveGrade
+                  //console.log(aveGrade)
                 }
-                this.aveGrade /= gradeCounter
-                console.log(this.aveGrade)
               }
-            }
 
-          })
+            })
 
+          }
         }
-      }
-    })
+      })
+    }
   }
 
   exportCog() {
@@ -1388,10 +1419,6 @@ export class CogDialog implements OnInit {
     this.searchForm.get('studentnumber').setValue('')
     this.searchForm.get('semester').setValue('')
     this.searchForm.get('schoolyear').setValue('')
-    this.totalUnits = 0
-    this.totalCreditUnits = 0
-    this.aveGrade = 0
-    this.passingPercentage = 0
 
     this.dialogRef.close()
   }

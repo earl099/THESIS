@@ -13,9 +13,9 @@ import { VariableService } from 'src/app/services/variable.service';
 export class DashboardComponent implements OnInit {
   globalVar!: Array<any>
   uname: any
-  //QUICK DATA FOR STUDENTS ENROLLED, SHIFTEES, LOA, MALE/FEMALE STUDENTS ENROLLED,
-  quickData: Array<number> = [0,0,0,0,0]
-
+  //QUICK DATA FOR STUDENTS ENROLLED, SHIFTEES, LOA, MALE/FEMALE STUDENTS ENROLLED, VALIDATED/ASSESSED RATIO, ASSESSED
+  quickData: Array<number> = [0,0,0,0,0,0,0]
+  studentList: any
 
   constructor(
     private router: Router,
@@ -23,9 +23,7 @@ export class DashboardComponent implements OnInit {
     private studentService: StudentService,
     private enrollmentService: EnrollmentService,
     private variableService: VariableService
-  ) {
-
-  }
+  ) { }
 
   ngOnInit(): void {
     if (!this.userService.isLoggedIn()) {
@@ -46,12 +44,42 @@ export class DashboardComponent implements OnInit {
         this.enrollmentService.getStudsEnroll(this.globalVar[0].semester, this.globalVar[0].schoolyear).subscribe((res) => {
           if(res) {
             let tmpData = res.studsEnroll
+
             if(tmpData.length < 1) {
               this.quickData[0] = 0
             }
             else {
               this.quickData[0] += tmpData.length
             }
+
+            for (let i = 0; i < tmpData.length; i++) {
+              this.studentService.getStudent(tmpData[i].studentnumber).subscribe((res) => {
+                if(res) {
+                  if(res.student.gender == 'MALE') {
+                    this.quickData[3]++
+                  }
+                  else {
+                    this.quickData[4]++
+                  }
+                }
+              })
+            }
+
+            this.enrollmentService.getAllAssessed(this.globalVar[0].semester, this.globalVar[0].schoolyear).subscribe((res) => {
+              if(res) {
+                let totalAssessed = res.assessedStuds
+
+                this.quickData[6] = totalAssessed.length
+                for (let i = 0; i < totalAssessed.length; i++) {
+                  for (let j = 0; j < tmpData.length; j++) {
+                    if(tmpData[j].studentnumber == totalAssessed[i].studentnumber) {
+                      this.quickData[5]++
+                    }
+                  }
+                }
+                this.quickData[5] = (this.quickData[5] / totalAssessed.length) * 100
+              }
+            })
           }
         })
 

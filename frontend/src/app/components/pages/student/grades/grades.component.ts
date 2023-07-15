@@ -3,6 +3,7 @@ import { FormBuilder, FormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { GradesService } from 'src/app/services/grades.service';
+import { ReportService } from 'src/app/services/report.service';
 import { StudentService } from 'src/app/services/student.service';
 import { UserService } from 'src/app/services/user.service';
 import { VariableService } from 'src/app/services/variable.service';
@@ -17,6 +18,8 @@ export class GradesComponent implements OnInit {
   searchForm: any
   schoolyear: any
   searchVisibility: boolean = true
+
+  courseList: any = []
 
   studentInfoForm: any
 
@@ -66,6 +69,7 @@ export class GradesComponent implements OnInit {
     private fb: FormBuilder,
     private studentService: StudentService,
     private gradeService: GradesService,
+    private reportService: ReportService,
     private userService: UserService,
     private toastr: ToastrService,
     private variableService: VariableService
@@ -105,6 +109,14 @@ export class GradesComponent implements OnInit {
     })
 
     this.setAdminVisibility()
+
+    let check: any = this.userService.getToken()
+    this.reportService.getCourses(check).subscribe((res) => {
+      if(res) {
+        this.courseList = res.course
+        console.log(this.courseList)
+      }
+    })
   }
 
   //--- ISUPDATE: TRUE IF UPDATING, FALSE IF COMPLETION ---//
@@ -190,6 +202,10 @@ export class GradesComponent implements OnInit {
         this.schoolyear = res.schoolyear
       }
     })
+  }
+
+  courseCheck(course: any) {
+    return !this.courseList.find((item: any) => item.courseCode === course)
   }
 
   setAdminVisibility() {

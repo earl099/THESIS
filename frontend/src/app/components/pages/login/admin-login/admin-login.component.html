@@ -6,7 +6,7 @@
         <mat-card-content>
           <mat-tab-group>
             <mat-tab label="Admin Login">
-              <form [formGroup]="loginForm" autocomplete="off" class="mt-5">
+              <form [formGroup]="adminLoginForm" autocomplete="off" class="mt-5">
                 <p class="mb-5">Sign in to your account</p>
                 <mat-form-field appearance="fill">
                   <mat-label>User Name</mat-label>
@@ -25,7 +25,7 @@
             </mat-tab>
 
             <mat-tab label="User Login">
-              <form [formGroup]="loginForm" autocomplete="off" class="mt-5">
+              <form [formGroup]="userLoginForm" autocomplete="off" class="mt-5">
                 <p class="mb-5">Sign in to your account</p>
                 <mat-form-field appearance="fill">
                   <mat-label>User Name</mat-label>

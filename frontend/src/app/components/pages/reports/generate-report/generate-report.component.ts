@@ -10,10 +10,10 @@ import { VariableService } from 'src/app/services/variable.service';
 import { ngxCsv } from 'ngx-csv/ngx-csv';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { Router } from '@angular/router';
 import { EnrollmentService } from 'src/app/services/enrollment.service';
 import { StudentService } from 'src/app/services/student.service';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-generate-report',
@@ -30,6 +30,7 @@ export class GenerateReportComponent implements OnInit {
   //loa specific forms
   filterForm: any
   processLogForm: any
+  processData: any
 
   //booleans for checking
   isAdvClicked!: boolean
@@ -38,6 +39,7 @@ export class GenerateReportComponent implements OnInit {
   isEnrolledReport!: boolean
   isShifteeReport!: boolean
   isLoaReport!: boolean
+  isAssessedReport!: boolean
 
   //table title
   title!: string
@@ -47,8 +49,13 @@ export class GenerateReportComponent implements OnInit {
   courseList: Array<any> = []
   schoolyearList: Array<any> = []
 
+  //course check list array
+  cCheckList: any = []
+
   //table columns
   enrolledColumns: Array<string> = [
+    'semester',
+    'schoolyear',
     'studentNumber',
     'firstName',
     'middleName',
@@ -56,8 +63,7 @@ export class GenerateReportComponent implements OnInit {
     'suffix',
     'course',
     'gender',
-    'semester',
-    'schoolyear'
+
   ]
 
   shifteeColumns: Array<string> = [
@@ -87,6 +93,18 @@ export class GenerateReportComponent implements OnInit {
     'delete'
   ]
 
+  assessedColumns: Array<string> = [
+    'studentNumber',
+    'firstName',
+    'middleName',
+    'lastName',
+    'suffix',
+    'course',
+    'gender',
+    'StudentStatus',
+    'scholarship'
+  ]
+
   //table paginator and sorter for the table
   @ViewChild('enrollPaginator') enrollPaginator!: MatPaginator;
   @ViewChild('enrollSort') enrollSort!: MatSort;
@@ -94,16 +112,20 @@ export class GenerateReportComponent implements OnInit {
   @ViewChild('shifteeSort') shifteeSort!: MatSort;
   @ViewChild('loaPaginator') loaPaginator!: MatPaginator;
   @ViewChild('loaSort') loaSort!: MatSort;
+  @ViewChild('assessedPaginator') assessedPaginator!: MatPaginator;
+  @ViewChild('assessedSort') assessedSort!: MatSort;
 
   //table data
   dataResult: Array<any> = []
   dataSource!: MatTableDataSource<any>
   dataSource1!: MatTableDataSource<any>
   dataSource2!: MatTableDataSource<any>
+  dataSource3!: MatTableDataSource<any>
 
   constructor(
     private reportService: ReportService,
     private studentService: StudentService,
+    private userService: UserService,
     private variableService: VariableService,
     private fb: FormBuilder,
     private toastr: ToastrService,
@@ -113,7 +135,18 @@ export class GenerateReportComponent implements OnInit {
 
   //on initialize
   ngOnInit(): void {
-    this.globalVar = this.variableService.getLegend().subscribe()
+    this.variableService.getLegend().subscribe((res) => {
+      this.globalVar = res.legend
+    })
+
+    this.processData = this.fb.group({
+      username: new FormControl({ value: '', disabled: false }),
+      ipaddress: new FormControl({ value: '', disabled: false }),
+      pcname: new FormControl({ value: '', disabled: false }),
+      studentnumber: new FormControl({ value: '', disabled: false }),
+      type: new FormControl({ value: '', disabled: false }),
+      description: new FormControl({ value: '', disabled: false }),
+    })
 
     this.processLogForm = this.fb.group({
       encoder: new FormControl({ value: '', disabled: false }),
@@ -122,7 +155,7 @@ export class GenerateReportComponent implements OnInit {
 
     this.reportForm = this.fb.group({
       reportType: new FormControl({ value: '', disabled: false }),
-      collegeCode: new FormControl({ value: localStorage.getItem('token'), disabled: false }),
+      collegeCode: new FormControl({ value: this.userService.getToken(), disabled: false }),
       courseCode: new FormControl({ value: '', disabled: false }),
 
       //advanced filters for Students Enrolled, w/ LOA and shiftees
@@ -145,6 +178,7 @@ export class GenerateReportComponent implements OnInit {
     this.isEnrolledReport = false
     this.isShifteeReport = false
     this.isLoaReport = false
+    this.isAssessedReport = false
 
     if(localStorage.getItem('token') == 'UNIV') {
       this.isAdmin = true
@@ -155,7 +189,18 @@ export class GenerateReportComponent implements OnInit {
       this.isAdmin = false
     }
 
+    let check = this.userService.getToken()
+    this.reportService.getCourses(check).subscribe((res) => {
+      if(res) {
+        this.cCheckList = res.course
+        this.courseList = res.course
+      }
+    })
     //console.log(this.reportForm.get('reportType').value)
+  }
+
+  courseCheck(course: any) {
+    return !this.cCheckList.find((item: any) => item.courseCode === course)
   }
 
   onAdvClick() {
@@ -220,41 +265,65 @@ export class GenerateReportComponent implements OnInit {
     }
     else {
       if(!this.isAdvClicked) {
-        this.reportForm.get('collegeCode').setValue('ALL')
+        if(this.userService.getToken() == 'UNIV') {
+          this.reportForm.get('collegeCode').setValue('ALL')
+        }
         this.reportForm.get('courseCode').setValue('ALL')
         this.reportForm.get('gender').setValue('ALL')
-        this.reportForm.get('semester').setValue('ALL')
-        this.reportForm.get('schoolyear').setValue('ALL')
+        this.reportForm.get('semester').setValue(this.globalVar[0].semester)
+        this.reportForm.get('schoolyear').setValue(this.globalVar[0].schoolyear)
 
         this.reportService.advSearchByReportType(this.reportForm.get('reportType').value, this.reportForm.value).subscribe((res) => {
           if(res) {
             let tmpData = res.result
             let tmpData2 = res.infoResult
 
+            //console.log(tmpData)
+            //console.log(tmpData2)
+
             //data for different report types
             let enrolledData = []
             let shifteeData = []
             let loaData = []
+            let assessedData = []
             let checker = { studentNumber: undefined }
 
             for (let i = 0; i < tmpData.length; i++) {
               Object.assign(tmpData[i], tmpData2[i])
               switch (this.reportForm.get('reportType').value) {
                 case 'stud_enroll':
-                  enrolledData.push(tmpData[i])
-                  enrolledData.forEach(item => delete item.studentnumber)
-                  if(i == tmpData.length - 1) {
-                    shifteeData.push(checker)
-                    loaData.push(checker)
+                  if(this.courseCheck(tmpData2.course)) {
+                    enrolledData.push(tmpData[i])
+                    enrolledData.forEach(item => delete item.studentnumber)
+                    if(i == tmpData.length - 1) {
+                      shifteeData.push(checker)
+                      assessedData.push(checker)
+                      loaData.push(checker)
+                    }
                   }
                   break
 
                 case 'shiftee':
-                  shifteeData.push(tmpData[i])
-                  shifteeData.forEach(item => delete item.studentnumber)
-                  if(i == tmpData.length - 1) {
-                    enrolledData.push(checker)
-                    loaData.push(checker)
+                  if(this.courseCheck(tmpData2.course)) {
+                    shifteeData.push(tmpData[i])
+                    shifteeData.forEach(item => delete item.studentnumber)
+                    if(i == tmpData.length - 1) {
+                      enrolledData.push(checker)
+                      assessedData.push(checker)
+                      loaData.push(checker)
+                    }
+                  }
+                  break
+
+                case 'assessed':
+                  if(this.courseCheck(tmpData2.course)) {
+                    assessedData.push(tmpData[i])
+                    assessedData.forEach(item => delete item.studentnumber)
+                    if(i == tmpData.length - 1) {
+                      enrolledData.push(checker)
+                      shifteeData.push(checker)
+                      loaData.push(checker)
+                    }
                   }
                   break
 
@@ -263,6 +332,7 @@ export class GenerateReportComponent implements OnInit {
                   loaData.forEach(item => delete item.studentnumber)
                   if(i == tmpData.length - 1) {
                     enrolledData.push(checker)
+                    assessedData.push(checker)
                     shifteeData.push(checker)
                   }
                   break
@@ -272,7 +342,8 @@ export class GenerateReportComponent implements OnInit {
             if(
               enrolledData[0].studentNumber == undefined &&
               shifteeData[0].studentNumber == undefined &&
-              loaData[0].studentNumber == undefined
+              loaData[0].studentNumber == undefined &&
+              assessedData[0].studentNumber == undefined
             ) {
               this.toastr.error('No result found.')
             }
@@ -288,6 +359,7 @@ export class GenerateReportComponent implements OnInit {
                   for (let i = 0; i < enrolledData.length; i++) {
                     this.dataResult.push(enrolledData[i])
                   }
+                  //console.log(this.dataResult)
 
                   this.title = 'Students Enrolled'
                   this.isEnrolledReport = true
@@ -306,13 +378,27 @@ export class GenerateReportComponent implements OnInit {
                       this.dataResult.splice(i, 1)
                     }
                   }
-                  console.log(this.dataResult)
 
                   this.title = 'Shiftees'
                   this.isShifteeReport = true
                   this.dataSource1 = new MatTableDataSource(this.dataResult)
                   this.dataSource1.paginator = this.shifteePaginator
                   this.dataSource1.sort = this.shifteeSort
+                  break
+
+                case 'assessed':
+                  console.log(assessedData)
+                  for (let i = 0; i < assessedData.length; i++) {
+                    if(!this.courseCheck(assessedData[i].course)) {
+                      this.dataResult.push(assessedData[i])
+                    }
+                  }
+
+                  this.title = 'Assessed Students'
+                  this.isAssessedReport = true
+                  this.dataSource3 = new MatTableDataSource(this.dataResult)
+                  this.dataSource3.paginator = this.assessedPaginator
+                  this.dataSource3.sort = this.assessedSort
                   break
 
                 default:
@@ -348,23 +434,6 @@ export class GenerateReportComponent implements OnInit {
         else {
           this.reportService.advSearchByReportType(this.reportForm.get('reportType').value, this.reportForm.value).subscribe((res) => {
             if(res) {
-              switch (this.reportForm.get('reportType').value) {
-                case 'stud_enroll':
-                  this.title = 'Students Enrolled'
-                  this.isEnrolledReport = true
-                  break
-
-                case 'shiftee':
-                  this.title = 'Shiftees'
-                  this.isShifteeReport = true
-                  break
-
-                default:
-                  this.title = 'Leave of Absence'
-                  this.isLoaReport = true
-                  break
-              }
-
               let tmpData = res.result
               let tmpData2 = res.infoResult
               let finalData = []
@@ -387,6 +456,7 @@ export class GenerateReportComponent implements OnInit {
                 this.toastr.error('No result found.')
               }
               else {
+
                 //refreshing the array
                 if(this.dataResult.length > 0) {
                   this.dataResult.splice(0, this.dataResult.length)
@@ -396,13 +466,52 @@ export class GenerateReportComponent implements OnInit {
                 for (let i = 0; i < finalData.length; i++) {
                   this.dataResult.push(finalData[i])
                 }
-                console.log(this.dataResult)
+                this.dataResult.forEach(item => delete item.studentnumber)
+                //console.log(this.dataResult)
 
-                //setting table data source and paginator and sorter
-                this.dataSource2 = new MatTableDataSource(this.dataResult)
-                this.dataSource2.paginator = this.enrollPaginator
-                this.dataSource2.sort = this.enrollSort
-                this.isReportGenerated = true
+                switch (this.reportForm.get('reportType').value) {
+                  case 'stud_enroll':
+                    this.title = 'Students Enrolled'
+                    this.isEnrolledReport = true
+                    //setting table data source and paginator and sorter
+                    this.dataSource = new MatTableDataSource(this.dataResult)
+                    this.dataSource.paginator = this.enrollPaginator
+                    this.dataSource.sort = this.enrollSort
+                    this.isReportGenerated = true
+                    break
+
+                  case 'shiftee':
+                    this.title = 'Shiftees'
+                    this.isShifteeReport = true
+                    //setting table data source and paginator and sorter
+                    this.dataSource1 = new MatTableDataSource(this.dataResult)
+                    this.dataSource1.paginator = this.enrollPaginator
+                    this.dataSource1.sort = this.enrollSort
+                    this.isReportGenerated = true
+                    break
+
+                  case 'assessed':
+                    this.title = 'Assessed Students'
+                    this.isAssessedReport = true
+                    //setting table data source and paginator and sorter
+                    this.dataSource3 = new MatTableDataSource(this.dataResult)
+                    this.dataSource3.paginator = this.enrollPaginator
+                    this.dataSource3.sort = this.enrollSort
+                    this.isReportGenerated = true
+                    break
+
+                  default:
+                    this.title = 'Leave of Absence'
+                    this.isLoaReport = true
+                    //setting table data source and paginator and sorter
+                    this.dataSource2 = new MatTableDataSource(this.dataResult)
+                    this.dataSource2.paginator = this.enrollPaginator
+                    this.dataSource2.sort = this.enrollSort
+                    this.isReportGenerated = true
+                    break
+                }
+
+
               }
             }
           })
@@ -437,38 +546,37 @@ export class GenerateReportComponent implements OnInit {
 
     new ngxCsv(this.dataResult, 'Report-' + this.reportForm.get('reportType').value, options)
 
-    let processData: any
     this.variableService.getIpAddress().subscribe((res) => {
       if(res) {
         let ipAdd = res.clientIp
         switch (this.reportForm.get('reportType').value) {
           case 'stud_enroll':
-            processData.get('username').setValue(localStorage.getItem('user'))
-            processData.get('ipaddress').setValue(ipAdd)
-            processData.get('pcname').setValue(window.location.hostname)
-            processData.get('studentnumber').setValue('N/A')
-            processData.get('type').setValue('Export Report')
-            processData.get('description').setValue(`Exported Report for Students Enrolled`)
-            this.variableService.addProcess(processData.value).subscribe()
+            this.processData.get('username').setValue(localStorage.getItem('user')?.toString())
+            this.processData.get('ipaddress').setValue(ipAdd)
+            this.processData.get('pcname').setValue(window.location.hostname)
+            this.processData.get('studentnumber').setValue('N/A')
+            this.processData.get('type').setValue('Export Report')
+            this.processData.get('description').setValue(`Exported Report for Students Enrolled`)
+            this.variableService.addProcess(this.processData.value).subscribe()
             break
 
           case 'shiftee':
-            processData.get('username').setValue(localStorage.getItem('user'))
-            processData.get('ipaddress').setValue(ipAdd)
-            processData.get('pcname').setValue(window.location.hostname)
-            processData.get('studentnumber').setValue('N/A')
-            processData.get('type').setValue('Export Report')
-            processData.get('description').setValue(`Exported Report for Shiftees`)
-            this.variableService.addProcess(processData.value).subscribe()
+            this.processData.get('username').setValue(localStorage.getItem('user'))
+            this.processData.get('ipaddress').setValue(ipAdd)
+            this.processData.get('pcname').setValue(window.location.hostname)
+            this.processData.get('studentnumber').setValue('N/A')
+            this.processData.get('type').setValue('Export Report')
+            this.processData.get('description').setValue(`Exported Report for Shiftees`)
+            this.variableService.addProcess(this.processData.value).subscribe()
             break
           default:
-            processData.get('username').setValue(localStorage.getItem('user'))
-            processData.get('ipaddress').setValue(ipAdd)
-            processData.get('pcname').setValue(window.location.hostname)
-            processData.get('studentnumber').setValue('N/A')
-            processData.get('type').setValue('Export Report')
-            processData.get('description').setValue(`Exported Report for LOA`)
-            this.variableService.addProcess(processData.value).subscribe()
+            this.processData.get('username').setValue(localStorage.getItem('user'))
+            this.processData.get('ipaddress').setValue(ipAdd)
+            this.processData.get('pcname').setValue(window.location.hostname)
+            this.processData.get('studentnumber').setValue('N/A')
+            this.processData.get('type').setValue('Export Report')
+            this.processData.get('description').setValue(`Exported Report for LOA`)
+            this.variableService.addProcess(this.processData.value).subscribe()
             break
         }
 

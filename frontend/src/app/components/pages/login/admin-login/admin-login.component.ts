@@ -12,7 +12,8 @@ import { UserService } from 'src/app/services/user.service';
   encapsulation: ViewEncapsulation.None
 })
 export class AdminLoginComponent implements OnInit {
-  loginForm: any;
+  adminLoginForm: any;
+  userLoginForm: any
 
   constructor(
     private userService: UserService,
@@ -21,20 +22,29 @@ export class AdminLoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.loginForm = new FormGroup({
+    this.adminLoginForm = new FormGroup({
       username: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required])
     });
+
+    this.userLoginForm = new FormGroup({
+      username: new FormControl('', [Validators.required]),
+      password: new FormControl('', [Validators.required])
+    });
+
+    if(localStorage.getItem('token') != null || localStorage.getItem('token') != undefined) {
+      this.router.navigate(['/dashboard'])
+    }
   }
 
   onLogin(accountType: any) {
-    if(this.loginForm.invalid) {
+    if(this.adminLoginForm.invalid && this.userLoginForm.invalid) {
       return this.toastr.error('Invalid User')
     }
     else {
       switch(accountType) {
         case 'admin':
-          this.userService.adminLogin(this.loginForm.value)
+          this.userService.adminLogin(this.adminLoginForm.value)
           .subscribe({
             next: (res) => {
               console.log(res);
@@ -67,7 +77,7 @@ export class AdminLoginComponent implements OnInit {
           break
 
         case 'user':
-          this.userService.userLogin(this.loginForm.value)
+          this.userService.userLogin(this.userLoginForm.value)
           .subscribe({
             next: (res) => {
               console.log(res);
@@ -87,6 +97,7 @@ export class AdminLoginComponent implements OnInit {
               }
               else{
                 alert('Error Logging in.');
+                localStorage.clear();
                 window.location.reload();
               }
             }

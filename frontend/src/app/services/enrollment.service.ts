@@ -188,11 +188,26 @@ export class EnrollmentService {
     ).pipe(catchError(this.handleError<any>('Drop Subject')))
   }
 
-  //--- GET ALL ASSESSED STUDEENTS BY SEEMESTER AND SCHOOLYEAR ---//
+  //--- GET ALL ASSESSED STUDENTS BY SEEMESTER AND SCHOOLYEAR ---//
   getAllAssessed(semester: any, schoolyear: any): Observable<any> {
     return this.httpClient.get(
       `${this.baseUrl}/assess_list/${semester}/${schoolyear}`, this.httpOptions
     ).pipe(catchError(this.handleError<any>('Get Assessed Students')))
+  }
+
+  //--- GET ASSESSED STUDENT ---//
+  getAssessedStudent(studentnumber: any, semester: any, schoolyear: any): Observable<any> {
+    return this.httpClient.get(
+      `${this.baseUrl}/assess_list/current/${studentnumber}/${semester}/${schoolyear}`, this.httpOptions
+    ).pipe(catchError(this.handleError<any>('Get Assessed Student')))
+  }
+
+  //--- EDIT SCHOLARSHIP ---//
+  editScholarship(studentnumber: any, semester: any, schoolyear: any, data: any): Observable<any> {
+    return this.httpClient.put(
+      `${this.baseUrl}/assess_list/edit/scholarship/${studentnumber}/${semester}/${schoolyear}`,
+      data, this.httpOptions
+    ).pipe(catchError(this.handleError<any>('Edit Scholarship')))
   }
 
   //--- ERROR HANDLING ---//

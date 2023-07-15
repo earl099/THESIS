@@ -23,11 +23,11 @@ export class VariableEditComponent implements OnInit {
 
   ngOnInit(): void {
     this.angForm = this.fb.group({
-      semester: new FormControl({ value: '', disabled: true }),
-      schoolyear: new FormControl({ value: '', disabled: true }),
-      ksemester: new FormControl({ value: '', disabled: true }),
-      kschoolyear: new FormControl({ value: '', disabled: true }),
-      mycampus: new FormControl({ value: '', disabled: true }),
+      semester: new FormControl({ value: '', disabled: false }),
+      schoolyear: new FormControl({ value: '', disabled: false }),
+      ksemester: new FormControl({ value: '', disabled: false }),
+      kschoolyear: new FormControl({ value: '', disabled: false }),
+      mycampus: new FormControl({ value: '', disabled: false }),
       hrmohead: new FormControl({ value: '', disabled: false }),
       hrmodesignation: new FormControl({ value: '', disabled: false }),
       registrar: new FormControl({ value: '', disabled: false }),

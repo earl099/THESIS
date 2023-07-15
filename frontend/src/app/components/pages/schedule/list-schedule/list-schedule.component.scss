@@ -54,3 +54,11 @@ div.container.card-content {
 .col.fs-6.mt-2 {
   text-align: left !important;
 }
+
+p {
+  width: max-content;
+}
+
+.mat-mdc-raised-button.mat-unthemed {
+  width: max-content;
+}

@@ -14,6 +14,7 @@
                       <mat-select formControlName="reportType" (selectionChange)="getSchoolyear(reportForm.get('reportType').value)">
                         <mat-option value="stud_enroll">Students Enrolled</mat-option>
                         <mat-option value="shiftee">Shiftees</mat-option>
+                        <mat-option value="assessed">Assessed Students</mat-option>
                         <mat-option value="loa">LOA</mat-option>
                       </mat-select>
                     </mat-form-field>
@@ -161,7 +162,7 @@
             <tr mat-row *matRowDef="let enrolledRow; columns: enrolledColumns"></tr>
 
             <tr class="mat-row" *matNoDataRow>
-              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+              <td class="mat-cell" colspan="9">No data matching the filter "{{input.value}}"</td>
             </tr>
           </table>
           <mat-paginator #enrollPaginator [pageSizeOptions]="[5]" aria-label="Select page of students"></mat-paginator>
@@ -233,6 +234,10 @@
         <!-- LOA LIST STARTS HERE -->
         <div class="container" *ngIf="isLoaReport">
           <br>
+          <div class="container text-right">
+            <button mat-raised-button (click)="openAddLoaDialog()">Add Record</button>
+          </div>
+          <br>
           <mat-card>
             <mat-card-content>
               <form [formGroup]="filterForm">
@@ -302,12 +307,6 @@
                 </div>
               </form>
             </mat-card-content>
-
-            <mat-card-actions>
-              <div class="container">
-                <button mat-raised-button (click)="openAddLoaDialog()">Add Record</button>
-              </div>
-            </mat-card-actions>
           </mat-card>
 
           <table mat-table [dataSource]="dataSource2" matSort #loaSort="matSort" (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
@@ -370,6 +369,63 @@
 
             <tr mat-header-row *matHeaderRowDef="loaColumns"></tr>
             <tr mat-row *matRowDef="let loaRow; columns: loaColumns"></tr>
+
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+          </table>
+          <mat-paginator #enrollPaginator [pageSizeOptions]="[5]" aria-label="Select page of students"></mat-paginator>
+        </div>
+
+        <div class="container" *ngIf="isAssessedReport">
+          <table mat-table [dataSource]="dataSource3" matSort #assessedSort="matSort" (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
+            <ng-container matColumnDef="studentNumber">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by studentNumber"> Student Number </th>
+              <td mat-cell *matCellDef="let assessed"> {{assessed.studentNumber}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="firstName">
+              <th mat-header-cell *matHeaderCellDef> First Name </th>
+              <td mat-cell *matCellDef="let assessed"> {{assessed.firstName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="middleName">
+              <th mat-header-cell *matHeaderCellDef> Middle Name </th>
+              <td mat-cell *matCellDef="let assessed"> {{assessed.middleName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="lastName">
+              <th mat-header-cell *matHeaderCellDef> Last Name </th>
+              <td mat-cell *matCellDef="let assessed"> {{assessed.lastName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="suffix">
+              <th mat-header-cell *matHeaderCellDef> Suffix </th>
+              <td mat-cell *matCellDef="let assessed"> {{ assessed.suffix === '' ? '-' : assessed.suffix }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="gender">
+              <th mat-header-cell *matHeaderCellDef> Gender </th>
+              <td mat-cell *matCellDef="let assessed"> {{assessed.gender}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="course">
+              <th mat-header-cell *matHeaderCellDef> Current Course </th>
+              <td mat-cell *matCellDef="let assessed"> {{assessed.course}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="StudentStatus">
+              <th mat-header-cell *matHeaderCellDef> Student Status </th>
+              <td mat-cell *matCellDef="let assessed"> {{assessed.StudentStatus}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="scholarship">
+              <th mat-header-cell *matHeaderCellDef> Scholarship </th>
+              <td mat-cell *matCellDef="let assessed"> {{assessed.scholarship}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="assessedColumns"></tr>
+            <tr mat-row *matRowDef="let assesedRow; columns: assessedColumns"></tr>
 
             <tr class="mat-row" *matNoDataRow>
               <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>

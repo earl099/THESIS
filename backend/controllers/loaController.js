@@ -201,17 +201,71 @@ const advLoaSearch = async (req, res) => {
     let objRes = []
     let studInfoResult = []
 
+    let courseList
+    let finalCourseList = []
+
+    //list for checking if student is in course list
+    if(collegeCode != 'ALL') {
+        if(courseCode != 'ALL') {
+            courseList = await courseModel.findAll({
+                attributes: [
+                    db.sequelize.fn(
+                        'DISTINCT',
+                        db.sequelize.col('courseCode')
+                    ),
+                    'courseCode',
+                    'courseCollege'
+                ],
+                where: {
+                    courseCollege: collegeCode,
+                    courseCode: courseCode
+                }
+            })
+        }
+        else {
+            courseList = await courseModel.findAll({
+                attributes: [
+                    db.sequelize.fn(
+                        'DISTINCT',
+                        db.sequelize.col('courseCode')
+                    ),
+                    'courseCode',
+                    'courseCollege'
+                ],
+                where: {
+                    courseCollege: collegeCode
+                }
+            })
+        }
+    }
+    else {
+        courseList = await courseModel.findAll({
+            attributes: [
+                db.sequelize.fn(
+                    'DISTINCT',
+                    db.sequelize.col('courseCode')
+                ),
+                'courseCode',
+                'courseCollege'
+            ]
+        })
+    }
+
+    for(let i = 0; i < courseList.length; i++) {
+        finalCourseList.push(courseList[i].courseCode) 
+    }
+
     //specific college
     if(collegeCode != 'UNIV') {
         //specific course
         if(courseCode != 'ALL') {
             //specific college, course and gender
             if(gender != 'ALL') {
-                let enrolledResult
+                let loaResult
 
                 //sem and sy specific
                 if(semester != 'ALL' && schoolyear != 'ALL') {
-                    enrolledResult = await loaModel.findAll({
+                    loaResult = await loaModel.findAll({
                         attributes: [
                             'studentnumber',
                             'dateencoded',
@@ -220,22 +274,26 @@ const advLoaSearch = async (req, res) => {
                         ],
                         where: { 
                             semester: semester, 
-                            schoolyear: schoolyear 
+                            schoolyear: schoolyear,
+                            course: courseCode
                         }
                     })
                 }
                 else {
-                    enrolledResult = await loaModel.findAll({
+                    loaResult = await loaModel.findAll({
                         attributes: [
                             'studentnumber',
                             'dateencoded',
                             'semester',
                             'schoolyear'
-                        ]
+                        ],
+                        where: {
+                            course: courseCode
+                        }
                     })
                 }
 
-                for (let i = 0; i < enrolledResult.length; i++) {
+                for (let i = 0; i < loaResult.length; i++) {
                     let infoRes = await studentModel.findOne({
                         attributes: [
                             'studentNumber',
@@ -247,24 +305,24 @@ const advLoaSearch = async (req, res) => {
                             'gender'
                         ],
                         where: {
-                            studentNumber: enrolledResult[i].studentnumber,
+                            studentNumber: loaResult[i].studentnumber,
                             course: courseCode,
                             gender: gender
                         }
                     })
                     
                     studInfoResult.push(infoRes)
-                    objRes.push(enrolledResult[i])
+                    objRes.push(loaResult[i])
                 }
             }
 
             //college and course are specific but gender is not
             else {
-                let enrolledResult 
+                let loaResult 
                 
                 //sem and sy specific
                 if(semester != 'ALL' && schoolyear != 'ALL') {
-                    enrolledResult = await loaModel.findAll({
+                    loaResult = await loaModel.findAll({
                         attributes: [
                             'studentnumber',
                             'dateencoded',
@@ -273,22 +331,26 @@ const advLoaSearch = async (req, res) => {
                         ],
                         where: { 
                             semester: semester, 
-                            schoolyear: schoolyear 
+                            schoolyear: schoolyear,
+                            course: courseCode
                         }
                     })
                 }
                 else {
-                    enrolledResult = await loaModel.findAll({
+                    loaResult = await loaModel.findAll({
                         attributes: [
                             'studentnumber',
                             'dateencoded',
                             'semester',
                             'schoolyear'
-                        ]
+                        ],
+                        where: {
+                            course: courseCode
+                        }
                     })
                 }
 
-                for (let i = 0; i < enrolledResult.length; i++) {
+                for (let i = 0; i < loaResult.length; i++) {
                     let infoRes = await studentModel.findOne({
                         attributes: [
                             'studentNumber',
@@ -300,24 +362,24 @@ const advLoaSearch = async (req, res) => {
                             'gender'
                         ],
                         where: {
-                            studentNumber: enrolledResult[i].studentnumber,
+                            studentNumber: loaResult[i].studentnumber,
                             course: courseCode
                         }
                     })
                     
                     studInfoResult.push(infoRes)
-                    objRes.push(enrolledResult[i])
+                    objRes.push(loaResult[i])
                 }
             }
         }
         else {
             //college and gender are specific, but course is not
             if(gender != 'ALL') {
-                let enrolledResult
+                let loaResult
                 
                 //sem and sy specific
                 if(semester != 'ALL' && schoolyear != 'ALL') {
-                    enrolledResult = await loaModel.findAll({
+                    loaResult = await loaModel.findAll({
                         attributes: [
                             'studentnumber',
                             'dateencoded',
@@ -326,22 +388,26 @@ const advLoaSearch = async (req, res) => {
                         ],
                         where: { 
                             semester: semester, 
-                            schoolyear: schoolyear 
+                            schoolyear: schoolyear,
+                            course: finalCourseList
                         }
                     })
                 }
                 else {
-                    enrolledResult = await loaModel.findAll({
+                    loaResult = await loaModel.findAll({
                         attributes: [
                             'studentnumber',
                             'dateencoded',
                             'semester',
                             'schoolyear'
-                        ]
+                        ],
+                        where: {
+                            course: finalCourseList
+                        }
                     })
                 }
 
-                for (let i = 0; i < enrolledResult.length; i++) {
+                for (let i = 0; i < loaResult.length; i++) {
                     let infoRes = await studentModel.findOne({
                         attributes: [
                             'studentNumber',
@@ -353,22 +419,22 @@ const advLoaSearch = async (req, res) => {
                             'gender'
                         ],
                         where: {
-                            studentNumber: enrolledResult[i].studentnumber,
+                            studentNumber: loaResult[i].studentnumber,
                             gender: gender
                         }
                     })
                     
                     studInfoResult.push(infoRes)
-                    objRes.push(enrolledResult[i])
+                    objRes.push(loaResult[i])
                 }
             }
             //college is specific, but course and gender are not
             else {
-                let enrolledResult
+                let loaResult
                 
                 //sem and sy specific
                 if(semester != 'ALL' && schoolyear != 'ALL') {
-                    enrolledResult = await loaModel.findAll({
+                    loaResult = await loaModel.findAll({
                         attributes: [
                             'studentnumber',
                             'dateencoded',
@@ -377,22 +443,26 @@ const advLoaSearch = async (req, res) => {
                         ],
                         where: { 
                             semester: semester, 
-                            schoolyear: schoolyear 
+                            schoolyear: schoolyear,
+                            course: finalCourseList
                         }
                     })
                 }
                 else {
-                    enrolledResult = await loaModel.findAll({
+                    loaResult = await loaModel.findAll({
                         attributes: [
                             'studentnumber',
                             'dateencoded',
                             'semester',
                             'schoolyear'
-                        ]
+                        ],
+                        where: {
+                            course: finalCourseList
+                        }
                     })
                 }
 
-                for (let i = 0; i < enrolledResult.length; i++) {
+                for (let i = 0; i < loaResult.length; i++) {
                     let infoRes = await studentModel.findOne({
                         attributes: [
                             'studentNumber',
@@ -404,12 +474,12 @@ const advLoaSearch = async (req, res) => {
                             'gender'
                         ],
                         where: {
-                            studentNumber: enrolledResult[i].studentnumber
+                            studentNumber: loaResult[i].studentnumber
                         }
                     })
                     
                     studInfoResult.push(infoRes)
-                    objRes.push(enrolledResult[i])
+                    objRes.push(loaResult[i])
                 }
             }
         }
@@ -420,11 +490,11 @@ const advLoaSearch = async (req, res) => {
         if(courseCode != 'ALL') {
             //gender is specific
             if(gender != 'ALL') {
-                let enrolledResult
+                let loaResult
                 
                 //sem and sy specific
                 if(semester != 'ALL' && schoolyear != 'ALL') {
-                    enrolledResult = await loaModel.findAll({
+                    loaResult = await loaModel.findAll({
                         attributes: [
                             'studentnumber',
                             'dateencoded',
@@ -438,7 +508,7 @@ const advLoaSearch = async (req, res) => {
                     })
                 }
                 else {
-                    enrolledResult = await loaModel.findAll({
+                    loaResult = await loaModel.findAll({
                         attributes: [
                             'studentnumber',
                             'semester',
@@ -447,7 +517,7 @@ const advLoaSearch = async (req, res) => {
                     })
                 }
 
-                for (let i = 0; i < enrolledResult.length; i++) {
+                for (let i = 0; i < loaResult.length; i++) {
                     let infoRes = await studentModel.findOne({
                         attributes: [
                             'studentNumber',
@@ -459,23 +529,23 @@ const advLoaSearch = async (req, res) => {
                             'gender'
                         ],
                         where: {
-                            studentNumber: enrolledResult[i].studentnumber,
+                            studentNumber: loaResult[i].studentnumber,
                             gender: gender,
                             course: courseCode
                         }
                     })
                     
                     studInfoResult.push(infoRes)
-                    objRes.push(enrolledResult[i])
+                    objRes.push(loaResult[i])
                 }
             }
             //gender is not specific
             else {
-                let enrolledResult
+                let loaResult
                 
                 //sem and sy specific
                 if(semester != 'ALL' && schoolyear != 'ALL') {
-                    enrolledResult = await loaModel.findAll({
+                    loaResult = await loaModel.findAll({
                         attributes: [
                             'studentnumber',
                             'dateencoded',
@@ -489,7 +559,7 @@ const advLoaSearch = async (req, res) => {
                     })
                 }
                 else {
-                    enrolledResult = await loaModel.findAll({
+                    loaResult = await loaModel.findAll({
                         attributes: [
                             'studentnumber',
                             'dateencoded',
@@ -499,7 +569,7 @@ const advLoaSearch = async (req, res) => {
                     })
                 }
 
-                for (let i = 0; i < enrolledResult.length; i++) {
+                for (let i = 0; i < loaResult.length; i++) {
                     let infoRes = await studentModel.findOne({
                         attributes: [
                             'studentNumber',
@@ -511,13 +581,13 @@ const advLoaSearch = async (req, res) => {
                             'gender'
                         ],
                         where: {
-                            studentNumber: enrolledResult[i].studentnumber,
+                            studentNumber: loaResult[i].studentnumber,
                             course: courseCode
                         }
                     })
                     
                     studInfoResult.push(infoRes)
-                    objRes.push(enrolledResult[i])
+                    objRes.push(loaResult[i])
                 }
             }
         }
@@ -525,11 +595,11 @@ const advLoaSearch = async (req, res) => {
         else {
             //gender is specific
             if(gender != 'ALL') {
-                let enrolledResult
+                let loaResult
                 
                 //sem and sy specific
                 if(semester != 'ALL' && schoolyear != 'ALL') {
-                    enrolledResult = await loaModel.findAll({
+                    loaResult = await loaModel.findAll({
                         attributes: [
                             'studentnumber',
                             'dateencoded',
@@ -543,7 +613,7 @@ const advLoaSearch = async (req, res) => {
                     })
                 }
                 else {
-                    enrolledResult = await loaModel.findAll({
+                    loaResult = await loaModel.findAll({
                         attributes: [
                             'studentnumber',
                             'dateencoded',
@@ -553,7 +623,7 @@ const advLoaSearch = async (req, res) => {
                     })
                 }
 
-                for (let i = 0; i < enrolledResult.length; i++) {
+                for (let i = 0; i < loaResult.length; i++) {
                     let infoRes = await studentModel.findOne({
                         attributes: [
                             'studentNumber',
@@ -565,22 +635,22 @@ const advLoaSearch = async (req, res) => {
                             'gender'
                         ],
                         where: {
-                            studentNumber: enrolledResult[i].studentnumber,
+                            studentNumber: loaResult[i].studentnumber,
                             gender: gender
                         }
                     })
                     
                     studInfoResult.push(infoRes)
-                    objRes.push(enrolledResult[i])
+                    objRes.push(loaResult[i])
                 }
             }
             //gender is not specific
             else {
-                let enrolledResult
+                let loaResult
                 
                 //sem and sy specific
                 if(semester != 'ALL' && schoolyear != 'ALL') {
-                    enrolledResult = await loaModel.findAll({
+                    loaResult = await loaModel.findAll({
                         attributes: [
                             'studentnumber',
                             'dateencoded',
@@ -594,7 +664,7 @@ const advLoaSearch = async (req, res) => {
                     })
                 }
                 else {
-                    enrolledResult = await loaModel.findAll({
+                    loaResult = await loaModel.findAll({
                         attributes: [
                             'studentnumber',
                             'dateencoded',
@@ -604,7 +674,7 @@ const advLoaSearch = async (req, res) => {
                     })
                 }
 
-                for (let i = 0; i < enrolledResult.length; i++) {
+                for (let i = 0; i < loaResult.length; i++) {
                     let infoRes = await studentModel.findOne({
                         attributes: [
                             'studentNumber',
@@ -616,19 +686,19 @@ const advLoaSearch = async (req, res) => {
                             'gender'
                         ],
                         where: {
-                            studentNumber: enrolledResult[i].studentnumber
+                            studentNumber: loaResult[i].studentnumber
                         }
                     })
                     
                     studInfoResult.push(infoRes)
-                    objRes.push(enrolledResult[i])
+                    objRes.push(loaResult[i])
                 }
             }
         }
     }
 
     if(objRes.length > 0) {
-        res.status(200).send({ message: 'Students Enrolled found.', result: objRes, infoResult: studInfoResult })
+        res.status(200).send({ message: 'Students loa found.', result: objRes, infoResult: studInfoResult })
     }
     else {
         res.status(500).send({ message: 'No Result.' })

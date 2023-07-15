@@ -9,11 +9,23 @@
 
 mat-card {
   opacity: 80%;
+  width: 55rem;
+
+  &.content {
+    width: 15rem;
+    background-color: #439a43;
+    color: white;
+  }
   mat-card-header {
     color: darkgreen;
   }
 
   mat-card-header, mat-card-content {
     opacity: 100% !important;
+  }
+
+  .row.center {
+    display: inline-block;
+    align-self: center;
   }
 }

@@ -1,16 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import { StudentService } from 'src/app/services/student.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { CurriculumService } from 'src/app/services/curriculum.service';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { VariableService } from 'src/app/services/variable.service';
 import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
 import { ReportService } from 'src/app/services/report.service';
+import { ngxCsv } from 'ngx-csv';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-student-list',
@@ -29,6 +29,7 @@ export class StudentListComponent implements OnInit {
     'middleName',
     'lastName',
     'suffix',
+    'course',
     'edit',
     'shiftTo',
     'confirmShift'
@@ -41,7 +42,7 @@ export class StudentListComponent implements OnInit {
   courseList: any = [];
   students: any = [];
   globalVars: any;
-
+  courseChecker: any = []
 
   //--- FORMS FOR INSERTING TO THE DATABASE ---//
   shifteeForm: any;
@@ -52,10 +53,9 @@ export class StudentListComponent implements OnInit {
   constructor(
     private studentService: StudentService,
     private reportService: ReportService,
-    private curriculumService: CurriculumService,
+    private userService: UserService,
     private variableService: VariableService,
     private fb: FormBuilder,
-    private router: Router,
     private toastr: ToastrService,
     private csvParser: NgxCsvParser,
     private _liveAnnouncer: LiveAnnouncer
@@ -86,6 +86,7 @@ export class StudentListComponent implements OnInit {
       description: new FormControl({ value: '', disabled: false })
     })
 
+    this.getCourseChecker()
     this.getStudents();
     this.getCourseList();
     this.getVariables();
@@ -94,7 +95,19 @@ export class StudentListComponent implements OnInit {
   getStudents() {
     this.studentService.getAllStudents().subscribe((res) => {
       if(res) {
-        this.students = res.students;
+        let tmpData = res.students
+        //console.log(tmpData)
+
+        for(let i = 0; i < tmpData.length; i++) {
+          if(!this.courseCheck(tmpData[i].course)) {
+            this.students.push(tmpData[i])
+          }
+          else {
+            continue
+          }
+        }
+        //console.log(this.students)
+
         this.dataSource = new MatTableDataSource(this.students);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -103,11 +116,34 @@ export class StudentListComponent implements OnInit {
     })
   }
 
+  getCourseChecker() {
+    let check = this.userService.getToken()
+
+    if(check == 'UNIV') {
+      this.reportService.getCourses('ALL').subscribe((res) => {
+        if(res) {
+          this.courseChecker = res.course;
+        }
+      })
+    }
+    else {
+      this.reportService.getCourses(check).subscribe((res) => {
+        if(res) {
+          this.courseChecker = res.course
+        }
+      })
+    }
+
+  }
+
+  courseCheck(course: any) {
+    return !this.courseChecker.find((item: any) => item.courseCode === course)
+  }
+
   getCourseList() {
     this.reportService.getCourses('ALL').subscribe((res) => {
       if(res) {
         this.courseList = res.course;
-        console.log(this.courseList)
       }
     })
   }
@@ -139,40 +175,42 @@ export class StudentListComponent implements OnInit {
   onConfirmShift(studentNumber: any) {
     //console.log(this.studentInfoForm.value)
     //console.log(this.shifteeForm.value)
-
-    if(this.studentInfoForm.get('studentNumber').value == null || this.shifteeForm.get('studentnumber').value == null) {
-      this.toastr.error('Shiftee course is invalid.')
-      window.location.reload()
-    }
-    else {
-      if((studentNumber != this.studentInfoForm.get('studentNumber').value) || (studentNumber != this.shifteeForm.get('studentnumber').value)) {
-        this.toastr.error('Please refresh the browser.')
+    if(confirm('Are you sure you want to shift the course of this student?')) {
+      if(this.studentInfoForm.get('studentNumber').value == null || this.shifteeForm.get('studentnumber').value == null) {
+        this.toastr.error('Shiftee course is invalid.')
+        window.location.reload()
       }
       else {
-        this.studentService.addShiftee(this.shifteeForm.value).subscribe()
+        if((studentNumber != this.studentInfoForm.get('studentNumber').value) || (studentNumber != this.shifteeForm.get('studentnumber').value)) {
+          this.toastr.error('Please refresh the browser.')
+        }
+        else {
+          this.studentService.addShiftee(this.shifteeForm.value).subscribe()
 
-        this.studentService.editCourse(Number(this.studentInfoForm.get('studentNumber').value), this.studentInfoForm.value).subscribe((res) => {
-          if(res) {
-            this.variableService.getIpAddress().subscribe((res) => {
-              if(res) {
-                let ipAdd = res.clientIp
+          this.studentService.editCourse(Number(this.studentInfoForm.get('studentNumber').value), this.studentInfoForm.value).subscribe((res) => {
+            if(res) {
+              this.variableService.getIpAddress().subscribe((res) => {
+                if(res) {
+                  let ipAdd = res.clientIp
 
-                this.processData.get('username').setValue(localStorage.getItem('user'))
-                this.processData.get('ipaddress').setValue(ipAdd)
-                this.processData.get('pcname').setValue(window.location.hostname)
-                this.processData.get('studentnumber').setValue(this.studentInfoForm.get('studentNumber').value)
-                this.processData.get('type').setValue('Shifted Course')
-                this.processData.get('description').setValue(
-                  `Shifted ${this.studentInfoForm.get('studentNumber').value}'s
-                  from ${this.shifteeForm.get('coursefrom').value} to ${this.shifteeForm.get('coursefrom').value}`)
-                this.variableService.addProcess(this.processData.value).subscribe()
-              }
-            })
+                  this.processData.get('username').setValue(localStorage.getItem('user'))
+                  this.processData.get('ipaddress').setValue(ipAdd)
+                  this.processData.get('pcname').setValue(window.location.hostname)
+                  this.processData.get('studentnumber').setValue(this.studentInfoForm.get('studentNumber').value)
+                  this.processData.get('type').setValue('Shifted Course')
+                  this.processData.get('description').setValue(
+                    `Shifted ${this.studentInfoForm.get('studentNumber').value}'s
+                    from ${this.shifteeForm.get('coursefrom').value} to ${this.shifteeForm.get('coursefrom').value}`)
+                  this.variableService.addProcess(this.processData.value).subscribe()
+                }
+              })
 
-            this.toastr.success(res.message)
-            this.router.navigate(['/student/list'])
-          }
-        })
+              this.toastr.success(res.message)
+              this.students = []
+              this.getStudents()
+            }
+          })
+        }
       }
     }
   }
@@ -239,6 +277,43 @@ export class StudentListComponent implements OnInit {
     else {
       window.location.reload()
     }
+  }
+
+  downloadTemplate() {
+    let columns = [
+      'studentNumber',
+      'firstName',
+      'lastName',
+      'middleName',
+      'suffix',
+      'street',
+      'barangay',
+      'municipality',
+      'province',
+      'dateOfBirth',
+      'gender',
+      'religion',
+      'citizenship',
+      'status',
+      'guardian',
+      'mobilePhone',
+      'email',
+      'yearAdmitted',
+      'SemesterAdmitted',
+      'course',
+      'cardNumber',
+      'studentincrement',
+      'lastupdate',
+      'highschool',
+      'curriculumid',
+    ]
+
+    let options = {
+      headers: columns,
+      showLabels: true
+    }
+
+    new ngxCsv({}, 'student-list-Template', options)
   }
 
   applyFilter(event: Event) {

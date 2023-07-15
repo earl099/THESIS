@@ -31,7 +31,8 @@ const getCourses = async (req, res) => {
                     'DISTINCT',
                     db.sequelize.col('courseCode')
                 ),
-                'courseCode'
+                'courseCode',
+                'courseCollege'
             ],
             where: { courseCollege: collegeCode }
         })
@@ -43,7 +44,8 @@ const getCourses = async (req, res) => {
                     'DISTINCT',
                     db.sequelize.col('courseCode')
                 ),
-                'courseCode'
+                'courseCode',
+                'courseCollege'
             ]
         })
     }

@@ -9,6 +9,7 @@ const divOfFeesModel = db.divOfFees
 //models needed for assessment
 const assessListModel = db.assessList
 const assessSubjModel = db.assessSubj
+const courseModel = db.course
 const scheduleModel = db.schedule
 const feesModel = db.fees
 const studentModel = db.student
@@ -95,6 +96,8 @@ const editStudEnroll = async (req, res) => {
 }
 
 const getStudsEnroll = async (req, res) => {
+    const semester = req.params.semester
+    const schoolyear = req.params.schoolyear
     const studsEnroll = await studEnrollModel.findAll({
         attributes: [
             'studentnumber',
@@ -108,7 +111,11 @@ const getStudsEnroll = async (req, res) => {
             'statusII',
             'coursenow',
             'notuitionenroll'
-        ]
+        ],
+        where: {
+            semester: semester,
+            schoolyear: schoolyear
+        }
     })
 
     if(studsEnroll.length > 0) {
@@ -346,40 +353,68 @@ const addTransaction = async (req, res) => {
 
         switch (schedcodeList.subjectype) {
             case 'AN SCI':
-                labFeeMultiplier[0]++
+                for(let i = 0; i < schedcodeList.labunits; i++ ) {
+                    labFeeMultiplier[0]++
+                }                
                 break
             case 'BIO SCI':
-                labFeeMultiplier[1]++
+                for(let i = 0; i < schedcodeList.labunits; i++ ) {
+                    labFeeMultiplier[1]++
+                }                
                 break
             case 'CEMDS':
-                labFeeMultiplier[2]++
+                for(let i = 0; i < schedcodeList.labunits; i++ ) {
+                    labFeeMultiplier[2]++
+                }                
                 break
             case 'HRM':
-                labFeeMultiplier[3]++
+                for(let i = 0; i < schedcodeList.labunits; i++ ) {
+                    labFeeMultiplier[3]++
+                }
                 break
             case 'CROP SCI':
-                labFeeMultiplier[4]++
+                for(let i = 0; i < schedcodeList.labunits; i++ ) {
+                    labFeeMultiplier[4]++
+                }                
                 break
             case 'ENGINEERING':
-                labFeeMultiplier[5]++
+                for(let i = 0; i < schedcodeList.labunits; i++ ) {
+                    labFeeMultiplier[5]++
+                }
+                
                 break
             case 'PHY SCI':
-                labFeeMultiplier[6]++
+                for(let i = 0; i < schedcodeList.labunits; i++ ) {
+                    labFeeMultiplier[6]++
+                }                
                 break
             case 'VET':
-                labFeeMultiplier[7]++
+                for(let i = 0; i < schedcodeList.labunits; i++ ) {
+                    labFeeMultiplier[7]++
+                }
+                
                 break
             case 'SPEECH':
-                labFeeMultiplier[8]++
+                for(let i = 0; i < schedcodeList.labunits; i++) {
+                    labFeeMultiplier[8]++
+                }
+                
                 break
             case 'ENGLISH LAB':
-                labFeeMultiplier[9]++
+                for(let i = 0; i < schedcodeList.labunits; i++ ) {
+                    labFeeMultiplier[9]++
+                }
+                
                 break
             case 'NURSING LAB':
-                labFeeMultiplier[10]++
+                for(let i = 0; i < schedcodeList.labunits; i++ ) {
+                    labFeeMultiplier[10]++
+                }                
                 break
             case 'CCL':
-                labFeeMultiplier[11]++
+                for(let i = 0; i < schedcodeList.labunits; i++ ) {
+                    labFeeMultiplier[11]++
+                }                
                 break
             case 'RLE':
             case 'RLE 2':
@@ -387,25 +422,43 @@ const addTransaction = async (req, res) => {
             case 'RLE 4':
             case 'MWRLE 2':
             case 'MWRLE 3':
-                labFeeMultiplier[12]++
+                for(let i = 0; i < schedcodeList.labunits; i++ ) {
+                    labFeeMultiplier[12]++
+                }
+                
                 break
             case 'CSPEAR':
-                labFeeMultiplier[13]++
+                for(let i = 0; i < schedcodeList.labunits; i++ ) {
+                    labFeeMultiplier[13]++
+                }
+                
                 break
             case 'EDFS':
-                labFeeMultiplier[14]++
+                for(let i = 0; i < schedcodeList.labunits; i++ ) {
+                    labFeeMultiplier[14]++
+                }                
                 break
             case 'PSYC':
-                labFeeMultiplier[15]++
+                for(let i = 0; i < schedcodeList.labunits; i++ ) {
+                    labFeeMultiplier[15]++
+                }                
                 break
             case 'TRM':
-                labFeeMultiplier[16]++
+                for(let i = 0; i < schedcodeList.labunits; i++ ) {
+                    labFeeMultiplier[16]++
+                }                
                 break
             case 'FISHERY':
-                labFeeMultiplier[17]++
+                for(let i = 0; i < schedcodeList.labunits; i++ ) {
+                    labFeeMultiplier[17]++
+                }
+                
                 break
             case 'STUDENT TEACHING':
-                labFeeMultiplier[18]++
+                for(let i = 0; i < schedcodeList.labunits; i++ ) {
+                    labFeeMultiplier[18]++
+                }
+                
                 break
             case 'NSTP':
                 labFeeMultiplier[19]++
@@ -439,7 +492,12 @@ const addTransaction = async (req, res) => {
         //OTHER FEES
         switch (schedcodeList.ojt) {
             case 'Y':
-                otherFeeChecker[0]++
+                if (otherFeeChecker[0] > 0) {
+                    break
+                } else {
+                    otherFeeChecker[0]++    
+                }
+                
                 break;
         }
         switch (schedcodeList.petition) {
@@ -449,17 +507,35 @@ const addTransaction = async (req, res) => {
         }
         switch (schedcodeList.thesis) {
             case 'Y':
-                otherFeeChecker[2]++
+                if(otherFeeChecker[2] > 0) {
+                    break
+                }
+                else {
+                    otherFeeChecker[2]++
+                }
+                
                 break;
         }
         switch (schedcodeList.internet) {
             case 'Y':
-                otherFeeChecker[3]++
+                if(otherFeeChecker[3] > 0) {
+                    break
+                }
+                else {
+                    otherFeeChecker[3]++
+                }
+                
                 break;
         }
         switch (schedcodeList.residency) {
             case 'Y':
-                otherFeeChecker[4]++
+                if(otherFeeChecker[4] > 0) {
+                    break
+                }
+                else {
+                    otherFeeChecker[4]++
+                }
+                
                 break;
         }
 
@@ -1513,15 +1589,70 @@ const searchEnrolled = async (req, res) => {
         gender,
     } = req.body
 
+    let courseList
+    let finalCourseList = []
+
+    if(collegeCode != 'ALL') {
+        if(courseCode != 'ALL') {
+            courseList = await courseModel.findAll({
+                attributes: [
+                    db.sequelize.fn(
+                        'DISTINCT',
+                        db.sequelize.col('courseCode')
+                    ),
+                    'courseCode',
+                    'courseCollege'
+                ],
+                where: {
+                    courseCollege: collegeCode,
+                    courseCode: courseCode
+                }
+            })
+        }
+        else {
+            courseList = await courseModel.findAll({
+                attributes: [
+                    db.sequelize.fn(
+                        'DISTINCT',
+                        db.sequelize.col('courseCode')
+                    ),
+                    'courseCode',
+                    'courseCollege'
+                ],
+                where: {
+                    courseCollege: collegeCode
+                }
+            })
+        }
+    }
+    else {
+        courseList = await courseModel.findAll({
+            attributes: [
+                db.sequelize.fn(
+                    'DISTINCT',
+                    db.sequelize.col('courseCode')
+                ),
+                'courseCode',
+                'courseCollege'
+            ]
+        })
+    }
+
+    for(let i = 0; i < courseList.length; i++) {
+        finalCourseList.push(courseList[i].courseCode) 
+    }
+
     //object for final response
     let objRes = []
     let studInfoResult = []
 
     //specific college
     if(collegeCode != 'UNIV') {
+
         //specific course
         if(courseCode != 'ALL') {
-            //specific college, course and gender
+
+            //specific gender
             if(gender != 'ALL') {
                 let enrolledResult
 
@@ -1535,7 +1666,8 @@ const searchEnrolled = async (req, res) => {
                         ],
                         where: { 
                             semester: semester, 
-                            schoolyear: schoolyear 
+                            schoolyear: schoolyear,
+                            coursenow: courseCode
                         }
                     })
                 }
@@ -1545,7 +1677,10 @@ const searchEnrolled = async (req, res) => {
                             'studentnumber',
                             'semester',
                             'schoolyear'
-                        ]
+                        ],
+                        where: { 
+                            coursenow: courseCode
+                        }
                     })
                 }
 
@@ -1586,7 +1721,8 @@ const searchEnrolled = async (req, res) => {
                         ],
                         where: { 
                             semester: semester, 
-                            schoolyear: schoolyear 
+                            schoolyear: schoolyear,
+                            coursenow: courseCode
                         }
                     })
                 }
@@ -1596,7 +1732,10 @@ const searchEnrolled = async (req, res) => {
                             'studentnumber',
                             'semester',
                             'schoolyear'
-                        ]
+                        ],
+                        where: {
+                            coursenow: courseCode
+                        }
                     })
                 }
 
@@ -1637,7 +1776,8 @@ const searchEnrolled = async (req, res) => {
                         ],
                         where: { 
                             semester: semester, 
-                            schoolyear: schoolyear 
+                            schoolyear: schoolyear,
+                            coursenow: finalCourseList
                         }
                     })
                 }
@@ -1647,7 +1787,10 @@ const searchEnrolled = async (req, res) => {
                             'studentnumber',
                             'semester',
                             'schoolyear'
-                        ]
+                        ],
+                        where: {
+                            coursenow: finalCourseList
+                        }
                     })
                 }
 
@@ -1686,7 +1829,8 @@ const searchEnrolled = async (req, res) => {
                         ],
                         where: { 
                             semester: semester, 
-                            schoolyear: schoolyear 
+                            schoolyear: schoolyear,
+                            coursenow: finalCourseList
                         }
                     })
                 }
@@ -1696,7 +1840,10 @@ const searchEnrolled = async (req, res) => {
                             'studentnumber',
                             'semester',
                             'schoolyear'
-                        ]
+                        ],
+                        where: {
+                            coursenow: finalCourseList
+                        }
                     })
                 }
 

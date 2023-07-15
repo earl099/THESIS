@@ -53,6 +53,15 @@ export class HeaderComponent implements OnInit {
     this.router.navigate([link]);
   }
 
+  redirectToHome() {
+    if(this.dataService.isLoggedIn()) {
+      this.router.navigate(['/dashboard'])
+    }
+    else {
+      this.router.navigate(['/login'])
+    }
+  }
+
   private changeName(name: boolean) {
     this.logoutBtn = name;
     this.loginBtn = !name;
