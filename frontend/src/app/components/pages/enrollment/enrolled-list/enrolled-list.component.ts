@@ -271,12 +271,24 @@ export class EnrolledListComponent implements OnInit {
             }
 
             let check = this.userService.getToken()
-            this.reportService.getCourses(check).subscribe((res) => {
-              if(res) {
-                this.courseList = res.course
-                //console.log(this.courseList)
-              }
-            })
+
+            if(check != 'UNIV') {
+              this.reportService.getCourses(check).subscribe((res) => {
+                if(res) {
+                  this.courseList = res.course
+                  //console.log(this.courseList)
+                }
+              })
+            }
+            else {
+              this.reportService.getCourses('ALL').subscribe((res) => {
+                if(res) {
+                  this.courseList = res.course
+                  //console.log(this.courseList)
+                }
+              })
+            }
+
           }
         })
       }

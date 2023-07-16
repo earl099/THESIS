@@ -91,26 +91,26 @@ export class EditStudentComponent implements OnInit {
     })
   }
 
-  onEditStudent(studentNumber: number, angForm: any) {
+  onEditStudent() {
+    console.log(this.angForm.value)
     if(confirm('Are you sure you want to edit this student\'s details?')){
+
       //--- CONVERTING TO UPPERCASE ---//
-      angForm.get('firstName').setValue(angForm.get('firstName').value.toUpperCase());
-      angForm.get('middleName').setValue(angForm.get('middleName').value.toUpperCase());
-      angForm.get('lastName').setValue(angForm.get('lastName').value.toUpperCase());
-      angForm.get('suffix').setValue(angForm.get('suffix').value.toUpperCase());
-      angForm.get('street').setValue(angForm.get('street').value.toUpperCase());
-      angForm.get('barangay').setValue(angForm.get('barangay').value.toUpperCase());
-      angForm.get('municipality').setValue(angForm.get('municipality').value.toUpperCase());
-      angForm.get('province').setValue(angForm.get('province').value.toUpperCase());
-      angForm.get('religion').setValue(angForm.get('religion').value.toUpperCase());
-      angForm.get('citizenship').setValue(angForm.get('citizenship').value.toUpperCase());
-      angForm.get('status').setValue(angForm.get('status').value.toUpperCase());
-      angForm.get('guardian').setValue(angForm.get('guardian').value.toUpperCase());
-      angForm.get('course').setValue(angForm.get('course').value.toUpperCase());
+      this.angForm.get('firstName').setValue(String(this.angForm.get('firstName').value).toUpperCase());
+      this.angForm.get('middleName').setValue(String(this.angForm.get('middleName').value).toUpperCase());
+      this.angForm.get('lastName').setValue(String(this.angForm.get('lastName').value).toUpperCase());
+      this.angForm.get('suffix').setValue(String(this.angForm.get('suffix').value).toUpperCase());
+      this.angForm.get('street').setValue(String(this.angForm.get('street').value).toUpperCase());
+      this.angForm.get('barangay').setValue(String(this.angForm.get('barangay').value).toUpperCase());
+      this.angForm.get('municipality').setValue(String(this.angForm.get('municipality').value).toUpperCase());
+      this.angForm.get('province').setValue(String(this.angForm.get('province').value).toUpperCase());
+      this.angForm.get('religion').setValue(String(this.angForm.get('religion').value).toUpperCase());
+      this.angForm.get('citizenship').setValue(String(this.angForm.get('citizenship').value).toUpperCase());
+      this.angForm.get('status').setValue(String(this.angForm.get('status').value).toUpperCase());
+      this.angForm.get('guardian').setValue(String(this.angForm.get('guardian').value).toUpperCase());
+      console.log(this.angForm.value);
 
-      //console.log(angForm.value);
-
-      this.studentService.editStudent(studentNumber, angForm.value).subscribe((res) => {
+      this.studentService.editStudent(Number(this.angForm.get('studentNumber').value), this.angForm.value).subscribe((res) => {
         if(res) {
           this.variableService.getIpAddress().subscribe((res) => {
             if(res) {
@@ -122,13 +122,13 @@ export class EditStudentComponent implements OnInit {
               this.processData.get('studentnumber').setValue(this.angForm.get('studentNumber').value)
               this.processData.get('type').setValue('Edit Student Details')
               this.processData.get('description').setValue(`Edited ${this.angForm.get('studentNumber').value}'s details to the database`)
-              this.variableService.addProcess(this.processData).subscribe()
+              this.variableService.addProcess(this.processData.value).subscribe()
             }
           })
 
           this.toastr.success(res.message);
           //console.log(res.student);
-          this.router.navigate([`/student/profile/${studentNumber}`]);
+          this.router.navigate([`/dashboard`]);
         }
         else{
           console.log(res);

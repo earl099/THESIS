@@ -9,7 +9,7 @@
 
         <mat-card-content>
           <div class="info">
-            <form [formGroup]="angForm" (ngSubmit)="onEditStudent(linkStudentNumber, angForm)">
+            <form [formGroup]="angForm">
               <img src="../../../../../assets/user.png" alt="student-pic">
               <h2>Student Information</h2>
               <mat-form-field appearance="fill">
@@ -163,7 +163,7 @@
         <mat-card-actions>
           <div class="row">
             <div class="col">
-              <button mat-raised-button type="submit" class="btn btn-success">Confirm Edit</button>
+              <button mat-raised-button type="submit" class="btn btn-success" (click)="onEditStudent()">Confirm Edit</button>
             </div>
             <div class="col">
               <button mat-raised-button routerLink="/student/list">Back to List</button>
