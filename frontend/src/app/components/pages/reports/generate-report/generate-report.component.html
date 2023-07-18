@@ -377,6 +377,7 @@
           <mat-paginator #enrollPaginator [pageSizeOptions]="[5]" aria-label="Select page of students"></mat-paginator>
         </div>
 
+        <!-- ASSESSED TABLE STARTS HERE -->
         <div class="container" *ngIf="isAssessedReport">
           <table mat-table [dataSource]="dataSource3" matSort #assessedSort="matSort" (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
             <ng-container matColumnDef="studentNumber">
@@ -427,9 +428,7 @@
             <tr mat-header-row *matHeaderRowDef="assessedColumns"></tr>
             <tr mat-row *matRowDef="let assesedRow; columns: assessedColumns"></tr>
 
-            <tr class="mat-row" *matNoDataRow>
-              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
-            </tr>
+            
           </table>
           <mat-paginator #enrollPaginator [pageSizeOptions]="[5]" aria-label="Select page of students"></mat-paginator>
         </div>

@@ -278,8 +278,8 @@ export class GenerateReportComponent implements OnInit {
             let tmpData = res.result
             let tmpData2 = res.infoResult
 
-            //console.log(tmpData)
-            //console.log(tmpData2)
+            console.log(tmpData)
+            console.log(tmpData2)
 
             //data for different report types
             let enrolledData = []
@@ -339,6 +339,7 @@ export class GenerateReportComponent implements OnInit {
               }
             }
 
+
             if(
               enrolledData[0].studentNumber == undefined &&
               shifteeData[0].studentNumber == undefined &&
@@ -389,11 +390,11 @@ export class GenerateReportComponent implements OnInit {
                 case 'assessed':
                   console.log(assessedData)
                   for (let i = 0; i < assessedData.length; i++) {
-                    if(!this.courseCheck(assessedData[i].course)) {
+                    if(this.courseCheck(assessedData[i].course)) {
                       this.dataResult.push(assessedData[i])
                     }
                   }
-
+                  console.log(this.dataResult)
                   this.title = 'Assessed Students'
                   this.isAssessedReport = true
                   this.dataSource3 = new MatTableDataSource(this.dataResult)
