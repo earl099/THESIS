@@ -390,9 +390,15 @@ export class GenerateReportComponent implements OnInit {
                 case 'assessed':
                   console.log(assessedData)
                   for (let i = 0; i < assessedData.length; i++) {
-                    if(this.courseCheck(assessedData[i].course)) {
+                    if(this.userService.getToken() == 'UNIV') {
                       this.dataResult.push(assessedData[i])
                     }
+                    else {
+                      if(!this.courseCheck(assessedData[i].course)) {
+                        this.dataResult.push(assessedData[i])
+                      }
+                    }
+
                   }
                   console.log(this.dataResult)
                   this.title = 'Assessed Students'
