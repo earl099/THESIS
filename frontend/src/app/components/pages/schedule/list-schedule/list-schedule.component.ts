@@ -5,6 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { Observable, concatMap, delay, delayWhen, from, interval, of } from 'rxjs';
 import { ngxCsv } from 'ngx-csv';
 import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
 import { ToastrService } from 'ngx-toastr';
@@ -111,27 +112,35 @@ export class ListScheduleComponent implements OnInit {
   }
 
   getSchedules() {
+    let specialCodes
     this.variableService.getLegend().subscribe((res) => {
       if(res) {
         this.globalVar = res.legend
 
         this.scheduleService.getSchedulesBySemSY(this.globalVar[0].semester, this.globalVar[0].schoolyear).subscribe((res) => {
           if(res) {
-            this.toastr.success(res.message);
+            //this.toastr.success(res.message);
             this.schedules = res.schedules;
-            for(let i = 0; i < this.schedules.length; i++) {
-              this.enrollmentService.getSubjectTitle(this.schedules[i].subjectCode).subscribe((res) => {
-                this.titles.push(res.subject)
-                Object.assign(this.schedules[i], this.titles[i])
+
+            this.enrollmentService.getSubjects().subscribe((res) => {
+              specialCodes = res.subjects
+              console.log(specialCodes)
+
+              for(let i = 0; i < this.schedules.length; i++) {
+                for (let j = 0; j < specialCodes.length; j++) {
+                  if(this.schedules[i].subjectCode == specialCodes[j].subjectcode) {
+                    Object.assign(this.schedules[i], { subjectTitle: specialCodes[j].subjectTitle })
+                    break
+                  }
+                }
 
                 if(i == this.schedules.length - 1) {
                   this.dataSource = new MatTableDataSource(this.schedules);
                   this.dataSource.paginator = this.paginator;
                   this.dataSource.sort = this.sort;
                 }
-              })
-            }
-
+              }
+            })
 
 
           }
@@ -188,7 +197,7 @@ export class ListScheduleComponent implements OnInit {
       }
       else {
         for(let i = 0; i < this.csvRecords.length; i++) {
-          this.scheduleService.addSchedule(this.csvRecords[i]).pipe().subscribe();
+          this.scheduleService.addSchedule(this.csvRecords[i]).subscribe();
 
           this.variableService.getIpAddress().subscribe((res) => {
             if(res) {

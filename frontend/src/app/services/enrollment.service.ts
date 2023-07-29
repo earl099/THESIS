@@ -146,6 +146,11 @@ export class EnrollmentService {
     .pipe(catchError(this.handleError<any>('Get Subject Title')))
   }
 
+  getSubjects() {
+    return this.httpClient.get(`${this.baseUrl}/subject/all`, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Get Subjects')))
+  }
+
   //--- DELETE SUBJECT ---//
   deleteSubject(subjectcode: any) {
     return this.httpClient.delete(`${this.baseUrl}/subject/delete/${subjectcode}`, this.httpOptions)

@@ -15,6 +15,8 @@ router.get('/subject/get/:subjectcode', subjectsController.getSubject)
 //--- GET SUBJECT TITLE ROUTE ---//
 router.get('/subject/get/title/:subjectcode', subjectsController.getSubjTitle)
 
+router.get('/subject/all', subjectsController.getSubjects)
+
 //--- GET SCHOOLYEAR ---//
 router.get('/subject/get/schoolyear', subjectsController.getSchoolyear)
 

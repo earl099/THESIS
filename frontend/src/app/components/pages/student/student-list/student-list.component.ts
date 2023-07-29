@@ -118,7 +118,7 @@ export class StudentListComponent implements OnInit {
 
   getCourseChecker() {
     let check = this.userService.getToken()
-
+    
     if(check == 'UNIV') {
       this.reportService.getCourses('ALL').subscribe((res) => {
         if(res) {
@@ -130,6 +130,7 @@ export class StudentListComponent implements OnInit {
       this.reportService.getCourses(check).subscribe((res) => {
         if(res) {
           this.courseChecker = res.course
+          console.log(this.courseChecker)
         }
       })
     }

@@ -125,14 +125,45 @@ const getSubject = async (req, res) => {
      }
 }
 
+//--- GET ALL SUBJECTS ---//
+const getSubjects = async (req, res) => {
+    const subjects = await subjectsModel.findAll({
+        attributes: [
+            'subjectcode',
+            'subjectTitle'
+        ]
+    })
+
+    if(subjects.length > 0) {
+        res.status(200).send({ message: 'Subjects found.', subjects: subjects })
+    }
+    else {
+        res.status(500).send({ message: 'Subjects not found.' })
+    }
+}
+
 //--- GET SUBJECT TITLE ---//
 const getSubjTitle = async (req, res) => {
     const subjectcode = req.params.subjectcode
+    let newsubjCode = ''
+    let subject
 
-    const subject = await subjectsModel.findOne({
-        attributes: ['subjectTitle'],
-        where: { subjectcode: subjectcode }
-    })
+    if(subjectcode.includes('.')) {
+        newsubjCode = subjectcode.replaceAll('.', '/')
+
+        subject = await subjectsModel.findOne({
+            attributes: ['subjectTitle'],
+            where: { subjectcode: newsubjCode }
+        })
+    }
+    else {
+        subject = await subjectsModel.findOne({
+            attributes: ['subjectTitle'],
+            where: { subjectcode: subjectcode }
+        })
+    }
+
+    
 
     if(subject) {
         res.status(200).send({ message: 'Subject title found.', subject: subject })
@@ -178,6 +209,7 @@ module.exports = {
     addSubject,
     editSubject,
     getSubject,
+    getSubjects,
     getSubjTitle,
     getSchoolyear,
     deleteSubject
