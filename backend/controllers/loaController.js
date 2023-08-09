@@ -110,7 +110,7 @@ const adminGetLoa = async (req, res) => {
         res.status(200).send({ message: 'Students with LOA found.', studsWithLoa: studsWithLoa })
     }
     else {
-        res.status(500).send({ message: 'Students with LOA not found' })
+        res.status(404).send({ message: 'Students with LOA not found' })
     }
 }
 

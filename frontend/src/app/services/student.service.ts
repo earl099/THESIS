@@ -120,8 +120,6 @@ export class StudentService {
     .pipe(catchError(this.handleError<any>('Delete Loa Record')))
   }
 
-  //--- GET ASSESSED 
-
   //--- ERROR HANDLING ---//
   private handleError<T>(operation = 'operation', result?: T) {
     return (): Observable<T> => {

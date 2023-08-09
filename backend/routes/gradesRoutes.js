@@ -3,6 +3,9 @@
 const gradesController = require('../controllers/gradesController')
 const router = require('express').Router()
 
+//--- GET STUDENT TOR ---//
+router.get('/grades/get/:type/:studentnumber', gradesController.getTor)
+
 //--- GET GRADES BY STUDENT NUMBER SEM AND SY ROUTE ---//
 router.get('/grades/:studentnumber/:semester/:schoolyear', gradesController.getGradesByStudNumSemSY)
 

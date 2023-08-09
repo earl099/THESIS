@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "enrollmentSystem-frontend": {
+    "frontend": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -34,7 +34,7 @@
               "rgbcolor",
               "raf"
            ],
-            "outputPath": "dist/enrollment-system-frontend",
+            "outputPath": "dist/frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -87,10 +87,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "enrollmentSystem-frontend:build:production"
+              "browserTarget": "frontend:build:production"
             },
             "development": {
-              "browserTarget": "enrollmentSystem-frontend:build:development"
+              "browserTarget": "frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -98,7 +98,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "enrollmentSystem-frontend:build"
+            "browserTarget": "frontend:build"
           }
         },
         "test": {
@@ -115,12 +115,6 @@
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css"
-            ],
-            "scripts": [
-              {
-                "backend": "cd ../backend npm start"
-              }
-
             ]
           }
         }

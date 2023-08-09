@@ -1,6 +1,13 @@
 @import  '../../index/home/home.component.scss';
 
 //FORMAT GOES HERE
+.page__content {
+  overflow: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 mat-card {
   background-color: #439a43;
 }

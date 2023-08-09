@@ -27,6 +27,9 @@ export class GenerateReportComponent implements OnInit {
   //report search parameters
   reportForm: any
 
+  //assessed filter form
+  assessedFilter: any
+
   //loa specific forms
   filterForm: any
   processLogForm: any
@@ -48,6 +51,7 @@ export class GenerateReportComponent implements OnInit {
   collegeList: Array<any> = []
   courseList: Array<any> = []
   schoolyearList: Array<any> = []
+  scholarshipList: Array<any> = []
 
   //course check list array
   cCheckList: any = []
@@ -105,6 +109,17 @@ export class GenerateReportComponent implements OnInit {
     'scholarship'
   ]
 
+  torColumns: Array<string> = [
+    'subjectcode',
+    'mygrade',
+    'mygradeedit',
+    'mygradeeditdate',
+    'makeupgrade',
+    'makeupencoder',
+    'makeupdate',
+    'units'
+  ]
+
   //table paginator and sorter for the table
   @ViewChild('enrollPaginator') enrollPaginator!: MatPaginator;
   @ViewChild('enrollSort') enrollSort!: MatSort;
@@ -114,6 +129,8 @@ export class GenerateReportComponent implements OnInit {
   @ViewChild('loaSort') loaSort!: MatSort;
   @ViewChild('assessedPaginator') assessedPaginator!: MatPaginator;
   @ViewChild('assessedSort') assessedSort!: MatSort;
+
+
 
   //table data
   dataResult: Array<any> = []
@@ -125,6 +142,7 @@ export class GenerateReportComponent implements OnInit {
   constructor(
     private reportService: ReportService,
     private studentService: StudentService,
+    private enrollmentService: EnrollmentService,
     private userService: UserService,
     private variableService: VariableService,
     private fb: FormBuilder,
@@ -161,7 +179,12 @@ export class GenerateReportComponent implements OnInit {
       //advanced filters for Students Enrolled, w/ LOA and shiftees
       gender: new FormControl({ value: '', disabled: false }),
       semester: new FormControl({ value: '', disabled: false }),
-      schoolyear: new FormControl({ value: '', disabled: false })
+      schoolyear: new FormControl({ value: '', disabled: false }),
+
+      scholarship: new FormControl({ value: '', disabled: false }),
+
+      //student number for tor
+      studentnumber: new FormControl({ value: '', disabled: false })
     })
 
     //filter for loa
@@ -171,6 +194,16 @@ export class GenerateReportComponent implements OnInit {
       gender: new FormControl({ value: 'ALL', disabled: false }),
       semester: new FormControl({ value: 'ALL', disabled: false }),
       schoolyear: new FormControl({ value: 'ALL', disabled: false })
+    })
+
+    //filter for assessed
+    this.assessedFilter = this.fb.group({
+      collegeCode: new FormControl({ value: localStorage.getItem('token'), disabled: false }),
+      courseCode: new FormControl({ value: 'ALL', disabled: false }),
+      gender: new FormControl({ value: 'ALL', disabled: false }),
+      semester: new FormControl({ value: 'ALL', disabled: false }),
+      schoolyear: new FormControl({ value: 'ALL', disabled: false }),
+      scholarship: new FormControl({ value: 'ALL', disabled: false })
     })
 
     this.isReportGenerated = false
@@ -190,13 +223,36 @@ export class GenerateReportComponent implements OnInit {
     }
 
     let check = this.userService.getToken()
-    this.reportService.getCourses(check).subscribe((res) => {
+    if(check != 'UNIV') {
+      this.reportService.getCourses(check).subscribe((res) => {
+        if(res) {
+          this.cCheckList = res.course
+          this.courseList = res.course
+        }
+      })
+    }
+    else {
+      this.reportService.getCourses('ALL').subscribe((res) => {
+        if(res) {
+          this.cCheckList = res.course
+          this.courseList = res.course
+        }
+      })
+    }
+
+    //console.log(this.reportForm.get('reportType').value)
+
+    this.enrollmentService.getScholarships().subscribe((res) => {
       if(res) {
-        this.cCheckList = res.course
-        this.courseList = res.course
+        let tmpData = res.scholarships
+
+        for (let i = 0; i < tmpData.length; i++) {
+          this.scholarshipList.push(tmpData[i].scholarship)
+        }
+
+        //console.log(this.scholarshipList)
       }
     })
-    //console.log(this.reportForm.get('reportType').value)
   }
 
   courseCheck(course: any) {
@@ -213,18 +269,20 @@ export class GenerateReportComponent implements OnInit {
   }
 
   getSchoolyear(type: string) {
-    this.reportService.getSchoolYearbyReportType(type).subscribe((res) => {
-      if(res) {
-        let tmpData = res.schoolyear
-        //console.log(tmpData)
-        if(tmpData.length > 0){
-          this.schoolyearList.splice(0, this.schoolyearList.length)
+    if(this.reportForm.get('reportType').value != 'tor') {
+      this.reportService.getSchoolYearbyReportType(type).subscribe((res) => {
+        if(res) {
+          let tmpData = res.schoolyear
+          //console.log(tmpData)
+          if(tmpData.length > 0){
+            this.schoolyearList.splice(0, this.schoolyearList.length)
+          }
+          for (let i = 0; i < tmpData.length; i++) {
+            this.schoolyearList.push(tmpData[i])
+          }
         }
-        for (let i = 0; i < tmpData.length; i++) {
-          this.schoolyearList.push(tmpData[i])
-        }
-      }
-    })
+      })
+    }
   }
 
   getColleges() {
@@ -243,19 +301,36 @@ export class GenerateReportComponent implements OnInit {
   }
 
   getCourses(college: string) {
-    this.reportService.getCourses(college).subscribe((res) => {
-      if(res) {
-        let tmpData = res.course
-        if(this.courseList.length > 0) {
-          this.courseList.splice(0, this.courseList.length)
-        }
+    if(college != 'UNIV') {
+      this.reportService.getCourses(college).subscribe((res) => {
+        if(res) {
+          let tmpData = res.course
+          if(this.courseList.length > 0) {
+            this.courseList.splice(0, this.courseList.length)
+          }
 
-        for (let i = 0; i < tmpData.length; i++) {
-          this.courseList.push(tmpData[i])
+          for (let i = 0; i < tmpData.length; i++) {
+            this.courseList.push(tmpData[i])
+          }
+          //console.log(this.courseList)
         }
-        //console.log(this.courseList)
-      }
-    })
+      })
+    }
+    else {
+      this.reportService.getCourses('ALL').subscribe((res) => {
+        if(res) {
+          let tmpData = res.course
+          if(this.courseList.length > 0) {
+            this.courseList.splice(0, this.courseList.length)
+          }
+
+          for (let i = 0; i < tmpData.length; i++) {
+            this.courseList.push(tmpData[i])
+          }
+          //console.log(this.courseList)
+        }
+      })
+    }
   }
 
   generateReport() {
@@ -270,6 +345,7 @@ export class GenerateReportComponent implements OnInit {
         }
         this.reportForm.get('courseCode').setValue('ALL')
         this.reportForm.get('gender').setValue('ALL')
+        this.reportForm.get('scholarship').setValue('ALL')
         this.reportForm.get('semester').setValue(this.globalVar[0].semester)
         this.reportForm.get('schoolyear').setValue(this.globalVar[0].schoolyear)
 
@@ -278,8 +354,9 @@ export class GenerateReportComponent implements OnInit {
             let tmpData = res.result
             let tmpData2 = res.infoResult
 
-            console.log(tmpData)
-            console.log(tmpData2)
+            //console.log(tmpData)
+            //console.log(tmpData2)
+            //console.log(this.reportForm.value)
 
             //data for different report types
             let enrolledData = []
@@ -325,6 +402,9 @@ export class GenerateReportComponent implements OnInit {
                       loaData.push(checker)
                     }
                   }
+                  break
+
+                case 'tor':
                   break
 
                 default:
@@ -388,7 +468,8 @@ export class GenerateReportComponent implements OnInit {
                   break
 
                 case 'assessed':
-                  console.log(assessedData)
+                  //console.log(assessedData)
+
                   for (let i = 0; i < assessedData.length; i++) {
                     if(this.userService.getToken() == 'UNIV') {
                       this.dataResult.push(assessedData[i])
@@ -400,7 +481,9 @@ export class GenerateReportComponent implements OnInit {
                     }
 
                   }
-                  console.log(this.dataResult)
+
+                  //console.log(this.dataResult)
+
                   this.title = 'Assessed Students'
                   this.isAssessedReport = true
                   this.dataSource3 = new MatTableDataSource(this.dataResult)
@@ -444,6 +527,7 @@ export class GenerateReportComponent implements OnInit {
               let tmpData = res.result
               let tmpData2 = res.infoResult
               let finalData = []
+
               for (let i = 0; i < tmpData.length; i++) {
                 if(tmpData2[i] == null) {
                   continue
@@ -492,8 +576,8 @@ export class GenerateReportComponent implements OnInit {
                     this.isShifteeReport = true
                     //setting table data source and paginator and sorter
                     this.dataSource1 = new MatTableDataSource(this.dataResult)
-                    this.dataSource1.paginator = this.enrollPaginator
-                    this.dataSource1.sort = this.enrollSort
+                    this.dataSource1.paginator = this.shifteePaginator
+                    this.dataSource1.sort = this.shifteeSort
                     this.isReportGenerated = true
                     break
 
@@ -502,8 +586,8 @@ export class GenerateReportComponent implements OnInit {
                     this.isAssessedReport = true
                     //setting table data source and paginator and sorter
                     this.dataSource3 = new MatTableDataSource(this.dataResult)
-                    this.dataSource3.paginator = this.enrollPaginator
-                    this.dataSource3.sort = this.enrollSort
+                    this.dataSource3.paginator = this.assessedPaginator
+                    this.dataSource3.sort = this.assessedSort
                     this.isReportGenerated = true
                     break
 
@@ -512,8 +596,8 @@ export class GenerateReportComponent implements OnInit {
                     this.isLoaReport = true
                     //setting table data source and paginator and sorter
                     this.dataSource2 = new MatTableDataSource(this.dataResult)
-                    this.dataSource2.paginator = this.enrollPaginator
-                    this.dataSource2.sort = this.enrollSort
+                    this.dataSource2.paginator = this.loaPaginator
+                    this.dataSource2.sort = this.loaSort
                     this.isReportGenerated = true
                     break
                 }
@@ -528,7 +612,7 @@ export class GenerateReportComponent implements OnInit {
   }
 
   generateCSV() {
-    let options
+    let options: any
     switch (this.reportForm.get('reportType').value) {
       case 'stud_enroll':
         options = {
@@ -543,6 +627,36 @@ export class GenerateReportComponent implements OnInit {
           showLabels: true
         }
         break
+
+      case 'assessed':
+        options = {
+          headers: this.assessedColumns,
+          showLabels: true
+        }
+        break
+
+      case 'tor':
+        options = {
+          headers: this.torColumns,
+          showLabels: true
+        }
+        //console.log(this.reportForm.get('reportType').value + this.reportForm.get('studentnumber').value )
+
+        this.reportService.advSearchByReportType(this.reportForm.get('reportType').value, this.reportForm.value, this.reportForm.get('studentnumber').value).subscribe((res) => {
+          if(res) {
+            let tmpData = res.tor
+
+            for (let i = 0; i < tmpData.length; i++) {
+              this.dataResult.push(tmpData[i])
+            }
+
+            console.log(this.dataResult)
+            new ngxCsv(this.dataResult, 'TOR-' + this.reportForm.get('studentnumber').value, options)
+          }
+        })
+
+        break
+
       default:
         options = {
           headers: this.loaColumns,
@@ -551,7 +665,10 @@ export class GenerateReportComponent implements OnInit {
         break;
     }
 
-    new ngxCsv(this.dataResult, 'Report-' + this.reportForm.get('reportType').value, options)
+    if(this.reportForm.get('reportType').value != 'tor') {
+      new ngxCsv(this.dataResult, 'Report-' + this.reportForm.get('reportType').value, options)
+    }
+
 
     this.variableService.getIpAddress().subscribe((res) => {
       if(res) {
@@ -576,6 +693,27 @@ export class GenerateReportComponent implements OnInit {
             this.processData.get('description').setValue(`Exported Report for Shiftees`)
             this.variableService.addProcess(this.processData.value).subscribe()
             break
+
+          case 'assessed':
+            this.processData.get('username').setValue(localStorage.getItem('user'))
+            this.processData.get('ipaddress').setValue(ipAdd)
+            this.processData.get('pcname').setValue(window.location.hostname)
+            this.processData.get('studentnumber').setValue('N/A')
+            this.processData.get('type').setValue('Export Report')
+            this.processData.get('description').setValue(`Exported Report for Assessed Students`)
+            this.variableService.addProcess(this.processData.value).subscribe()
+            break
+
+          case 'tor':
+            this.processData.get('username').setValue(localStorage.getItem('user'))
+            this.processData.get('ipaddress').setValue(ipAdd)
+            this.processData.get('pcname').setValue(window.location.hostname)
+            this.processData.get('studentnumber').setValue(this.reportForm.get('studentnumber').value)
+            this.processData.get('type').setValue('Export Report')
+            this.processData.get('description').setValue(`Exported Transcript of Records of ${this.reportForm.get('studentnumber').value}`)
+            this.variableService.addProcess(this.processData.value).subscribe()
+            break
+
           default:
             this.processData.get('username').setValue(localStorage.getItem('user'))
             this.processData.get('ipaddress').setValue(ipAdd)
@@ -591,6 +729,80 @@ export class GenerateReportComponent implements OnInit {
     })
   }
 
+  filterAssessed() {
+    this.reportForm.get('reportType').setValue('assessed')
+    console.log(this.assessedFilter.value)
+
+    if(
+      this.assessedFilter.get('collegeCode').value == '' ||
+      this.assessedFilter.get('collegeCode').value == 'ALL'
+    ) {
+      this.assessedFilter.get('collegeCode').setValue('ALL')
+    }
+
+    this.getCourses(this.assessedFilter.get('collegeCode').value)
+
+    if(
+      this.assessedFilter.get('courseCode').value == '' ||
+      this.assessedFilter.get('courseCode').value == 'ALL'
+    ) {
+      this.assessedFilter.get('courseCode').setValue('ALL')
+    }
+
+    if(
+      this.assessedFilter.get('gender').value == '' ||
+      this.assessedFilter.get('gender').value == 'ALL'
+    ) {
+      this.assessedFilter.get('gender').setValue('ALL')
+    }
+
+    if(
+      this.assessedFilter.get('semester').value == '' ||
+      this.assessedFilter.get('semester').value == 'ALL'
+    ) {
+      this.assessedFilter.get('semester').setValue('ALL')
+    }
+
+    if(
+      this.assessedFilter.get('schoolyear').value == '' ||
+      this.assessedFilter.get('schoolyear').value == 'ALL'
+    ) {
+      this.assessedFilter.get('schoolyear').setValue('ALL')
+    }
+
+    if(
+      this.assessedFilter.get('scholarship').value == '' ||
+      this.assessedFilter.get('scholarship').value == 'ALL'
+    ) {
+      this.assessedFilter.get('scholarship').setValue('ALL')
+    }
+
+    this.reportService.advSearchByReportType(this.reportForm.get('reportType').value, this.assessedFilter.value).subscribe({
+      next: (res) => {
+        if(res) {
+          let tmpData = res.result
+          let tmpData2 = res.infoResult
+
+          console.log(tmpData2)
+          let finalData = []
+          for(let i = 0; i < tmpData2.length; i++) {
+            if(tmpData2[i] == null) {
+              continue
+            }
+            else {
+              Object.assign(tmpData[i], tmpData2[i])
+              finalData.push(tmpData[i])
+            }
+          }
+
+          this.dataSource3.disconnect()
+          this.dataSource3 = new MatTableDataSource(finalData)
+        }
+      }
+    })
+  }
+
+  //LOA FUNCTIONS
   filterLoa() {
     this.reportForm.get('reportType').setValue('loa')
 
@@ -690,6 +902,17 @@ export class GenerateReportComponent implements OnInit {
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
+    }
+  }
+
+  numberFilter(event: any) {
+    var charCode = (event.which) ? event.which : event.keyCode;
+    // Only Numbers 0-9
+    if ((charCode < 48 || charCode > 57)) {
+      event.preventDefault();
+      return false;
+    } else {
+      return true;
     }
   }
 

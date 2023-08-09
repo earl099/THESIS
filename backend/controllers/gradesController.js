@@ -4,6 +4,31 @@ const db = require('../config/sequelize')
 const gradesModel = db.grades
 const gradeLogsModel = db.gradeLogs
 
+//--- GET ALL GRADES BY STUDENT NUMBER ---//
+const getTor = async(req, res) => {
+    const studentnumber = req.params.studentnumber
+
+    const tor = await gradesModel.findAll({
+        attributes: [
+            'subjectcode',
+            'mygrade',
+            'mygradeedit',
+            'mygradeeditdate',
+            'makeupgrade',
+            'makeupencoder',
+            'makeupdate',
+            'units'
+        ],
+        where: {
+            studentnumber: studentnumber
+        }
+    })
+
+    if(tor.length > 0) {
+        res.status(200).send({ message: 'Grades found.', tor: tor })
+    }
+}
+
 //--- GET GRADES BY STUDENT NUMBER, SEMESTER, SCHOOLYEAR ---//
 const getGradesByStudNumSemSY = async (req, res) => {
     const studentnumber = req.params.studentnumber
@@ -161,6 +186,7 @@ const updateGrade = async (req, res) => {
 }
 
 module.exports = {
+    getTor,
     getGradesByStudNumSemSY,
     getGradeBySubjcodeSchedcodeAndStudNum,
     getSchoolyear,

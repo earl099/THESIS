@@ -59,7 +59,7 @@ export class ReportService {
   }
 
   //--- SEARCH STUDENTS ENROLLED ---//
-  advSearchByReportType(type: any, data: any): Observable<any> {
+  advSearchByReportType(type: any, data: any, studentnumber?: string): Observable<any> {
     //if student enrolled
     if(type == 'stud_enroll') {
       return this.httpClient
@@ -75,6 +75,11 @@ export class ReportService {
       return this.httpClient
       .post(`${this.baseUrl}/report/get/type/${type}`, data, this.httpOptions)
       .pipe(catchError(this.handleError<any>('Search Operation')))
+    }
+    else if(type == 'tor') {
+      return this.httpClient
+      .get(`${this.baseUrl}/grades/get/${type}/${studentnumber}`, this.httpOptions)
+      .pipe(catchError(this.handleError<any>('Get Transcript of Records')))
     }
     else {
       return this.httpClient

@@ -13,8 +13,9 @@ import { VariableService } from 'src/app/services/variable.service';
 export class DashboardComponent implements OnInit {
   globalVar!: Array<any>
   uname: any
-  //QUICK DATA FOR STUDENTS ENROLLED, SHIFTEES, LOA, MALE/FEMALE STUDENTS ENROLLED, VALIDATED/ASSESSED RATIO, ASSESSED
-  quickData: Array<number> = [0,0,0,0,0,0,0]
+  //QUICK DATA FOR STUDENTS ENROLLED, SHIFTEES, LOA, MALE/FEMALE STUDENTS ENROLLED, VALIDATED/ASSESSED RATIO, ASSESSED,
+  //ASSESSED WITH SCHOLARSHIP, WITHOUT SCHOLARSHIP
+  quickData: Array<number> = [0,0,0,0,0,0,0,0,0]
   studentList: any
 
   constructor(
@@ -41,9 +42,43 @@ export class DashboardComponent implements OnInit {
       if(res) {
         let globalTmpData = res.legend
         this.globalVar = globalTmpData
-        this.enrollmentService.getStudsEnroll(this.globalVar[0].semester, this.globalVar[0].schoolyear).subscribe((res) => {
+        let tmpData: any
+
+        this.enrollmentService.getAllAssessed(this.globalVar[0].semester, this.globalVar[0].schoolyear).subscribe((res) => {
           if(res) {
-            let tmpData = res.studsEnroll
+            let totalAssessed = res.assessedStuds
+            //console.log(totalAssessed)
+            this.quickData[6] = totalAssessed.length
+
+            for (let i = 0; i < totalAssessed.length; i++) {
+              console.log(totalAssessed[i])
+              if(totalAssessed[i].scholarship == 'NO DISCOUNT') {
+                this.quickData[7]++
+              }
+              else {
+                this.quickData[8]++
+              }
+
+              try {
+                for (let j = 0; j < tmpData.length; j++) {
+                  if(tmpData[j].studentnumber == totalAssessed[i].studentnumber) {
+                    this.quickData[5]++
+                  }
+                }
+              } catch (error) {
+
+              }
+
+            }
+
+            this.quickData[5] = (this.quickData[5] / totalAssessed.length) * 100
+
+          }
+        })
+
+        this.enrollmentService.getStudsEnroll(this.globalVar[0].semester, this.globalVar[0].schoolyear)?.subscribe((res) => {
+          if(res) {
+            tmpData = res.studsEnroll
 
             if(tmpData.length < 1) {
               this.quickData[0] = 0
@@ -53,7 +88,7 @@ export class DashboardComponent implements OnInit {
             }
 
             for (let i = 0; i < tmpData.length; i++) {
-              this.studentService.getStudent(tmpData[i].studentnumber).subscribe((res) => {
+              this.studentService.getStudent(tmpData[i].studentnumber)?.subscribe((res) => {
                 if(res) {
                   if(res.student.gender == 'MALE') {
                     this.quickData[3]++
@@ -64,22 +99,6 @@ export class DashboardComponent implements OnInit {
                 }
               })
             }
-
-            this.enrollmentService.getAllAssessed(this.globalVar[0].semester, this.globalVar[0].schoolyear).subscribe((res) => {
-              if(res) {
-                let totalAssessed = res.assessedStuds
-
-                this.quickData[6] = totalAssessed.length
-                for (let i = 0; i < totalAssessed.length; i++) {
-                  for (let j = 0; j < tmpData.length; j++) {
-                    if(tmpData[j].studentnumber == totalAssessed[i].studentnumber) {
-                      this.quickData[5]++
-                    }
-                  }
-                }
-                this.quickData[5] = (this.quickData[5] / totalAssessed.length) * 100
-              }
-            })
           }
         })
 

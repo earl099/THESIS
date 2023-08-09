@@ -133,7 +133,8 @@ const assessedReport = async (req, res) => {
         courseCode,
         semester,
         schoolyear,
-        gender
+        gender,
+        scholarship
     } = req.body
     
     //object for final response
@@ -204,26 +205,58 @@ const assessedReport = async (req, res) => {
 
                 //sem and sy specific
                 if(semester != 'ALL' && schoolyear != 'ALL') {
-                    assessedResult = await assessListModel.findAll({
-                        attributes: [
-                            'studentNumber',
-                            'StudentStatus',
-                            'scholarship'
-                        ],
-                        where: { 
-                            semester: semester, 
-                            schoolyear: schoolyear
-                        }
-                    })
+                    //specific scholarship
+                    if(scholarship != 'ALL') {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ],
+                            where: { 
+                                semester: semester, 
+                                schoolyear: schoolyear,
+                                scholarship: scholarship
+                            }
+                        })
+                    }
+                    else {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ],
+                            where: { 
+                                semester: semester, 
+                                schoolyear: schoolyear
+                            }
+                        })
+                    }
+                    
                 }
                 else {
-                    assessedResult = await assessListModel.findAll({
-                        attributes: [
-                            'studentNumber',
-                            'StudentStatus',
-                            'scholarship'
-                        ]
-                    })
+                    if(scholarship != 'ALL') {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ],
+                            where: { 
+                                scholarship: scholarship
+                            }
+                        })
+                    }
+                    else {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ]
+                        })
+                    }
                 }
 
                 for (let i = 0; i < assessedResult.length; i++) {
@@ -238,7 +271,7 @@ const assessedReport = async (req, res) => {
                             'gender'
                         ],
                         where: {
-                            studentNumber: assessedResult[i].studentnumber,
+                            studentNumber: assessedResult[i].studentNumber,
                             course: courseCode,
                             gender: gender
                         }
@@ -255,27 +288,57 @@ const assessedReport = async (req, res) => {
                 
                 //sem and sy specific
                 if(semester != 'ALL' && schoolyear != 'ALL') {
-                    assessedResult = await assessListModel.findAll({
-                        attributes: [
-                            'studentNumber',
-                            'StudentStatus',
-                            'scholarship'
-                        ],
-                        where: { 
-                            semester: semester, 
-                            schoolyear: schoolyear
-                        }
-                    })
+                    //specific scholarship
+                    if(scholarship != 'ALL') {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ],
+                            where: { 
+                                semester: semester, 
+                                schoolyear: schoolyear,
+                                scholarship: scholarship
+                            }
+                        })
+                    }
+                    else {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ],
+                            where: { 
+                                semester: semester, 
+                                schoolyear: schoolyear
+                            }
+                        })
+                    }
                 }
                 else {
-                    assessedResult = await assessListModel.findAll({
-                        attributes: [
-                            'studentNumber',
-                            'StudentStatus',
-                            'scholarship'
-                        ]
-                        
-                    })
+                    if(scholarship != 'ALL') {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ],
+                            where: { 
+                                scholarship: scholarship
+                            }
+                        })
+                    }
+                    else {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ]
+                        })
+                    }
                 }
 
                 for (let i = 0; i < assessedResult.length; i++) {
@@ -290,7 +353,7 @@ const assessedReport = async (req, res) => {
                             'gender'
                         ],
                         where: {
-                            studentNumber: assessedResult[i].studentnumber,
+                            studentNumber: assessedResult[i].studentNumber,
                             course: courseCode
                         }
                     })
@@ -307,28 +370,56 @@ const assessedReport = async (req, res) => {
                 
                 //sem and sy specific
                 if(semester != 'ALL' && schoolyear != 'ALL') {
-                    assessedResult = await assessListModel.findAll({
-                        attributes: [
-                            'studentNumber',
-                            'StudentStatus',
-                            'dateAssess',
-                            'scholarship'
-                        ],
-                        where: { 
-                            semester: semester, 
-                            schoolyear: schoolyear
-                        }
-                    })
+                    if(scholarship != 'ALL') {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ],
+                            where: { 
+                                semester: semester, 
+                                schoolyear: schoolyear,
+                                scholarship: scholarship
+                            }
+                        })
+                    }
+                    else {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ],
+                            where: { 
+                                semester: semester, 
+                                schoolyear: schoolyear
+                            }
+                        })
+                    }
                 }
                 else {
-                    assessedResult = await assessListModel.findAll({
-                        attributes: [
-                            'studentNumber',
-                            'StudentStatus',
-                            'dateAssess',
-                            'scholarship'
-                        ]
-                    })
+                    if(scholarship != 'ALL') {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ],
+                            where: { 
+                                scholarship: scholarship
+                            }
+                        })
+                    }
+                    else {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ]
+                        })
+                    }
                 }
 
                 for (let i = 0; i < assessedResult.length; i++) {
@@ -358,26 +449,56 @@ const assessedReport = async (req, res) => {
                 
                 //sem and sy specific
                 if(semester != 'ALL' && schoolyear != 'ALL') {
-                    assessedResult = await assessListModel.findAll({
-                        attributes: [
-                            'studentNumber',
-                            'StudentStatus',
-                            'scholarship'
-                        ],
-                        where: { 
-                            semester: semester, 
-                            schoolyear: schoolyear
-                        }
-                    })
+                    if(scholarship != 'ALL') {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ],
+                            where: { 
+                                semester: semester, 
+                                schoolyear: schoolyear,
+                                scholarship: scholarship
+                            }
+                        })
+                    }
+                    else {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ],
+                            where: { 
+                                semester: semester, 
+                                schoolyear: schoolyear
+                            }
+                        })
+                    }
                 }
                 else {
-                    assessedResult = await assessListModel.findAll({
-                        attributes: [
-                            'studentNumber',
-                            'StudentStatus',
-                            'scholarship'
-                        ]
-                    })
+                    if(scholarship != 'ALL') {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ],
+                            where: { 
+                                scholarship: scholarship
+                            }
+                        })
+                    }
+                    else {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ]
+                        })
+                    }
                 }
 
                 for (let i = 0; i < assessedResult.length; i++) {
@@ -412,26 +533,56 @@ const assessedReport = async (req, res) => {
                 
                 //sem and sy specific
                 if(semester != 'ALL' && schoolyear != 'ALL') {
-                    assessedResult = await assessListModel.findAll({
-                        attributes: [
-                            'studentNumber',
-                            'StudentStatus',
-                            'scholarship'
-                        ],
-                        where: { 
-                            semester: semester, 
-                            schoolyear: schoolyear 
-                        }
-                    })
+                    if(scholarship != 'ALL') {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ],
+                            where: { 
+                                semester: semester, 
+                                schoolyear: schoolyear,
+                                scholarship: scholarship
+                            }
+                        })
+                    }
+                    else {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ],
+                            where: { 
+                                semester: semester, 
+                                schoolyear: schoolyear
+                            }
+                        })
+                    }
                 }
                 else {
-                    assessedResult = await assessListModel.findAll({
-                        attributes: [
-                            'studentNumber',
-                            'StudentStatus',
-                            'scholarship'
-                        ]
-                    })
+                    if(scholarship != 'ALL') {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ],
+                            where: { 
+                                scholarship: scholarship
+                            }
+                        })
+                    }
+                    else {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ]
+                        })
+                    }
                 }
 
                 for (let i = 0; i < assessedResult.length; i++) {
@@ -462,27 +613,56 @@ const assessedReport = async (req, res) => {
                 
                 //sem and sy specific
                 if(semester != 'ALL' && schoolyear != 'ALL') {
-                    assessedResult = await assessListModel.findAll({
-                        attributes: [
-                            'studentNumber',
-                            'StudentStatus',
-                            'scholarship'
-                        ],
-                        where: { 
-                            semester: semester, 
-                            schoolyear: schoolyear 
-                        }
-                    })
+                    if(scholarship != 'ALL') {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ],
+                            where: { 
+                                semester: semester, 
+                                schoolyear: schoolyear,
+                                scholarship: scholarship
+                            }
+                        })
+                    }
+                    else {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ],
+                            where: { 
+                                semester: semester, 
+                                schoolyear: schoolyear
+                            }
+                        })
+                    }
                 }
                 else {
-                    assessedResult = await assessListModel.findAll({
-                        attributes: [
-                            'studentNumber',
-                            'StudentStatus',
-                            'dateAssess',
-                            'scholarship'
-                        ]
-                    })
+                    if(scholarship != 'ALL') {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ],
+                            where: { 
+                                scholarship: scholarship
+                            }
+                        })
+                    }
+                    else {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ]
+                        })
+                    }
                 }
 
                 for (let i = 0; i < assessedResult.length; i++) {
@@ -515,26 +695,56 @@ const assessedReport = async (req, res) => {
                 
                 //sem and sy specific
                 if(semester != 'ALL' && schoolyear != 'ALL') {
-                    assessedResult = await assessListModel.findAll({
-                        attributes: [
-                            'studentNumber',
-                            'StudentStatus',
-                            'scholarship'
-                        ],
-                        where: { 
-                            semester: semester, 
-                            schoolyear: schoolyear 
-                        }
-                    })
+                    if(scholarship != 'ALL') {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ],
+                            where: { 
+                                semester: semester, 
+                                schoolyear: schoolyear,
+                                scholarship: scholarship
+                            }
+                        })
+                    }
+                    else {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ],
+                            where: { 
+                                semester: semester, 
+                                schoolyear: schoolyear
+                            }
+                        })
+                    }
                 }
                 else {
-                    assessedResult = await assessListModel.findAll({
-                        attributes: [
-                            'studentNumber',
-                            'StudentStatus',
-                            'scholarship'
-                        ]
-                    })
+                    if(scholarship != 'ALL') {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ],
+                            where: { 
+                                scholarship: scholarship
+                            }
+                        })
+                    }
+                    else {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ]
+                        })
+                    }
                 }
 
                 for (let i = 0; i < assessedResult.length; i++) {
@@ -564,26 +774,56 @@ const assessedReport = async (req, res) => {
                 
                 //sem and sy specific
                 if(semester != 'ALL' && schoolyear != 'ALL') {
-                    assessedResult = await assessListModel.findAll({
-                        attributes: [
-                            'studentNumber',
-                            'StudentStatus',
-                            'scholarship'
-                        ],
-                        where: { 
-                            semester: semester, 
-                            schoolyear: schoolyear 
-                        }
-                    })
+                    if(scholarship != 'ALL') {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ],
+                            where: { 
+                                semester: semester, 
+                                schoolyear: schoolyear,
+                                scholarship: scholarship
+                            }
+                        })
+                    }
+                    else {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ],
+                            where: { 
+                                semester: semester, 
+                                schoolyear: schoolyear
+                            }
+                        })
+                    }
                 }
                 else {
-                    assessedResult = await assessListModel.findAll({
-                        attributes: [
-                            'studentNumber',
-                            'StudentStatus',
-                            'scholarship'
-                        ]
-                    })
+                    if(scholarship != 'ALL') {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ],
+                            where: { 
+                                scholarship: scholarship
+                            }
+                        })
+                    }
+                    else {
+                        assessedResult = await assessListModel.findAll({
+                            attributes: [
+                                'studentNumber',
+                                'StudentStatus',
+                                'scholarship'
+                            ]
+                        })
+                    }
                 }
 
                 for (let i = 0; i < assessedResult.length; i++) {
