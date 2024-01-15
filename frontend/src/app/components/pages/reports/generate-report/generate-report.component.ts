@@ -67,7 +67,7 @@ export class GenerateReportComponent implements OnInit {
     'suffix',
     'course',
     'gender',
-
+    'scholarship'
   ]
 
   shifteeColumns: Array<string> = [
@@ -253,6 +253,10 @@ export class GenerateReportComponent implements OnInit {
         //console.log(this.scholarshipList)
       }
     })
+  }
+
+  getReportType() {
+    return this.reportForm.get('reportType').value
   }
 
   courseCheck(course: any) {
@@ -731,7 +735,7 @@ export class GenerateReportComponent implements OnInit {
 
   filterAssessed() {
     this.reportForm.get('reportType').setValue('assessed')
-    console.log(this.assessedFilter.value)
+    //console.log(this.assessedFilter.value)
 
     if(
       this.assessedFilter.get('collegeCode').value == '' ||
@@ -783,7 +787,7 @@ export class GenerateReportComponent implements OnInit {
           let tmpData = res.result
           let tmpData2 = res.infoResult
 
-          console.log(tmpData2)
+          //console.log(tmpData2)
           let finalData = []
           for(let i = 0; i < tmpData2.length; i++) {
             if(tmpData2[i] == null) {

@@ -1,5 +1,6 @@
 "use strict"
 
+const { Op } = require('sequelize')
 const db = require('../config/sequelize')
 const collegeModel = db.college
 const courseModel = db.course
@@ -23,19 +24,41 @@ const getColleges = async (req, res) => {
 const getCourses = async (req, res) => {
     const collegeCode = req.params.collegeCode
 
+    let collegeList = collegeCode.split('.')
+
+
     let course
     if(collegeCode != 'ALL'){
-        course = await courseModel.findAll({
-            attributes: [
-                db.sequelize.fn(
-                    'DISTINCT',
-                    db.sequelize.col('courseCode')
-                ),
-                'courseCode',
-                'courseCollege'
-            ],
-            where: { courseCollege: collegeCode }
-        })
+        if(collegeList.length > 1) {
+            course = await courseModel.findAll({
+                attributes: [
+                    db.sequelize.fn(
+                        'DISTINCT',
+                        db.sequelize.col('courseCode')
+                    ),
+                    'courseCode',
+                    'courseCollege'
+                ],
+                where: { 
+                    courseCollege: {
+                        [Op.or]: collegeList
+                    } 
+                }
+            })
+        }
+        else {
+            course = await courseModel.findAll({
+                attributes: [
+                    db.sequelize.fn(
+                        'DISTINCT',
+                        db.sequelize.col('courseCode')
+                    ),
+                    'courseCode',
+                    'courseCollege'
+                ],
+                where: { courseCollege: collegeCode }
+            })
+        }
     }
     else {
         course = await courseModel.findAll({

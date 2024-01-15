@@ -158,7 +158,8 @@ export class EnrolledListComponent implements OnInit {
       schedcode: new FormControl({ value: '', disabled: false }),
       subjectCode: new FormControl({ value:'', disabled: false }),
       isShown: new FormControl({ value: 'true', disabled: false }),
-      isTextResult: new FormControl({ value: 'false', disabled: false })
+      isTextResult: new FormControl({ value: 'false', disabled: false }),
+      isFinal: new FormControl({ value: 'false', disabled: false })
     })
 
     this.resultForm = this.fb.group({
@@ -240,6 +241,25 @@ export class EnrolledListComponent implements OnInit {
         this.cogSemester.setValue(this.globalVar[0].ksemester)
         this.cogSchoolyear.setValue(this.globalVar[0].kschoolyear)
 
+        let check = this.userService.getToken()
+
+        if(check != 'UNIV') {
+          this.reportService.getCourses(check).subscribe((res) => {
+            if(res) {
+              this.courseList = res.course
+              //console.log(this.courseList)
+            }
+          })
+        }
+        else {
+          this.reportService.getCourses('ALL').subscribe((res) => {
+            if(res) {
+              this.courseList = res.course
+              //console.log(this.courseList)
+            }
+          })
+        }
+
         this.enrollmentService.getStudsEnroll(this.globalVar[0].semester, this.globalVar[0].schoolyear).subscribe((res) => {
           if(res) {
             let tmpData = res.studsEnroll
@@ -251,17 +271,20 @@ export class EnrolledListComponent implements OnInit {
 
                   let finalTmpData = {}
 
-                  this.enrolledList.push(Object.assign(
-                    finalTmpData,
-                    {
-                      studentnumber: tmpData[i].studentnumber,
-                      firstName: tmpData2.firstName,
-                      middleName: tmpData2.middleName,
-                      lastName: tmpData2.lastName,
-                      suffix: tmpData2.suffix,
-                      course: tmpData2.course
-                    })
-                  )
+                  if(this.courseList.find((course: any) => course.courseCode === tmpData[i].coursenow)) {
+                    this.enrolledList.push(Object.assign(
+                      finalTmpData,
+                      {
+                        studentnumber: tmpData[i].studentnumber,
+                        firstName: tmpData2.firstName,
+                        middleName: tmpData2.middleName,
+                        lastName: tmpData2.lastName,
+                        suffix: tmpData2.suffix,
+                        course: tmpData2.course
+                      })
+                    )
+                  }
+
 
                   if(i == tmpData.length - 1) {
                     this.dataSource = new MatTableDataSource(this.enrolledList)
@@ -269,26 +292,6 @@ export class EnrolledListComponent implements OnInit {
                 }
               })
             }
-
-            let check = this.userService.getToken()
-
-            if(check != 'UNIV') {
-              this.reportService.getCourses(check).subscribe((res) => {
-                if(res) {
-                  this.courseList = res.course
-                  //console.log(this.courseList)
-                }
-              })
-            }
-            else {
-              this.reportService.getCourses('ALL').subscribe((res) => {
-                if(res) {
-                  this.courseList = res.course
-                  //console.log(this.courseList)
-                }
-              })
-            }
-
           }
         })
       }
@@ -598,36 +601,38 @@ export class EnrolledListComponent implements OnInit {
 
   }
 
-  dropSubj(data: any) {
+  dropSubj() {
     //initialize drop
     let studnum = this.operationData.get('studentnumber').value
 
     if(confirm('Are you sure you want to delete this subject and reevaluate')) {
-      this.enrollmentService.dropSubjTransaction(
-        this.operationData.get('studentnumber').value,
-        this.globalVar[0].semester,
-        this.globalVar[0].schoolyear,
-        data
-      ).subscribe((res) => {
-        if(res) {
-          this.variableService.getIpAddress().subscribe((res) => {
-            if(res) {
-              let ipAdd = res.clientIp
+      for (let i = 0; i < this.subjToDrop.length; i++) {
+        this.enrollmentService.dropSubjTransaction(
+          this.operationData.get('studentnumber').value,
+          this.globalVar[0].semester,
+          this.globalVar[0].schoolyear,
+          this.subjToDrop[i]
+        ).subscribe((res) => {
+          if(res) {
+            this.variableService.getIpAddress().subscribe((res) => {
+              if(res) {
+                let ipAdd = res.clientIp
 
-              this.processData.get('username').setValue(localStorage.getItem('user'))
-              this.processData.get('ipaddress').setValue(ipAdd)
-              this.processData.get('pcname').setValue(window.location.hostname)
-              this.processData.get('studentnumber').setValue(studnum)
-              this.processData.get('type').setValue('Drop Subject')
-              this.processData.get('description').setValue(`Dropped ${data.schedcode} to ${studnum}'s schedule.`)
-              this.variableService.addProcess(this.processData.value).subscribe()
+                this.processData.get('username').setValue(localStorage.getItem('user'))
+                this.processData.get('ipaddress').setValue(ipAdd)
+                this.processData.get('pcname').setValue(window.location.hostname)
+                this.processData.get('studentnumber').setValue(studnum)
+                this.processData.get('type').setValue('Drop Subject')
+                this.processData.get('description').setValue(`Dropped ${this.subjToDrop[i].schedcode} to ${studnum}'s schedule.`)
+                this.variableService.addProcess(this.processData.value).subscribe()
+              }
+            })
+            if(i == this.subjToDrop.length - 1) {
+              this.toastr.success('Subject Dropped.')
             }
-          })
-
-          this.toastr.success('Subject Dropped.')
-
-        }
-      })
+          }
+        })
+      }
     }
     this.closeSection()
   }
@@ -808,8 +813,6 @@ export class EnrolledListComponent implements OnInit {
                             this.toastr.success('Changing of Subjects Success')
                             this.closeSection()
                           })
-
-
                         }
                       }
                     })
@@ -1308,6 +1311,9 @@ export class CogDialog implements OnInit {
                 if(!Number.isNaN(Number(this.resultGradesList[i].mygrade))) {
                   aveGrade += Number(this.resultGradesList[i].mygrade)
                 }
+                else if(this.resultGradesList[i].makeupgrade == '-') {
+                  aveGrade += 0
+                }
                 else {
                   aveGrade += Number(this.resultGradesList[i].makeupgrade)
                 }
@@ -1374,7 +1380,7 @@ export class CogDialog implements OnInit {
   }
 
   exportCog() {
-    let data: any = document.getElementById('print')
+    let data: any = document.getElementById('print1')
     html2canvas(data).then((canvas) => {
       let fileWidth = 208
       let fileHeight = (canvas.height * fileWidth) / canvas.width

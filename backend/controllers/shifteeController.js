@@ -1,5 +1,6 @@
 "use strict"
 
+const { Op } = require('sequelize');
 const db = require('../config/sequelize');
 const shifteeModel = db.shiftee;
 const studentModel = db.student;
@@ -157,42 +158,83 @@ const advShifteeSearch = async (req, res) => {
         gender
     } = req.body
     
+    let collegeList = collegeCode.split('.')
+
     //object for final response
     let objRes = []
     let studInfoResult = []
 
     //list for checking if student is in course list
     if(collegeCode != 'ALL') {
-        if(courseCode != 'ALL') {
-            courseList = await courseModel.findAll({
-                attributes: [
-                    db.sequelize.fn(
-                        'DISTINCT',
-                        db.sequelize.col('courseCode')
-                    ),
-                    'courseCode',
-                    'courseCollege'
-                ],
-                where: {
-                    courseCollege: collegeCode,
-                    courseCode: courseCode
-                }
-            })
+        if(collegeList.length > 1) {
+            if(courseCode != 'ALL') {
+                courseList = await courseModel.findAll({
+                    attributes: [
+                        db.sequelize.fn(
+                            'DISTINCT',
+                            db.sequelize.col('courseCode')
+                        ),
+                        'courseCode',
+                        'courseCollege'
+                    ],
+                    where: {
+                        courseCollege: {
+                            [Op.or]: collegeList
+                        },
+                        courseCode: courseCode
+                    }
+                })
+            }
+            else {
+                courseList = await courseModel.findAll({
+                    attributes: [
+                        db.sequelize.fn(
+                            'DISTINCT',
+                            db.sequelize.col('courseCode')
+                        ),
+                        'courseCode',
+                        'courseCollege'
+                    ],
+                    where: {
+                        courseCollege: {
+                            [Op.or]: collegeList
+                        }
+                    }
+                })
+            }
         }
         else {
-            courseList = await courseModel.findAll({
-                attributes: [
-                    db.sequelize.fn(
-                        'DISTINCT',
-                        db.sequelize.col('courseCode')
-                    ),
-                    'courseCode',
-                    'courseCollege'
-                ],
-                where: {
-                    courseCollege: collegeCode
-                }
-            })
+            if(courseCode != 'ALL') {
+                courseList = await courseModel.findAll({
+                    attributes: [
+                        db.sequelize.fn(
+                            'DISTINCT',
+                            db.sequelize.col('courseCode')
+                        ),
+                        'courseCode',
+                        'courseCollege'
+                    ],
+                    where: {
+                        courseCollege: collegeCode,
+                        courseCode: courseCode
+                    }
+                })
+            }
+            else {
+                courseList = await courseModel.findAll({
+                    attributes: [
+                        db.sequelize.fn(
+                            'DISTINCT',
+                            db.sequelize.col('courseCode')
+                        ),
+                        'courseCode',
+                        'courseCollege'
+                    ],
+                    where: {
+                        courseCollege: collegeCode
+                    }
+                })
+            }
         }
     }
     else {

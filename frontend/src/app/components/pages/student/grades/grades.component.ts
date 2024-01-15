@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
+import { Observable } from 'rxjs';
 import { GradesService } from 'src/app/services/grades.service';
 import { ReportService } from 'src/app/services/report.service';
+import { ScheduleService } from 'src/app/services/schedule.service';
 import { StudentService } from 'src/app/services/student.service';
 import { UserService } from 'src/app/services/user.service';
 import { VariableService } from 'src/app/services/variable.service';
@@ -15,11 +17,22 @@ import { VariableService } from 'src/app/services/variable.service';
 })
 export class GradesComponent implements OnInit {
   date = new Date()
-  searchForm: any
+  studSearchForm: any
+  schedSearchForm: any
+
+  filteredSched!: Observable<any>
   schoolyear: any
-  searchVisibility: boolean = true
+  //base search for choosing between student search
+  baseSearch: boolean = true
+  //student search
+  studSearch: boolean = false
+  //sched search
+  schedSearch: boolean = false
+  schedControl = new FormControl('0')
+  isAdmin!: boolean
 
   courseList: any = []
+  schedList: any = []
 
   studentInfoForm: any
 
@@ -39,7 +52,7 @@ export class GradesComponent implements OnInit {
     '5.00',
   ]
 
-  changingColumns: string[] = [
+  studChangingColumns: string[] = [
     'schedcode',
     'subjectcode',
     'mygrade',
@@ -47,21 +60,28 @@ export class GradesComponent implements OnInit {
     'update'
   ]
 
-  completionColumns: string[] = [
-    'schedcode',
-    'subjectcode',
+  schedChangingColumns: string[] = [
+    'studentnumber',
+    'lastName',
+    'firstName',
+    'middleName',
+    'suffix',
     'mygrade',
-    'makeupgrade',
-    'complete'
+    'newGrade',
+    'update'
   ]
 
   newGradeControl = new FormControl()
   updatedGradeData: Array<any> = []
   updatedGradeForm: any
   ipAdd = ''
-  completionVisibility: boolean = false
-  changingVisibility: boolean = false
-  gradesDataSource!: MatTableDataSource<any>
+  studCompVisibility: boolean = false
+  studChangeVisibility: boolean = false
+  schedCompVisibility: boolean = false
+  schedChangeVisibility: boolean = false
+
+  studGradesDataSource!: MatTableDataSource<any>
+  schedGradesDataSource!: MatTableDataSource<any>
 
   adminVisibility!: boolean
 
@@ -69,6 +89,7 @@ export class GradesComponent implements OnInit {
     private fb: FormBuilder,
     private studentService: StudentService,
     private gradeService: GradesService,
+    private scheduleService: ScheduleService,
     private reportService: ReportService,
     private userService: UserService,
     private toastr: ToastrService,
@@ -76,7 +97,11 @@ export class GradesComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    this.searchForm = this.fb.group({
+    this.schedSearchForm = this.fb.group({
+      schedcode: new FormControl({ value: '', disabled: false })
+    })
+
+    this.studSearchForm = this.fb.group({
       studentnumber: new FormControl({ value: '', disabled: false }),
       semester: new FormControl({ value: '', disabled: false }),
       schoolyear: new FormControl({ value: '', disabled: false }),
@@ -111,6 +136,13 @@ export class GradesComponent implements OnInit {
     this.setAdminVisibility()
 
     let check: any = this.userService.getToken()
+    if(check == 'UNIV') {
+      this.isAdmin = true
+    }
+    else {
+      this.isAdmin = false
+    }
+
     this.reportService.getCourses(check).subscribe((res) => {
       if(res) {
         this.courseList = res.course
@@ -119,21 +151,33 @@ export class GradesComponent implements OnInit {
     })
   }
 
+  //-- SEARCH SWITCH IF TRUE, BY STUDENT, ELSE, BY SCHEDCODE --//
+  searchSwitch(trigger: boolean) {
+    if(trigger) {
+      this.studSearch = true
+    }
+    else {
+      this.schedSearch = true
+    }
+    this.baseSearch = false
+  }
+
+  //-- STUDENT SEARCH FUNCTIONS START HERE --//
   //--- ISUPDATE: TRUE IF UPDATING, FALSE IF COMPLETION ---//
-  generateData(isUpdate: boolean) {
+  generateStudData(isUpdate: boolean) {
     if(
-      (this.searchForm.get('studentnumber').value == '' ||
-      this.searchForm.get('semester').value == '' ||
-      this.searchForm.get('schoolyear').value == '') ||
+      (this.studSearchForm.get('studentnumber').value == '' ||
+      this.studSearchForm.get('semester').value == '' ||
+      this.studSearchForm.get('schoolyear').value == '') ||
       this.studentInfoForm.get('fullName').value == ''
     ) {
       this.toastr.error('Please fill out all fields.')
     }
     else {
-      this.searchVisibility = false
-      this.studentService.getStudent(this.searchForm.get('studentnumber').value).subscribe((res) => {
+      this.studSearch = false
+      this.studentService.getStudent(this.studSearchForm.get('studentnumber').value).subscribe((res) => {
         if(res) {
-          this.studentInfoForm.get('studentnumber').setValue(this.searchForm.get('studentnumber').value)
+          this.studentInfoForm.get('studentnumber').setValue(this.studSearchForm.get('studentnumber').value)
           this.studentInfoForm.get('firstname').setValue(res.student.firstName)
           this.studentInfoForm.get('middlename').setValue(res.student.middleName.at(0) + '.')
           this.studentInfoForm.get('lastname').setValue(res.student.lastName)
@@ -142,44 +186,48 @@ export class GradesComponent implements OnInit {
       })
 
       this.gradeService.getGradeByStudNumSemSY(
-        this.searchForm.get('studentnumber').value,
-        this.searchForm.get('semester').value,
-        this.searchForm.get('schoolyear').value
+        this.studSearchForm.get('studentnumber').value,
+        this.studSearchForm.get('semester').value,
+        this.studSearchForm.get('schoolyear').value
       ).subscribe((res) => {
         if(res) {
           let tmpData = res.grades
           if(isUpdate) {
-            this.changingVisibility = true
+            this.studChangeVisibility = true
             for (let i = 0; i < tmpData.length; i++) {
               this.updatedGradeData.push(tmpData[i])
             }
           }
           else {
-            this.completionVisibility = true
+            this.studCompVisibility = true
             for (let i = 0; i < tmpData.length; i++) {
-              if(tmpData[i].mygrade == 'INC' || tmpData[i].mygrade == '4.00') {
+              if((tmpData[i].mygrade == 'INC' || tmpData[i].mygrade == '4.00') && tmpData[i].makeupgrade == '-') {
                 this.updatedGradeData.push(tmpData[i])
+              }
+              else {
+
               }
             }
           }
-          this.gradesDataSource = new MatTableDataSource(this.updatedGradeData)
+          this.studGradesDataSource = new MatTableDataSource(this.updatedGradeData)
         }
       })
     }
   }
 
+  //--- GENERATE STUDENT PROFILE ---//
   generateProfile(studentnumber: any) {
     if(
-      this.searchForm.get('studentnumber').value == '' ||
-      this.searchForm.get('semester').value == '' ||
-      this.searchForm.get('schoolyear').value == ''
+      this.studSearchForm.get('studentnumber').value == '' ||
+      this.studSearchForm.get('semester').value == '' ||
+      this.studSearchForm.get('schoolyear').value == ''
     ) {
       this.toastr.error('Please fill out all fields.')
     }
     else {
       this.studentService.getStudent(studentnumber).subscribe((res) => {
         if(res) {
-          this.studentInfoForm.get('studentnumber').setValue(this.searchForm.get('studentnumber').value)
+          this.studentInfoForm.get('studentnumber').setValue(this.studSearchForm.get('studentnumber').value)
           this.studentInfoForm.get('firstname').setValue(res.student.firstName)
           this.studentInfoForm.get('middlename').setValue(res.student.middleName.at(0) + '.')
           this.studentInfoForm.get('lastname').setValue(res.student.lastName)
@@ -205,7 +253,12 @@ export class GradesComponent implements OnInit {
   }
 
   courseCheck(course: any) {
-    return !this.courseList.find((item: any) => item.courseCode === course)
+    if(this.userService.getToken() != 'UNIV') {
+      return !this.courseList.find((item: any) => item.courseCode === course)
+    }
+    else {
+      return false
+    }
   }
 
   setAdminVisibility() {
@@ -241,16 +294,16 @@ export class GradesComponent implements OnInit {
             this.updatedGradeForm.get('ipaddress').setValue(this.ipAdd)
             this.updatedGradeForm.get('pcname').setValue(window.location.hostname)
             this.updatedGradeForm.get('username').setValue(localStorage.getItem('user'))
-            this.updatedGradeForm.get('semester').setValue(this.searchForm.get('semester').value)
-            this.updatedGradeForm.get('schoolyear').setValue(this.searchForm.get('schoolyear').value)
+            this.updatedGradeForm.get('semester').setValue(this.studSearchForm.get('semester').value)
+            this.updatedGradeForm.get('schoolyear').setValue(this.studSearchForm.get('schoolyear').value)
 
             try {
               this.gradeService.updateGrade(
-                this.searchForm.get('studentnumber').value,
+                this.studSearchForm.get('studentnumber').value,
                 scheduleData.schedcode.toString(), scheduleData.subjectcode.toString(),
                 this.updatedGradeForm.value
               ).subscribe()
-              this.backToSearch()
+              this.backToStudSearch()
               this.toastr.success('Grade Update Successful')
             } catch (error) {
               this.toastr.error('Grade Update Failed')
@@ -289,16 +342,22 @@ export class GradesComponent implements OnInit {
             this.updatedGradeForm.get('ipaddress').setValue(this.ipAdd)
             this.updatedGradeForm.get('pcname').setValue(window.location.hostname)
             this.updatedGradeForm.get('username').setValue(localStorage.getItem('user'))
-            this.updatedGradeForm.get('semester').setValue(this.searchForm.get('semester').value)
-            this.updatedGradeForm.get('schoolyear').setValue(this.searchForm.get('schoolyear').value)
+            this.updatedGradeForm.get('semester').setValue(this.studSearchForm.get('semester').value)
+            this.updatedGradeForm.get('schoolyear').setValue(this.studSearchForm.get('schoolyear').value)
 
             try {
               this.gradeService.updateGrade(
-                this.searchForm.get('studentnumber').value,
+                this.studSearchForm.get('studentnumber').value,
                 scheduleData.schedcode.toString(), scheduleData.subjectcode.toString(),
                 this.updatedGradeForm.value
               ).subscribe()
-              this.backToSearch()
+              if(this.studChangeVisibility || this.studCompVisibility) {
+                this.backToStudSearch()
+              }
+              else {
+                this.backToSchedSearch()
+              }
+
               this.toastr.success('Grade Update Successful')
             } catch (error) {
               this.toastr.error('Grade Update Failed')
@@ -313,15 +372,15 @@ export class GradesComponent implements OnInit {
     }
   }
 
-  backToSearch() {
-    this.searchVisibility = true
-    this.completionVisibility = false
-    this.changingVisibility = false
+  backToStudSearch() {
+    this.studSearch = true
+    this.studCompVisibility = false
+    this.studChangeVisibility = false
     this.updatedGradeData = []
     this.newGradeControl.reset()
-    this.searchForm.get('studentnumber').reset()
-    this.searchForm.get('semester').reset()
-    this.searchForm.get('schoolyear').reset()
+    this.studSearchForm.get('studentnumber').reset()
+    this.studSearchForm.get('semester').reset()
+    this.studSearchForm.get('schoolyear').reset()
 
     this.studentInfoForm.get('studentnumber').reset()
     this.studentInfoForm.get('firstname').reset()
@@ -330,6 +389,73 @@ export class GradesComponent implements OnInit {
     this.studentInfoForm.get('course').reset()
     this.studentInfoForm.get('gender').reset()
     this.studentInfoForm.get('fullName').reset()
+  }
+  //-- STUDENT SEARCH FUNCTIONS ENDS HERE --//
+
+  //--- SCHEDCODE SEARCH FUNCTION STARTS HERE ---//
+  generateSchedData(isUpdate: boolean, schedcode: any) {
+    if(isUpdate) {
+      let data: any[] = []
+      this.schedChangeVisibility = true
+      this.schedSearch = false
+      this.gradeService.getGradesBySchedcode(schedcode).subscribe((res) => {
+        if(res) {
+          let tmpData = res.grades
+          for(let i = 0; i < tmpData.length; i++) {
+            this.studentService.getStudent(tmpData[i].studentnumber).subscribe((res) => {
+              if(res) {
+                let tmpData2 = res.student
+                data.push(Object.assign(tmpData[i], tmpData2))
+                delete data[i].studentNumber
+                if(i == tmpData.length - 1) {
+                  this.schedGradesDataSource = new MatTableDataSource(data)
+                }
+              }
+            })
+          }
+          console.log(data)
+        }
+      })
+    }
+    else {
+      let data: any[] = []
+      this.schedCompVisibility = true
+      this.schedSearch = false
+      this.gradeService.getGradesBySchedcode(schedcode).subscribe((res) => {
+        if(res) {
+          let tmpData = res.grades
+          for(let i = 0; i < tmpData.length; i++) {
+            this.studentService.getStudent(tmpData[i].studentnumber).subscribe((res) => {
+              if(res) {
+                let tmpData2 = res.student
+                if(tmpData[i].mygrade == 'INC' || tmpData[i].mygrade == '4.00') {
+                  data.push(Object.assign(tmpData[i], tmpData2))
+                  delete data[i].studentNumber
+                  if(i == tmpData.length - 1) {
+                    this.schedGradesDataSource = new MatTableDataSource(data)
+                  }
+                }
+              }
+            })
+          }
+          console.log(data)
+        }
+      })
+    }
+  }
+
+  backToSchedSearch() {
+    this.schedSearch = true
+    this.schedChangeVisibility = false
+    this.schedCompVisibility = false
+    this.schedSearchForm.get('schedcode').setValue('')
+  }
+  //--- SCHEDCODE SEARCH FUNCTION ENDS HERE ---//
+
+  backToSearchType() {
+    this.studSearch = false
+    this.schedSearch = false
+    this.baseSearch = true
   }
 
   numberFilter(event: any) {

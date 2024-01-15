@@ -28,7 +28,7 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col" *ngIf="isAdmin && isAdvClicked">
+                  <div class="col" *ngIf="isAdmin && isAdvClicked && getReportType() != 'assessed' && getReportType() != 'loa'">
                     <mat-form-field>
                       <mat-label>College</mat-label>
                       <mat-select formControlName="collegeCode" (selectionChange)="getCourses(reportForm.get('collegeCode').value)">
@@ -37,14 +37,14 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col" *ngIf="!isAdmin">
+                  <div class="col" *ngIf="!isAdmin && getReportType() != 'assessed' && getReportType() != 'loa'">
                     <mat-form-field appearance="fill">
                       <mat-label>College</mat-label>
                       <input matInput type="text" formControlName="collegeCode" readonly>
                     </mat-form-field>
                   </div>
 
-                  <div class="col" *ngIf="isAdvClicked">
+                  <div class="col" *ngIf="isAdvClicked && getReportType() != 'assessed' && getReportType() != 'loa'">
                     <mat-form-field>
                       <mat-label>Course</mat-label>
                       <mat-select formControlName="courseCode">
@@ -55,7 +55,7 @@
                   </div>
                 </div>
 
-                <div class="row align-items-start" *ngIf="isAdvClicked">
+                <div class="row align-items-start" *ngIf="isAdvClicked && getReportType() != 'assessed' && getReportType() != 'loa'">
                   <div class="col">
                     <mat-form-field>
                       <mat-label>Gender</mat-label>
@@ -85,6 +85,18 @@
                       <mat-select formControlName="schoolyear">
                         <mat-option *ngFor="let year of schoolyearList" [value]="year.schoolyear">{{year.schoolyear}}</mat-option>
                         <mat-option value="ALL">ALL</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row align-items-start" *ngIf="isAdvClicked && getReportType() != 'assessed' && getReportType() != 'loa'">
+                  <div class="col" *ngIf="getReportType() == 'stud_enroll'">
+                    <mat-form-field>
+                      <mat-label>Scholarship</mat-label>
+                      <mat-select formControlName="schoolyear">
+                        <mat-option *ngFor="let scholarship of scholarshipList" [value]="scholarship">{{scholarship}}</mat-option>
+                          <mat-option value="ALL">ALL</mat-option>
                       </mat-select>
                     </mat-form-field>
                   </div>

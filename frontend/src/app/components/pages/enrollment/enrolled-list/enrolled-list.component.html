@@ -70,9 +70,6 @@
           <tr mat-header-row *matHeaderRowDef="columns"></tr>
           <tr mat-row *matRowDef="let studentRow; columns: columns"></tr>
 
-          <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell" colspan="8">No data matching the filter "{{input.value}}"</td>
-          </tr>
         </table>
         <mat-paginator [pageSizeOptions]="[6]" aria-label="Select page of students"></mat-paginator>
       </div>
@@ -171,7 +168,9 @@
           <ng-container matColumnDef="drop">
             <th mat-header-cell *matHeaderCellDef> Drop </th>
             <td mat-cell *matCellDef="let schedule">
-              <button mat-raised-button (click)="dropSubj(schedule)"> Drop </button>
+              <mat-checkbox
+              (change)="addToDropSubjList($event, schedule)"
+              ></mat-checkbox>
             </td>
           </ng-container>
 
@@ -180,7 +179,15 @@
         </table>
         <br>
 
-        <button mat-raised-button type="submit" class="btn btn-success" (click)="closeSection()">Close Drop</button>
+        <div class="row">
+          <div class="col">
+            <button mat-raised-button type="submit" class="btn btn-success" (click)="closeSection()">Confirm Drop</button>
+          </div>
+          <div class="col">
+            <button mat-raised-button type="submit" class="btn btn-success" (click)="closeSection()">Close Drop</button>
+          </div>
+        </div>
+
       </div>
 
       <!-- CHANGING SECTION STARTS HERE -->
@@ -312,79 +319,191 @@
       </div>
 
 
-      <div id="print" *ngIf="isRegFormOpen" class="mt-5 px-5">
-        <br><br><br><br><br><br>
-        <div class="row pl-2">
-          <div class="col">
-            <p>Student Number: {{resultForm.get('studentnumber').value}}</p>
-          </div>
-          <div class="col"></div>
-          <div class="col text-center">
-            <p>Semester: {{globalVar[0].semester}}</p>
-          </div>
-
-          <div class="col">
-            <p class="text-left">School Year: {{globalVar[0].schoolyear}}</p>
-          </div>
-
-        </div>
-
-        <div class="row align-items-start">
-          <div class="col">
-            <p>
-              Student Name: {{resultForm.get('firstname').value}} {{resultForm.get('middlename').value}}. {{resultForm.get('lastname').value}}
-            </p>
-          </div>
-          <div class="col"></div>
-
-          <div class="col w-2">
-            <p>
-              Date: {{currentDate | date: 'fullDate'}} | {{currentDate | date: 'mediumTime'}}
-            </p>
-          </div>
-          <div class="col"></div>
-        </div>
-
+      <div id="print" *ngIf="isRegFormOpen" class="mt-5 px-3">
+        <br><br><br>
         <div class="row">
           <div class="col">
-            <p>
-              Course: {{resultForm.get('course').value}}
+            <p class="mt-1 pt-2 data text-end">
+              &nbsp;
+              <strong>
+                {{resultForm.get('studentnumber').value}}
+              </strong>
+            </p>
+          </div>
+
+          <div class="col"></div>
+
+          <div class="col">
+            <p class="mt-1 pt-2 data text-left">
+              <strong>
+                {{globalVar[0].semester}}
+              </strong>
             </p>
           </div>
 
           <div class="col">
-            <p>
-              Year: {{resultForm.get('year').value}}
+            <p class="mt-1 pt-2 data text-left">
+              <strong>
+                {{globalVar[0].schoolyear}}
+              </strong>
             </p>
           </div>
+
+        </div>
+
+        <div class="row align-items-start">
           <div class="col">
-            <p>
-              Encoder: eCopy
+            <p class="data text-left">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;
+              <strong>
+                {{resultForm.get('firstname').value}} {{resultForm.get('middlename').value}}. {{resultForm.get('lastname').value}}
+              </strong>
             </p>
           </div>
 
           <div class="col">
-            <p class="text-left">
-              Major: {{this.resultForm.get('major').value}}
+            <p class="data text-end">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <strong>
+                {{currentDate | date: 'fullDate'}} | {{currentDate | date: 'mediumTime'}}
+              </strong>
+            </p>
+          </div>
+          <div class="col"></div>
+        </div>
+
+        <div class="row no-pad">
+          <div class="col">
+            <p class="data">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;
+              <strong>
+                {{resultForm.get('course').value}}
+              </strong>
+            </p>
+          </div>
+
+          <div class="col">
+            <p class="data">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;
+              <strong>
+                {{resultForm.get('year').value}}
+              </strong>
+            </p>
+          </div>
+          <div class="col">
+            <p class="data text-center">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;
+              <strong>
+                eCopy
+              </strong>
+            </p>
+          </div>
+
+          <div class="col">
+            <p class="data text-center">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <strong>
+                {{this.resultForm.get('major').value}}
+              </strong>
             </p>
           </div>
           <div class="col"></div>
         </div>
 
         <div class="row align-items-start">
-          <div class="col">
-            <p>
-              Address: {{this.resultForm.get('address').value}}
+          <div class="col no-pad">
+            <p class="data text-left">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;
+              <strong>
+                {{this.resultForm.get('address').value}}
+              </strong>
             </p>
           </div>
 
           <div class="col">
-            <p>
-              Section: {{this.resultForm.get('section').value}}
+            <p class="data text-center">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;
+              <strong>
+                {{this.resultForm.get('section').value}}
+              </strong>
             </p>
+          </div>
+
+          <div class="col"></div>
+          <div class="col"></div>
+        </div>
+
+        <div class="container pt-4">
+          <div class="row no-pad">
+            <div class="col fit-content">
+              <p *ngFor="let result of resultSubjectsList" class="data-small">
+                {{result.schedcode}}
+                <br>
+              </p>
+
+            </div>
+
+            <div class="col fit-content position-relative left-1">
+              <p *ngFor="let result of resultSubjectsList" class="data-small">
+                {{result.subjectCode}}
+                <br>
+              </p>
+            </div>
+
+            <div class="col position-relative left-2 overflow-x-hidden ">
+              <p #title *ngFor="let result of resultSubjectsList" class="data-small subj-width">
+                {{result.subjectTitle}}
+              </p>
+            </div>
+
+            <div class="col fit-content position-relative left-1">
+              <p *ngFor="let result of resultSubjectsList" class="data-small">
+                {{result.units}}
+              </p>
+            </div>
+
+            <div class="col fit-content position-relative left-1">
+              <p *ngFor="let result of resultSubjectsList" class="data-small text-center">
+                {{result.timein1}}-{{result.timeout1}}
+                {{result.timein2 === 'N/A' ? '' : ' \| ' + result.timein2 + '-' + result.timeout2}}
+              </p>
+            </div>
+
+            <div class="col fit-content position-relative left-1-day">
+              <p *ngFor="let result of resultSubjectsList" class="data-small text-center">
+                {{result.day1}}
+                {{result.day2 === 'N/A' ? '' : ' \| ' + result.day2}}
+              </p>
+            </div>
+
+            <div class="col fit-content">
+              <p *ngFor="let result of resultSubjectsList" class="data-small text-center">
+                {{result.room1}}
+                {{result.room2 === 'N/A' ? '' : ' \| ' + result.room2}}
+              </p>
+            </div>
           </div>
         </div>
 
+        <!--
         <div class="container table table-responsive">
           <table mat-table [dataSource]="regFormDataSource" class="reg-form">
             <ng-container matColumnDef="schedcode">
@@ -435,197 +554,211 @@
             <tr mat-row *matRowDef="let row; columns: resultSubjectsColumn;" class="data-row"></tr>
           </table>
         </div>
+        -->
+
 
         <div class="row align-items-start pt-1">
           <div class="col">
-            <p><strong>Laboratory Fees</strong></p>
-            <mat-divider></mat-divider>
-            <p>
+            <br><br><br><br><br>
+            <br><br><br><br>
+            <p class="data">
               {{resultForm.get('ansci').value === 0 ? '' : "AnSci: "}}
               {{resultForm.get('ansci').value === 0 ? '' : resultForm.get('ansci').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('biosci').value === 0 ? '' : "BioSci: "}}
               {{resultForm.get('biosci').value === 0 ? '' : resultForm.get('biosci').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('cemds').value === 0 ? '' : "CEMDS: "}}
               {{resultForm.get('cemds').value === 0 ? '' : resultForm.get('cemds').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('hrm').value === 0 ? '' : "HRM: "}}
               {{resultForm.get('hrm').value === 0 ? '' : resultForm.get('hrm').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('cropsci').value === 0 ? '' : "CropSci: "}}
               {{resultForm.get('cropsci').value === 0 ? '' : resultForm.get('cropsci').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('engineering').value === 0 ? '' : "Engineering: "}}
               {{resultForm.get('engineering').value === 0 ? '' : resultForm.get('engineering').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('physci').value === 0 ? '' : "PhySci: "}}
               {{resultForm.get('physci').value === 0 ? '' : resultForm.get('physci').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('vetmed').value === 0 ? '' : "VetMed: "}}
               {{resultForm.get('vetmed').value === 0 ? '' : resultForm.get('vetmed').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('speech').value === 0 ? '' : "Speech: "}}
               {{resultForm.get('speech').value === 0 ? '' : resultForm.get('speech').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('english').value === 0 ? '' : "English: "}}
               {{resultForm.get('english').value === 0 ? '' : resultForm.get('english').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('ccl').value === 0 ? '' : "CCL: "}}
               {{resultForm.get('ccl').value === 0 ? '' : resultForm.get('ccl').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('cspear').value === 0 ? '' : "CSPEAR: "}}
               {{resultForm.get('cspear').value === 0 ? '' : resultForm.get('cspear').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('fishery').value === 0 ? '' : "Fishery: "}}
               {{resultForm.get('fishery').value === 0 ? '' : resultForm.get('fishery').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('psyc').value === 0 ? '' : "Psyc: "}}
               {{resultForm.get('psyc').value === 0 ? '' : resultForm.get('psyc').value | number: '1.2-2'}}
             </p>
           </div>
 
           <div class="col">
-            <p class="pt-1"><strong>Other Fees</strong></p>
-            <mat-divider></mat-divider>
+            <br><br><br><br><br>
+            <br><br><br><br>
 
-            <p>
+            <p class="data">
               {{resultForm.get('internet').value === 0 ? '' : "Internet: "}}
               {{resultForm.get('internet').value === 0 ? '' : resultForm.get('internet').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('nstp').value === 0 ? '' : "NSTP: "}}
               {{resultForm.get('nstp').value === 0 ? '' : resultForm.get('nstp').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('ojt').value === 0 ? '' : "OJT: "}}
               {{resultForm.get('ojt').value === 0 ? '' : resultForm.get('ojt').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('thesis').value === 0 ? '' : "Thesis: "}}
               {{resultForm.get('thesis').value === 0 ? '' : resultForm.get('thesis').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('rle').value === 0 ? '' : "RLE: "}}
               {{resultForm.get('rle').value === 0 ? '' : resultForm.get('rle').value | number: '1.2-2'}}</p>
-            <p>
+            <p class="data">
               {{resultForm.get('student').value === 0 ? '' : "Student: "}}
               {{resultForm.get('student').value === 0 ? '' : resultForm.get('student').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('late').value === 0 ? '' : "Late: "}}
               {{resultForm.get('late').value === 0 ? '' : resultForm.get('late').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('residency').value === 0 ? '' : "Residency: "}}
               {{resultForm.get('residency').value === 0 ? '' : resultForm.get('residency').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('foreignstudent').value === 0 ? '' : "Foreign Student: "}}
               {{resultForm.get('foreignstudent').value === 0 ? '' : resultForm.get('foreignstudent').value | number: '1.2-2'}}</p>
-            <p>
+            <p class="data">
               {{resultForm.get('addedsubj').value === 0 ? '' : "Added Subject: "}}
               {{resultForm.get('addedsubj').value === 0 ? '' : resultForm.get('addedsubj').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('petition').value === 0 ? '' : "Petition: "}}
               {{resultForm.get('petition').value === 0 ? '' : resultForm.get('petition').value | number: '1.2-2'}}
             </p>
           </div>
 
-          <div class="col">
-            <p class="pt-1"><strong>Assessment</strong></p>
-            <mat-divider></mat-divider>
+          <div class="col position-relative left-2">
+            <br><br><br><br><br>
+            <br><br><br><br>
 
-            <p>
+            <p class="data">
               {{resultForm.get('tuition').value === 0 ? '' : "Tuition: "}}
               {{resultForm.get('tuition').value === 0 ? '' : resultForm.get('tuition').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('library').value === 0 ? '' : "Library: "}}
               {{resultForm.get('library').value === 0 ? '' : resultForm.get('library').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('medical').value === 0 ? '' : "Med/Dental: "}}
               {{resultForm.get('medical').value === 0 ? '' : resultForm.get('medical').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('publication').value === 0 ? '' : "Publication: "}}
               {{resultForm.get('publication').value === 0 ? '' : resultForm.get('publication').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('registration').value === 0 ? '' : "Registration: "}}
               {{resultForm.get('registration').value === 0 ? '' : resultForm.get('registration').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('guidance').value === 0 ? '' : "Guidance: "}}
               {{resultForm.get('guidance').value === 0 ? '' : resultForm.get('guidance').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('id').value === 0 ? '' : "ID: "}}
               {{resultForm.get('id').value === 0 ? '' : resultForm.get('id').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('sfdf').value === 0 ? '' : "SFDF: "}}
               {{resultForm.get('sfdf').value === 0 ? '' : resultForm.get('sfdf').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('srf').value === 0 ? '' : "SRF: "}}
               {{resultForm.get('srf').value === 0 ? '' : resultForm.get('srf').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('athletic').value === 0 ? '' : "Athletic: "}}
               {{resultForm.get('athletic').value === 0 ? '' : resultForm.get('athletic').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('scuaa').value === 0 ? '' : "SCUAA: "}}
               {{resultForm.get('scuaa').value === 0 ? '' : resultForm.get('scuaa').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('deposit').value === 0 ? '' : "Deposit: "}}
               {{resultForm.get('deposit').value === 0 ? '' : resultForm.get('deposit').value | number: '1.2-2'}}
             </p>
-            <p>
+            <p class="data">
               {{resultForm.get('edfs').value === 0 ? '' : "EDFS: "}}
               {{resultForm.get('edfs').value === 0 ? '' : resultForm.get('edfs').value | number: '1.2-2'}}
             </p>
 
-            <p>
+            <p class="data">
               {{resultForm.get('trm').value === 0 ? '' : "TRM: "}}
               {{resultForm.get('trm').value === 0 ? '' : resultForm.get('trm').value | number: '1.2-2'}}
             </p>
-            <p>Total Lab Fee: {{resultForm.get('totalLab').value | number: '1.2-2'}}</p>
-            <p>Total Other: {{resultForm.get('totalOther').value | number: '1.2-2'}}</p>
+            <p class="data">Total Lab Fee: {{resultForm.get('totalLab').value | number: '1.2-2'}}</p>
+            <p class="data">Total Other: {{resultForm.get('totalOther').value | number: '1.2-2'}}</p>
           </div>
 
-          <div class="col">
-            <p class="pt-1 no-margin"><strong>Total UNITS:</strong> {{totalUnits}}</p>
-            <p><strong>Total HOURS:</strong> {{totalHours}}</p>
-            <mat-divider></mat-divider>
-            <p><strong>Total AMOUNT:</strong> {{totalAmount | number: '1.2-2'}}</p>
-            <p><strong>Scholarship:</strong> <br>{{resultForm.get('scholarship').value}}</p>
-            <mat-divider></mat-divider>
-            <p>Tuition: {{resultForm.get('discountTuition').value}}</p>
-            <p>SFDF: {{resultForm.get('discountSfdf').value}}</p>
-            <p>SRF: {{resultForm.get('discountSrf').value}}</p>
-            <mat-divider></mat-divider>
-            <p><strong>Terms of Payment</strong></p>
-            <p>First: {{totalAmount/2 | number: '1.2-2'}}</p>
-            <p>Second: {{totalAmount/4 | number: '1.2-2'}}</p>
-            <p>Third: {{totalAmount/4 | number: '1.2-2'}}</p>
+          <div class="col position-relative left-3">
+            <br><br><br><br><br>
+            <br><br>
+
+            <p class="data mt-1 pt-2 text-center">{{totalUnits}}</p>
+            <p class="data text-center">{{totalHours}}</p>
+            <br>
+
+            <p class="data mt-2 text-center">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;
+              {{totalAmount | number: '1.2-2'}}
+            </p>
+
+            <br>
+            <p class="data mt-3">{{resultForm.get('scholarship').value}}</p>
+
+
+            <p class="data mt-2">{{resultForm.get('discountTuition').value}}</p>
+            <p class="data">{{resultForm.get('discountSfdf').value}}</p>
+            <p class="data">{{resultForm.get('discountSrf').value}}</p>
+
+            <br>
+            <p class="data mt-2 pt-1">{{totalAmount/2 | number: '1.2-2'}}</p>
+            <p class="data">{{totalAmount/4 | number: '1.2-2'}}</p>
+            <p class="data">{{totalAmount/4 | number: '1.2-2'}}</p>
           </div>
           <div class="col "></div>
         </div>

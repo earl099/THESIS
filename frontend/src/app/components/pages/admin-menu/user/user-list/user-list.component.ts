@@ -45,6 +45,7 @@ export class UserListComponent implements OnInit {
   ngOnInit(): void {
 
     this.addForm = this.fb.group({
+      collegeSelection: new FormControl(''),
       collegeID: new FormControl(''),
       username: new FormControl(''),
       email: new FormControl('', Validators.email),
@@ -76,6 +77,22 @@ export class UserListComponent implements OnInit {
   }
 
   addUser() {
+    let test = this.addForm.get('collegeSelection').value
+    let test1 = ''
+    let separator = '.'
+
+    for (let i = 0; i < test.length; i++) {
+      if(i != test.length - 1) {
+        test1 = test1.concat(test[i], separator)
+      }
+      else {
+        test1 = test1.concat(test[i])
+        this.addForm.get('collegeID').setValue(test1)
+      }
+    }
+    console.log(test1.split('.'))
+    console.log(this.addForm.get('collegeID').value)
+
     if(confirm('Confirm Add?')) {
       if(this.addForm.get('collegeID').value != 'UNIV') {
         this.addForm.get('isAdmin').setValue(false)

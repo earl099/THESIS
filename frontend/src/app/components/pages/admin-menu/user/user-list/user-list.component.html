@@ -60,7 +60,7 @@
                 <form [formGroup]="addForm">
                   <mat-form-field appearance="fill">
                     <mat-label>College ID</mat-label>
-                    <mat-select formControlName="collegeID">
+                    <mat-select formControlName="collegeSelection" multiple>
                       <mat-option value="UNIV">UNIV</mat-option>
                       <mat-option *ngFor="let college of collegeList" [value]="college.collegeCode">{{college.collegeCode}}</mat-option>
                     </mat-select>

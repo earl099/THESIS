@@ -1,5 +1,6 @@
 "use strict"
 
+const { Op } = require('sequelize');
 const db = require('../config/sequelize')
 const os = require('os')
 const loaModel = db.loa
@@ -117,11 +118,26 @@ const adminGetLoa = async (req, res) => {
 const userGetLoa = async (req, res) => {
     const collegeID = req.params.collegeID
 
-    const courseList = courseModel.findAll({
-        attributes: [ 'courseCode' ],
-        where: { courseCollege: collegeID }
-    })
-
+    let courseArray = collegeID.split('.')
+    let courseList
+    
+    if(courseArray.length > 1) {
+        courseList = courseModel.findAll({
+            attributes: [ 'courseCode' ],
+            where: { 
+                courseCollege: {
+                    [Op.or]: courseArray
+                }
+            }
+        })
+    }
+    else {
+        courseList = courseModel.findAll({
+            attributes: [ 'courseCode' ],
+            where: { courseCollege: collegeID }
+        })
+    }
+    
     const studsWithLoa = await loaModel.findAll({
         attributes: [
             'studentnumber',
@@ -197,6 +213,8 @@ const advLoaSearch = async (req, res) => {
         gender
     } = req.body
     
+    let collegeList = collegeCode.split('.')
+
     //object for final response
     let objRes = []
     let studInfoResult = []
@@ -206,36 +224,75 @@ const advLoaSearch = async (req, res) => {
 
     //list for checking if student is in course list
     if(collegeCode != 'ALL') {
-        if(courseCode != 'ALL') {
-            courseList = await courseModel.findAll({
-                attributes: [
-                    db.sequelize.fn(
-                        'DISTINCT',
-                        db.sequelize.col('courseCode')
-                    ),
-                    'courseCode',
-                    'courseCollege'
-                ],
-                where: {
-                    courseCollege: collegeCode,
-                    courseCode: courseCode
-                }
-            })
+        if(collegeList.length > 1) {
+            if(courseCode != 'ALL') {
+                courseList = await courseModel.findAll({
+                    attributes: [
+                        db.sequelize.fn(
+                            'DISTINCT',
+                            db.sequelize.col('courseCode')
+                        ),
+                        'courseCode',
+                        'courseCollege'
+                    ],
+                    where: {
+                        courseCollege: {
+                            [Op.or]: collegeList
+                        },
+                        courseCode: courseCode
+                    }
+                })
+            }
+            else {
+                courseList = await courseModel.findAll({
+                    attributes: [
+                        db.sequelize.fn(
+                            'DISTINCT',
+                            db.sequelize.col('courseCode')
+                        ),
+                        'courseCode',
+                        'courseCollege'
+                    ],
+                    where: {
+                        courseCollege: {
+                            [Op.or]: collegeList
+                        }
+                    }
+                })
+            }
         }
         else {
-            courseList = await courseModel.findAll({
-                attributes: [
-                    db.sequelize.fn(
-                        'DISTINCT',
-                        db.sequelize.col('courseCode')
-                    ),
-                    'courseCode',
-                    'courseCollege'
-                ],
-                where: {
-                    courseCollege: collegeCode
-                }
-            })
+            if(courseCode != 'ALL') {
+                courseList = await courseModel.findAll({
+                    attributes: [
+                        db.sequelize.fn(
+                            'DISTINCT',
+                            db.sequelize.col('courseCode')
+                        ),
+                        'courseCode',
+                        'courseCollege'
+                    ],
+                    where: {
+                        courseCollege: collegeCode,
+                        courseCode: courseCode
+                    }
+                })
+            }
+            else {
+                courseList = await courseModel.findAll({
+                    attributes: [
+                        db.sequelize.fn(
+                            'DISTINCT',
+                            db.sequelize.col('courseCode')
+                        ),
+                        'courseCode',
+                        'courseCollege'
+                    ],
+                    where: {
+                        courseCollege: collegeCode
+                    }
+                })
+            }
         }
     }
     else {

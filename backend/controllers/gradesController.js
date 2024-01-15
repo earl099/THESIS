@@ -185,10 +185,41 @@ const updateGrade = async (req, res) => {
     }
 }
 
+//--- GET GRADES BY SCHEDCODE ---//
+const getGradesBySchedCode = async (req, res) => {
+    const schedcode = req.params.schedcode
+    
+    const grades = await gradesModel.findAll({
+        attributes: [
+            'schedcode',
+            'studentnumber',
+            'subjectcode',
+            'mygrade',
+            'mygradeedit',
+            'mygradeeditdate',
+            'makeupgrade',
+            'makeupencoder',
+            'makeupdate',
+            'units'
+        ],
+        where: {
+            schedcode: schedcode
+        }
+    })
+
+    if(grades.length > 0) {
+        res.status(200).send({ message: 'Grades found.', grades: grades })
+    }
+    else {
+        res.status(500).send({ message: 'Grades not found.' })
+    }
+}
+
 module.exports = {
     getTor,
     getGradesByStudNumSemSY,
     getGradeBySubjcodeSchedcodeAndStudNum,
+    getGradesBySchedCode,
     getSchoolyear,
     updateGrade
 }

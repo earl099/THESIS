@@ -1,5 +1,6 @@
 "use strict"
 
+const { Op } = require('sequelize')
 const db = require('../config/sequelize')
 //validation models
 const studEnrollModel = db.studEnroll
@@ -167,7 +168,7 @@ const addTransaction = async (req, res) => {
     const studentnumber = req.params.studentnumber
     const semester = req.params.semester
     const schoolyear = req.params.schoolyear
-
+    
     //assessed student to student enroll
     const studentInfo = await studentModel.findOne({
         attributes: [
@@ -330,8 +331,10 @@ const addTransaction = async (req, res) => {
 
     //Total units
     let totalUnits = 0
+    let slots = 0
 
     for(let i = 0; i < assessSubj.length; i++) {
+        
         const schedcodeList = await scheduleModel.findOne({
             attributes: [
                 'schedcode',
@@ -342,7 +345,8 @@ const addTransaction = async (req, res) => {
                 'petition',
                 'thesis',
                 'internet',
-                'residency'
+                'residency',
+                'slots'
             ],
             where: {
                 schedcode: assessSubj[i].schedcode,
@@ -621,6 +625,13 @@ const addTransaction = async (req, res) => {
                 evaluate: 'N'
             }
 
+            slots = Number(schedcodeList.slots)--
+            await scheduleModel.update({ slots: slots }, {
+                where: {
+                    schedcode: assessSubj[i].schedcode
+                }
+            }, { transaction })
+
             //creating subjectenrolled data
             try {
                 await subjEnrollModel.create(subjEnrollObject)
@@ -729,6 +740,8 @@ const addSubjTransaction = async (req, res) => {
     const studentnumber = req.params.studentnumber
     const semester = req.params.semester
     const schoolyear = req.params.schoolyear
+    const { subjNum } = req.body
+    
     let subjCounter = 0
     let transaction = await db.sequelize.transaction()
 
@@ -1142,7 +1155,7 @@ const dropSubjTransaction = async (req, res) => {
     const schoolyear = req.params.schoolyear
     let transaction = await db.sequelize.transaction()
 
-    //--- ADDED SUBJECT CHECKER ---//
+    let slots = 0
 
     //--- STUDENT INFO FOR REEVALUATION OF DIVISION OF FEES ---//
     const studentInfo = await studentModel.findOne({
@@ -1354,6 +1367,16 @@ const dropSubjTransaction = async (req, res) => {
             }
         }, { transaction })
 
+        //SLOTS
+        let slots = 0
+        slots = Number(schedcodeList.slots)
+        await scheduleModel.update({ slots: slots }, {
+            where: {
+                studentnumber: studentnumber,
+                schedcode: schedcodeList.schedcode
+            }
+        }, { transaction })
+
         switch (schedcodeList.subjectype) {
             case 'AN SCI':
                 labFeeMultiplier[0]++
@@ -1515,7 +1538,7 @@ const dropSubjTransaction = async (req, res) => {
         student: labFeeMultiplier[18] * feesBase.studentTeaching,
         residency: otherFeeChecker[4] * feesBase.residency,
         foreignstudent: otherFeeChecker[5] * feesBase.foreignStudent,
-        addedsubj: otherFeeChecker[6] * feesBase.addedSubj,
+        addedsubj: subjNum * feesBase.addedSubj,
         tuition: totalTuition - (totalTuition * (scholarship.tuition / 100)),
         library: feesBase.miscLibrary,
         medical: feesBase.miscMedical,
@@ -1587,42 +1610,83 @@ const searchEnrolled = async (req, res) => {
         semester,
         schoolyear,
         gender,
+        scholarship
     } = req.body
 
+    let collegeList = collegeCode.split('.')
     let courseList
     let finalCourseList = []
 
     if(collegeCode != 'ALL') {
-        if(courseCode != 'ALL') {
-            courseList = await courseModel.findAll({
-                attributes: [
-                    db.sequelize.fn(
-                        'DISTINCT',
-                        db.sequelize.col('courseCode')
-                    ),
-                    'courseCode',
-                    'courseCollege'
-                ],
-                where: {
-                    courseCollege: collegeCode,
-                    courseCode: courseCode
-                }
-            })
+        if(collegeList.length > 1) {
+            if(courseCode != 'ALL') {
+                courseList = await courseModel.findAll({
+                    attributes: [
+                        db.sequelize.fn(
+                            'DISTINCT',
+                            db.sequelize.col('courseCode')
+                        ),
+                        'courseCode',
+                        'courseCollege'
+                    ],
+                    where: {
+                        courseCollege: {
+                            [Op.or]: collegeList
+                        },
+                        courseCode: courseCode
+                    }
+                })
+            }
+            else {
+                courseList = await courseModel.findAll({
+                    attributes: [
+                        db.sequelize.fn(
+                            'DISTINCT',
+                            db.sequelize.col('courseCode')
+                        ),
+                        'courseCode',
+                        'courseCollege'
+                    ],
+                    where: {
+                        courseCollege: {
+                            [Op.or]: collegeList
+                        }
+                    }
+                })
+            }
         }
         else {
-            courseList = await courseModel.findAll({
-                attributes: [
-                    db.sequelize.fn(
-                        'DISTINCT',
-                        db.sequelize.col('courseCode')
-                    ),
-                    'courseCode',
-                    'courseCollege'
-                ],
-                where: {
-                    courseCollege: collegeCode
-                }
-            })
+            if(courseCode != 'ALL') {
+                courseList = await courseModel.findAll({
+                    attributes: [
+                        db.sequelize.fn(
+                            'DISTINCT',
+                            db.sequelize.col('courseCode')
+                        ),
+                        'courseCode',
+                        'courseCollege'
+                    ],
+                    where: {
+                        courseCollege: collegeCode,
+                        courseCode: courseCode
+                    }
+                })
+            }
+            else {
+                courseList = await courseModel.findAll({
+                    attributes: [
+                        db.sequelize.fn(
+                            'DISTINCT',
+                            db.sequelize.col('courseCode')
+                        ),
+                        'courseCode',
+                        'courseCollege'
+                    ],
+                    where: {
+                        courseCollege: collegeCode
+                    }
+                })
+            }
         }
     }
     else {
@@ -1656,32 +1720,137 @@ const searchEnrolled = async (req, res) => {
             if(gender != 'ALL') {
                 let enrolledResult
 
-                //sem and sy specific
-                if(semester != 'ALL' && schoolyear != 'ALL') {
-                    enrolledResult = await studEnrollModel.findAll({
-                        attributes: [
-                            'studentnumber',
-                            'semester',
-                            'schoolyear'
-                        ],
-                        where: { 
-                            semester: semester, 
-                            schoolyear: schoolyear,
-                            coursenow: courseCode
+                //sem specific
+                if(semester != 'ALL') {
+                    //sy spcific
+                    if(schoolyear != 'ALL') {
+                        if(scholarship != 'ALL') {
+                            enrolledResult = await studEnrollModel.findAll({
+                                attributes: [
+                                    'studentnumber',
+                                    'semester',
+                                    'schoolyear',
+                                    'scholarship'
+                                ],
+                                where: { 
+                                    semester: semester, 
+                                    schoolyear: schoolyear,
+                                    scholarship: scholarship,
+                                    coursenow: courseCode
+                                }
+                            })
                         }
-                    })
+                        else {
+                            enrolledResult = await studEnrollModel.findAll({
+                                attributes: [
+                                    'studentnumber',
+                                    'semester',
+                                    'schoolyear',
+                                    'scholarship'
+                                ],
+                                where: { 
+                                    semester: semester, 
+                                    schoolyear: schoolyear,
+                                    coursenow: courseCode
+                                }
+                            })
+                        }
+                    }
+                    else {
+                        if(scholarship != 'ALL') {
+                            enrolledResult = await studEnrollModel.findAll({
+                                attributes: [
+                                    'studentnumber',
+                                    'semester',
+                                    'schoolyear',
+                                    'scholarship'
+                                ],
+                                where: { 
+                                    semester: semester,
+                                    scholarship: scholarship, 
+                                    coursenow: courseCode
+                                }
+                            })
+                        }
+                        else {
+                            enrolledResult = await studEnrollModel.findAll({
+                                attributes: [
+                                    'studentnumber',
+                                    'semester',
+                                    'schoolyear',
+                                    'scholarship'
+                                ],
+                                where: { 
+                                    semester: semester, 
+                                    coursenow: courseCode
+                                }
+                            })
+                        }
+                        
+                    }
                 }
                 else {
-                    enrolledResult = await studEnrollModel.findAll({
-                        attributes: [
-                            'studentnumber',
-                            'semester',
-                            'schoolyear'
-                        ],
-                        where: { 
-                            coursenow: courseCode
+                    if(schoolyear != 'ALL') {
+                        if(scholarship != 'ALL') {
+                            enrolledResult = await studEnrollModel.findAll({
+                                attributes: [
+                                    'studentnumber',
+                                    'semester',
+                                    'schoolyear',
+                                    'scholarship'
+                                ],
+                                where: {
+                                    schoolyear: schoolyear,
+                                    scholarship: scholarship,
+                                    coursenow: courseCode
+                                }
+                            })
                         }
-                    })
+                        else {
+                            enrolledResult = await studEnrollModel.findAll({
+                                attributes: [
+                                    'studentnumber',
+                                    'semester',
+                                    'schoolyear',
+                                    'scholarship'
+                                ],
+                                where: { 
+                                    schoolyear: schoolyear,
+                                    coursenow: courseCode
+                                }
+                            })
+                        }
+                    }
+                    else {
+                        if(scholarship != 'ALL') {
+                            enrolledResult = await studEnrollModel.findAll({
+                                attributes: [
+                                    'studentnumber',
+                                    'semester',
+                                    'schoolyear',
+                                    'scholarship'
+                                ],
+                                where: {
+                                    scholarship: scholarship,
+                                    coursenow: courseCode
+                                }
+                            })
+                        }
+                        else {
+                            enrolledResult = await studEnrollModel.findAll({
+                                attributes: [
+                                    'studentnumber',
+                                    'semester',
+                                    'schoolyear',
+                                    'scholarship'
+                                ],
+                                where: {
+                                    coursenow: courseCode
+                                }
+                            })
+                        }
+                    }
+                    
                 }
 
                 for (let i = 0; i < enrolledResult.length; i++) {
@@ -1766,32 +1935,137 @@ const searchEnrolled = async (req, res) => {
             if(gender != 'ALL') {
                 let enrolledResult
                 
-                //sem and sy specific
-                if(semester != 'ALL' && schoolyear != 'ALL') {
-                    enrolledResult = await studEnrollModel.findAll({
-                        attributes: [
-                            'studentnumber',
-                            'semester',
-                            'schoolyear'
-                        ],
-                        where: { 
-                            semester: semester, 
-                            schoolyear: schoolyear,
-                            coursenow: finalCourseList
+                //sem specific
+                if(semester != 'ALL') {
+                    //sy specific
+                    if(schoolyear != 'ALL') {
+                        //scholarship specific
+                        if(scholarship != 'ALL') {
+                            enrolledResult = await studEnrollModel.findAll({
+                                attributes: [
+                                    'studentnumber',
+                                    'semester',
+                                    'schoolyear',
+                                    'scholarship'
+                                ],
+                                where: { 
+                                    semester: semester, 
+                                    schoolyear: schoolyear,
+                                    scholarship: scholarship,
+                                    coursenow: finalCourseList
+                                }
+                            })
                         }
-                    })
+                        else {
+                            enrolledResult = await studEnrollModel.findAll({
+                                attributes: [
+                                    'studentnumber',
+                                    'semester',
+                                    'schoolyear',
+                                    'scholarship'
+                                ],
+                                where: { 
+                                    semester: semester, 
+                                    schoolyear: schoolyear,
+                                    coursenow: finalCourseList
+                                }
+                            })
+                        }
+                    }
+                    else {
+                        if(scholarship != 'ALL') {
+                            enrolledResult = await studEnrollModel.findAll({
+                                attributes: [
+                                    'studentnumber',
+                                    'semester',
+                                    'schoolyear',
+                                    'scholarship'
+                                ],
+                                where: { 
+                                    semester: semester,
+                                    scholarship: scholarship,
+                                    coursenow: finalCourseList
+                                }
+                            })
+                        }
+                        else {
+                            enrolledResult = await studEnrollModel.findAll({
+                                attributes: [
+                                    'studentnumber',
+                                    'semester',
+                                    'schoolyear',
+                                    'scholarship'
+                                ],
+                                where: { 
+                                    semester: semester, 
+                                    coursenow: finalCourseList
+                                }
+                            })
+                        }
+                    }
+                    
                 }
                 else {
-                    enrolledResult = await studEnrollModel.findAll({
-                        attributes: [
-                            'studentnumber',
-                            'semester',
-                            'schoolyear'
-                        ],
-                        where: {
-                            coursenow: finalCourseList
+                    if(schoolyear != 'ALL') {
+                        if(scholarship != 'ALL') {
+                            enrolledResult = await studEnrollModel.findAll({
+                                attributes: [
+                                    'studentnumber',
+                                    'semester',
+                                    'schoolyear',
+                                    'scholarship'
+                                ],
+                                where: {
+                                    schoolyear: schoolyear,
+                                    scholarship: scholarship,
+                                    coursenow: finalCourseList
+                                }
+                            })
                         }
-                    })
+                        else {
+                            enrolledResult = await studEnrollModel.findAll({
+                                attributes: [
+                                    'studentnumber',
+                                    'semester',
+                                    'schoolyear',
+                                    'scholarship'
+                                ],
+                                where: {
+                                    schoolyear: schoolyear,
+                                    coursenow: finalCourseList
+                                }
+                            })
+                        }
+                    }
+                    else {
+                        if(scholarship != 'ALL') {
+                            enrolledResult = await studEnrollModel.findAll({
+                                attributes: [
+                                    'studentnumber',
+                                    'semester',
+                                    'schoolyear',
+                                    'scholarship'
+                                ],
+                                where: {
+                                    scholarship: scholarship,
+                                    coursenow: finalCourseList
+                                }
+                            })
+                        }
+                        else {
+                            enrolledResult = await studEnrollModel.findAll({
+                                attributes: [
+                                    'studentnumber',
+                                    'semester',
+                                    'schoolyear',
+                                    'scholarship'
+                                ],
+                                where: {
+                                    coursenow: finalCourseList
+                                }
+                            })
+                        }
+                    }
                 }
 
                 for (let i = 0; i < enrolledResult.length; i++) {

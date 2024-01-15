@@ -15,6 +15,9 @@ router.get('/grades/get/:schedcode/:subjectcode/:studentnumber', gradesControlle
 //--- GET SCHOOLYEAR ---//
 router.get('/grades/get/:studentnumber', gradesController.getSchoolyear)
 
+//--- GET GRADES BY SCHEDCODE ---//
+router.get('/grades/all/:schedcode', gradesController.getGradesBySchedCode)
+
 //--- UPDATE AND COMPLETION GRADE ROUTE ---//
 router.post('/grades/update/:studentnumber/:schedcode/:subjectcode', gradesController.updateGrade)
 

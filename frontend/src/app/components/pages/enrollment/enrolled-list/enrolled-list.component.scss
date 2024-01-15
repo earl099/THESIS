@@ -6,10 +6,12 @@ table {
 
   &.reg-form {
     border-bottom: solid;
+    background-color: transparent;
   }
 
   &.cog-form {
     border: solid;
+    background-color: transparent;
   }
 }
 
@@ -69,10 +71,37 @@ mat-card-actions {
 div.col {
   text-align: center;
   min-width: fit-content;
+  &.fit-content {
+    max-width: fit-content;
+    //padding: 0px;
+  }
+  &.left-1 {
+    left: 1rem;
+
+    &-day {
+      left: 0.25rem;
+    }
+    &-5 {
+      left: 1.5rem;
+    }
+  }
+  &.left-2 {
+    left: 2.5rem;
+  }
+  &.init-width {
+    min-width: initial;
+  }
+  &.left-3 {
+    left: 5rem;
+  }
 }
 
 .row {
   padding-left: 2rem;
+
+  &.no-pad {
+    padding: 0px;
+  }
 }
 
 p {
@@ -80,9 +109,46 @@ p {
   &.right {
     text-align: right;
   }
+  &.data {
+    margin: 0px;
+    &-small {
+      font-size: 0.625rem;
+      margin: 0px;
+      white-space: nowrap;
+      overflow-x: hidden;
+
+      &.subj-width {
+        width: 13rem;
+      }
+    }
+
+
+  }
+}
+
+.no-pad {
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 #print {
   padding: 0%;
   font-size: small;
+  background-image: url('../../../../../assets/COR-Layout.png');
+  background-size: 8.1in 11.7in;
+  background-position: top;
+  background-repeat: no-repeat;
+  width: 8.3in;
+  height: 11.7in;
+}
+
+#print1 {
+  padding: 0%;
+  font-size: small;
+  background-image: url('../../../../../assets/cog-template.png');
+  background-size: 9.3in 11.7in;
+  background-position: top;
+  background-repeat: no-repeat;
+  width: 8.3in;
+  height: 11.7in;
 }

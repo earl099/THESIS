@@ -2,7 +2,20 @@
   <div class="page__box p-3 mt-2">Grades</div>
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
-      <div class="container" *ngIf="searchVisibility">
+      <div class="container" *ngIf="baseSearch">
+        <mat-label>Search by:</mat-label>
+        <br><br>
+        <div class="row">
+          <div class="col">
+            <button mat-raised-button (click)="searchSwitch(true)">Student</button>
+          </div>
+          <div class="col">
+            <button mat-raised-button (click)="searchSwitch(false)">Schedcode</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="container" *ngIf="studSearch">
         <div class="row">
           <div class="col">
             <mat-card class="search">
@@ -11,7 +24,7 @@
               </mat-card-header>
 
               <mat-card-content>
-                <ng-container [formGroup]="searchForm">
+                <ng-container [formGroup]="studSearchForm">
                   <mat-form-field>
                     <mat-label>Student Number</mat-label>
                   <input matInput #studentnumber type="text" formControlName="studentnumber" autocomplete="off" (keypress)="numberFilter($event)" (change)="getSchoolyear(studentnumber.value)">
@@ -39,6 +52,8 @@
               </mat-card-content>
 
               <mat-card-actions class="mb-3 align-self-end">
+                <button mat-raised-button (click)="backToSearchType()">Back to Search Type</button>
+                &nbsp;
                 <button mat-raised-button (click)="generateProfile(studentnumber.value)">Generate Profile</button>
               </mat-card-actions>
             </mat-card>
@@ -97,11 +112,12 @@
                 <div class="container">
                   <div class="row align-items-start">
                     <div class="col">
-                      <button mat-raised-button type="submit" class="btn btn-success" (click)="generateData(false)" [disabled]="courseCheck(studentInfoForm.get('course').value)">Completion</button>
+                      <button mat-raised-button type="submit" class="btn btn-success" (click)="generateStudData(false)"
+                      [disabled]="courseCheck(studentInfoForm.get('course').value)">Completion</button>
                     </div>
 
                     <div class="col" *ngIf="adminVisibility">
-                      <button mat-raised-button type="submit" class="btn btn-success" (click)="generateData(true)" >Update Grade</button>
+                      <button mat-raised-button type="submit" class="btn btn-success" (click)="generateStudData(true)" >Update Grade</button>
                     </div>
 
                     <div class="col">
@@ -116,12 +132,13 @@
         </div>
       </div>
 
-      <div class="container" *ngIf="completionVisibility || changingVisibility">
-        <div class="container" *ngIf="completionVisibility">
+
+      <div class="container" *ngIf="studCompVisibility || studChangeVisibility">
+        <div class="container" *ngIf="studCompVisibility">
           <p class="fs-3">Completion of Grades</p>
         </div>
 
-        <div class="container" *ngIf="changingVisibility">
+        <div class="container" *ngIf="studChangeVisibility">
           <p class="fs-3">Updating of Grades</p>
         </div>
         <br>
@@ -142,9 +159,9 @@
         </div>
       </div>
 
-      <div class="container" *ngIf="changingVisibility">
+      <div class="container" *ngIf="studChangeVisibility">
         <br>
-        <table mat-table [dataSource]="gradesDataSource" class="mat-elevation-z8">
+        <table mat-table [dataSource]="studGradesDataSource" class="mat-elevation-z8">
           <ng-container matColumnDef="schedcode">
             <th mat-header-cell *matHeaderCellDef> Schedule Code </th>
             <td mat-cell *matCellDef="let grade"> {{grade.schedcode}} </td>
@@ -176,8 +193,8 @@
             </td>
           </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="changingColumns"></tr>
-          <tr mat-row *matRowDef="let gradeRow; columns: changingColumns"></tr>
+          <tr mat-header-row *matHeaderRowDef="studChangingColumns"></tr>
+          <tr mat-row *matRowDef="let gradeRow; columns: studChangingColumns"></tr>
 
           <tr class="mat-row" *matNoDataRow>
             <td class="mat-cell" colspan="4">No grades to change.</td>
@@ -185,9 +202,9 @@
         </table>
       </div>
 
-      <div class="container" *ngIf="completionVisibility">
+      <div class="container" *ngIf="studCompVisibility">
         <br>
-        <table mat-table [dataSource]="gradesDataSource" class="mat-elevation-z8">
+        <table mat-table [dataSource]="studGradesDataSource" class="mat-elevation-z8">
           <ng-container matColumnDef="schedcode">
             <th mat-header-cell *matHeaderCellDef> Schedule Code </th>
             <td mat-cell *matCellDef="let grade"> {{grade.schedcode}} </td>
@@ -200,7 +217,164 @@
 
           <ng-container matColumnDef="mygrade">
             <th mat-header-cell *matHeaderCellDef> Current Grade </th>
-            <td mat-cell *matCellDef="let grade"> {{grade.mygrade}} </td>
+            <td mat-cell *matCellDef="let grade"> {{ grade.makeupgrade === '-' ? grade.mygrade : grade.makeupgrade }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="newGrade">
+            <th mat-header-cell *matHeaderCellDef> New Grade </th>
+            <td mat-cell *matCellDef="let grade">
+              <mat-select [formControl]="newGradeControl">
+                <mat-option *ngFor="let item of gradeList" [value]="item">{{item}}</mat-option>
+              </mat-select>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="update">
+            <th mat-header-cell *matHeaderCellDef> Complete </th>
+            <td mat-cell *matCellDef="let grade">
+              <button mat-raised-button (click)="initCompletion(grade, newGradeControl.value)"> Confirm </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="studChangingColumns"></tr>
+          <tr mat-row *matRowDef="let gradeRow; columns: studChangingColumns"></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="5">No grades to change.</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="container" *ngIf="studChangeVisibility || studCompVisibility">
+        <button mat-button class="btn btn-success" (click)="backToStudSearch()">Back to Search</button>
+      </div>
+
+
+      <div class="container" *ngIf="schedSearch">
+        <mat-card class="search">
+          <mat-card-header>
+            <h1>Schedule Search</h1>
+          </mat-card-header>
+
+          <mat-card-content>
+            <ng-container [formGroup]="schedSearchForm">
+              <mat-form-field>
+                <mat-label>Schedule Code</mat-label>
+                <input matInput type="text" formControlName="schedcode" (keypress)="numberFilter($event)" >
+              </mat-form-field>
+              <br>
+            </ng-container>
+          </mat-card-content>
+
+          <mat-card-actions class="mb-3 align-self-center">
+            <button mat-raised-button (click)="backToSearchType()">Search Type</button>
+            &nbsp;
+            <button mat-raised-button (click)="generateSchedData(true, schedSearchForm.get('schedcode').value)">Update</button>
+            &nbsp;
+            <button mat-raised-button *ngIf="isAdmin" (click)="generateSchedData(false, schedSearchForm.get('schedcode').value)">Completion</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+
+      <div class="container" *ngIf="schedChangeVisibility">
+        <br>
+        <table mat-table [dataSource]="schedGradesDataSource" class="mat-elevation-z8">
+          <ng-container matColumnDef="studentnumber">
+            <th mat-header-cell *matHeaderCellDef> Student Number </th>
+            <td mat-cell *matCellDef="let grade"> {{grade.studentnumber}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="lastName">
+            <th mat-header-cell *matHeaderCellDef> Last Name </th>
+            <td mat-cell *matCellDef="let grade"> {{grade.lastName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="firstName">
+            <th mat-header-cell *matHeaderCellDef> First Name </th>
+            <td mat-cell *matCellDef="let grade"> {{grade.firstName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="middleName">
+            <th mat-header-cell *matHeaderCellDef> Middle Name </th>
+            <td mat-cell *matCellDef="let grade"> {{grade.middleName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="suffix">
+            <th mat-header-cell *matHeaderCellDef> Suffix </th>
+            <td mat-cell *matCellDef="let grade"> {{ grade.suffix === '' ? '-' : grade.suffix }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="subjectcode">
+            <th mat-header-cell *matHeaderCellDef> Subject Code </th>
+            <td mat-cell *matCellDef="let grade"> {{grade.subjectcode}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="mygrade">
+            <th mat-header-cell *matHeaderCellDef> Current Grade </th>
+            <td mat-cell *matCellDef="let grade"> {{ grade.makeupgrade === '-' ? grade.mygrade : grade.makeupgrade }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="newGrade">
+            <th mat-header-cell *matHeaderCellDef> New Grade </th>
+            <td mat-cell *matCellDef="let grade">
+              <mat-select [formControl]="newGradeControl">
+                <mat-option *ngFor="let item of gradeList" [value]="item">{{item}}</mat-option>
+              </mat-select>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="update">
+            <th mat-header-cell *matHeaderCellDef> Update </th>
+            <td mat-cell *matCellDef="let grade">
+              <button mat-raised-button (click)="initUpdate(grade, newGradeControl.value)"> Confirm </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="schedChangingColumns"></tr>
+          <tr mat-row *matRowDef="let gradeRow; columns: schedChangingColumns"></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No grades to change.</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="container" *ngIf="schedCompVisibility">
+        <br>
+        <table mat-table [dataSource]="schedGradesDataSource" class="mat-elevation-z8">
+          <ng-container matColumnDef="studentnumber">
+            <th mat-header-cell *matHeaderCellDef> Student Number </th>
+            <td mat-cell *matCellDef="let grade"> {{grade.studentnumber}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="lastName">
+            <th mat-header-cell *matHeaderCellDef> Last Name </th>
+            <td mat-cell *matCellDef="let grade"> {{grade.lastName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="firstName">
+            <th mat-header-cell *matHeaderCellDef> First Name </th>
+            <td mat-cell *matCellDef="let grade"> {{grade.firstName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="middleName">
+            <th mat-header-cell *matHeaderCellDef> Middle Name </th>
+            <td mat-cell *matCellDef="let grade"> {{grade.middleName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="suffix">
+            <th mat-header-cell *matHeaderCellDef> Suffix </th>
+            <td mat-cell *matCellDef="let grade"> {{ grade.suffix === '' ? '-' : grade.suffix }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="subjectcode">
+            <th mat-header-cell *matHeaderCellDef> Subject Code </th>
+            <td mat-cell *matCellDef="let grade"> {{grade.subjectcode}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="mygrade">
+            <th mat-header-cell *matHeaderCellDef> Current Grade </th>
+            <td mat-cell *matCellDef="let grade"> {{ grade.makeupgrade === '-' ? grade.mygrade : grade.makeupgrade }} </td>
           </ng-container>
 
           <ng-container matColumnDef="newGrade">
@@ -219,17 +393,13 @@
             </td>
           </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="changingColumns"></tr>
-          <tr mat-row *matRowDef="let gradeRow; columns: changingColumns"></tr>
+          <tr mat-header-row *matHeaderRowDef="schedChangingColumns"></tr>
+          <tr mat-row *matRowDef="let gradeRow; columns: schedChangingColumns"></tr>
 
           <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell" colspan="5">No grades to change.</td>
+            <td class="mat-cell" colspan="4">No grades to change.</td>
           </tr>
         </table>
-      </div>
-
-      <div class="container" *ngIf="changingVisibility || completionVisibility">
-        <button mat-button class="btn btn-success" (click)="backToSearch()">Back to Search</button>
       </div>
     </div>
   </div>

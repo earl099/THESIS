@@ -87,71 +87,67 @@ export class AssessedListComponent implements OnInit {
         //console.log(this.globalVars)
 
         if(this.userService.getToken() != 'UNIV') {
-          this.enrollmentService.getAllAssessed(this.globalVars[0].semester, this.globalVars[0].schoolyear).subscribe((res) => {
+          this.reportService.getCourses(this.userService.getToken()).subscribe((res) => {
             if(res) {
-              let tmpData = res.assessedStuds
+              this.courseList = res.course
+              //console.log(this.courseList)
 
-              for (let i = 0; i < tmpData.length; i++) {
-                this.assessedStuds.push(tmpData[i])
-              }
-              //console.log(this.assessedStuds)
-
-              this.reportService.getCourses(this.userService.getToken()).subscribe((res) => {
+              this.enrollmentService.getAllAssessed(this.globalVars[0].semester, this.globalVars[0].schoolyear).subscribe((res) => {
                 if(res) {
-                  this.courseList = res.course
+                  let tmpData = res.assessedStuds
+                  //console.log(tmpData)
 
-                  this.enrollmentService.getStudsEnroll(this.globalVars[0].semester, this.globalVars[0].schoolyear).subscribe((res) => {
+                  this.studentService.getAllStudents().subscribe((res) => {
                     if(res) {
-                      let tmpData = res.studsEnroll
+                      let tmpData1 = res.students
+                      //console.log(tmpData1)
 
-                      for (let i = 0; i < tmpData.length; i++) {
-                        this.validatedStuds.push(tmpData[i])
-                      }
-                      //console.log(this.validatedStuds)
-
-                      for (let i = 0; i < this.assessedStuds.length; i++) {
-                        if(this.validatedStuds.find((item: any) => item.studentnumber === this.assessedStuds[i].studentnumber)) {
-                          validatedStatus.validatedStatus = true
-                        }
-                        else {
-                          validatedStatus.validatedStatus = false
-                        }
-
-                        this.assessedListFinal.push(Object.assign({
-                          studentnumber: this.assessedStuds[i].studentnumber,
-                          scholarship: this.assessedStuds[i].scholarship
-                        }, validatedStatus))
-                      }
-
-                      for (let i = 0; i < this.assessedListFinal.length; i++) {
-                        this.studentService.getStudent(this.assessedListFinal[i].studentnumber).subscribe((res) => {
-                          if(res) {
-                            let tmpData = res.student
-
-                            this.assessedListFinal[i] = Object.assign(this.assessedListFinal[i],
-                              {
-                                firstName: tmpData.firstName,
-                                middleName: tmpData.middleName,
-                                lastName: tmpData.lastName,
-                                suffix: tmpData.suffix,
-                                course: tmpData.course
-                            })
+                      this.enrollmentService.getStudsEnroll(this.globalVars[0].semester, this.globalVars[0].schoolyear).subscribe((res) => {
+                        if(res) {
+                          let tmpData2 = res.studsEnroll
+                          //console.log(tmpData2)
 
 
-                            if(this.courseCheck(this.assessedListFinal[i].course)) {
-                              this.assessedListFinal.splice(i, 1)
-
+                          for (let i = 0; i < tmpData.length; i++) {
+                            if(
+                              tmpData1.find((student: any) => student.studentNumber === tmpData[i].studentnumber)) {
+                              this.assessedListFinal.push(Object.assign({}, {
+                                studentnumber: tmpData[i].studentnumber
+                              }))
                             }
-                            console.log(this.assessedListFinal)
+                          }
+                          console.log(this.assessedListFinal)
+
+                          for (let i = 0; i < this.assessedListFinal.length; i++) {
+                            for (let j = 0; j < tmpData1.length; j++) {
+                              try {
+                                if(tmpData1[j].studentNumber == this.assessedListFinal[i].studentnumber) {
+                                  if(this.courseList.find((course: any) => course.courseCode === tmpData1[j].course)) {
+                                    Object.assign(this.assessedListFinal[i], {
+                                      firstName: tmpData1[j].firstName,
+                                      middleName: tmpData1[j].middleName,
+                                      lastName: tmpData1[j].lastName,
+                                      suffix: tmpData1[j].suffix,
+                                      course: tmpData1[j].course
+                                    })
+                                  }
+                                  else {
+                                    this.assessedListFinal.splice(i, 1)
+                                  }
+                                }
+
+
+                              } catch { }
+                            }
 
                             this.enrollmentService.getScholarships().subscribe((res) => {
                               if(res) {
-                                let tmpData = res.scholarships
+                                let tmpData3 = res.scholarships
 
-                                for (let j = 0; j < tmpData.length; j++) {
-                                  this.scholarshipList.push(tmpData[j].scholarship)
+                                for (let j = 0; j < tmpData3.length; j++) {
+                                  this.scholarshipList.push(tmpData3[j].scholarship)
                                   try {
-                                    if(tmpData[j].scholarship == this.assessedListFinal[i].scholarship) {
+                                    if(tmpData3[j].scholarship == this.assessedListFinal[i].scholarship) {
                                       this.studScholarship = this.assessedListFinal[i].scholarship
                                       //console.log(this.studScholarship)
                                     }
@@ -159,101 +155,43 @@ export class AssessedListComponent implements OnInit {
                                     continue
                                   }
 
-                                  if(this.userService.getToken() != 'UNIV') {
-                                    this.dataSource = new MatTableDataSource(this.assessedListFinal)
-                                    this.dataSource.paginator = this.paginator
-                                    this.dataSource.sort = this.sort
-                                  }
+                                  this.dataSource = new MatTableDataSource(this.assessedListFinal)
+                                  this.dataSource.paginator = this.paginator
+                                  this.dataSource.sort = this.sort
                                 }
                               }
                             })
-
-                            if(this.userService.getToken() == 'UNIV') {
-                              this.dataSource = new MatTableDataSource(this.assessedListFinal)
-                              this.dataSource.paginator = this.paginator
-                              this.dataSource.sort = this.sort
-                            }
                           }
-                        })
-                      }
-                    }
-                    else {
-                      for (let i = 0; i < this.assessedStuds.length; i++) {
-                        if(this.validatedStuds.find((item: any) => item.studentnumber === this.assessedStuds[i].studentnumber)) {
-                          validatedStatus.validatedStatus = true
+                          console.log(this.assessedListFinal)
+
+
                         }
-                        else {
-                          validatedStatus.validatedStatus = false
-                        }
+                      })
 
-                        this.assessedListFinal.push(Object.assign({
-                          studentnumber: this.assessedStuds[i].studentnumber,
-                          scholarship: this.assessedStuds[i].scholarship
-                        }, validatedStatus))
-                      }
-
-                      for (let i = 0; i < this.assessedListFinal.length; i++) {
-                        this.studentService.getStudent(this.assessedListFinal[i].studentnumber).subscribe((res) => {
-                          if(res) {
-                            let tmpData = res.student
-
-                            this.assessedListFinal[i] = Object.assign(this.assessedListFinal[i],
-                              {
-                                firstName: tmpData.firstName,
-                                middleName: tmpData.middleName,
-                                lastName: tmpData.lastName,
-                                suffix: tmpData.suffix,
-                                course: tmpData.course
-                            })
-
-                            if(this.courseCheck(this.assessedListFinal[i].course)) {
-                              this.assessedListFinal.splice(i, 1)
-                            }
-
-                            this.enrollmentService.getScholarships().subscribe((res) => {
-                              if(res) {
-                                let tmpData = res.scholarships
-
-                                for (let j = 0; j < tmpData.length; j++) {
-                                  this.scholarshipList.push(tmpData[j].scholarship)
-                                  if(tmpData[j].scholarship == this.assessedListFinal[i].scholarship) {
-                                    this.studScholarship = this.assessedListFinal[i].scholarship
-                                    //console.log(this.studScholarship)
-                                  }
-                                }
-
-                                this.dataSource = new MatTableDataSource(this.assessedListFinal)
-                                this.dataSource.paginator = this.paginator
-                                this.dataSource.sort = this.sort
-                              }
-                            })
-
-                            this.dataSource = new MatTableDataSource(this.assessedListFinal)
-                            this.dataSource.paginator = this.paginator
-                            this.dataSource.sort = this.sort
-                          }
-                        })
-                      }
                     }
                   })
+
+
                 }
               })
             }
           })
         }
         else {
-          this.enrollmentService.getAllAssessed(this.globalVars[0].semester, this.globalVars[0].schoolyear).subscribe((res) => {
+          this.reportService.getCourses('ALL').subscribe((res) => {
             if(res) {
-              let tmpData = res.assessedStuds
+              this.courseList = res.course
 
-              for (let i = 0; i < tmpData.length; i++) {
-                this.assessedStuds.push(tmpData[i])
-              }
-              //console.log(this.assessedStuds)
-
-              this.reportService.getCourses('ALL').subscribe((res) => {
+              this.enrollmentService.getAllAssessed(this.globalVars[0].semester, this.globalVars[0].schoolyear).subscribe((res) => {
                 if(res) {
-                  this.courseList = res.course
+                  let tmpData = res.assessedStuds
+
+                  for (let i = 0; i < tmpData.length; i++) {
+                    this.assessedStuds.push(tmpData[i])
+                  }
+                  //console.log(this.assessedStuds)
+
+
 
                   this.enrollmentService.getStudsEnroll(this.globalVars[0].semester, this.globalVars[0].schoolyear).subscribe((res) => {
                     if(res) {
@@ -378,7 +316,6 @@ export class AssessedListComponent implements OnInit {
             }
           })
         }
-
       }
     })
   }

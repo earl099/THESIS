@@ -33,6 +33,12 @@ export class GradesService {
     .pipe(catchError(this.handleError<any>('Get Schoolyear')))
   }
 
+  //--- GET GRADES BY SCHEDCODE ---//
+  getGradesBySchedcode(schedcode: any) {
+    return this.httpClient.get(`${this.baseURL}/grades/all/${schedcode}`, this.httpOptions)
+    .pipe(catchError(this.handleError<any>('Get Grades')))
+  }
+
   //--- UPDATE GRADES ---//
   updateGrade(
     studentnumber: any,
