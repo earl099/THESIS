@@ -35,6 +35,15 @@ export class AdminLoginComponent implements OnInit {
     if(localStorage.getItem('token') != null || localStorage.getItem('token') != undefined) {
       this.router.navigate(['/dashboard'])
     }
+
+    this.userService.getAllUsers().subscribe((res) => {
+      if(res) {
+        let tmpData = res.users
+        if(tmpData.length < 1) {
+          this.router.navigate(['/install'])
+        }
+      }
+    })
   }
 
   onLogin(accountType: any) {

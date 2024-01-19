@@ -2,7 +2,48 @@
   <div class="page__box p-3 mt-2">Installation</div>
   <div class="page__content shadow p-3 position-relative">
     <div class="page__content-data position-absolute text-center">
-      <div class="container">
+      <div class="container" *ngIf="noUser">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>ADD ADMIN ACCOUNT</mat-card-title>
+          </mat-card-header>
+
+          <mat-card-content>
+            <form [formGroup]="addForm">
+              <mat-form-field appearance="fill">
+                <mat-label>College ID</mat-label>
+                <input matInput type="text" formControlName="collegeID" readonly>
+              </mat-form-field>
+              <br>
+
+              <mat-form-field appearance="fill">
+                <mat-label>User Name</mat-label>
+                <input matInput type="text" formControlName="username">
+              </mat-form-field>
+              <br>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Password</mat-label>
+                <input matInput type="password" formControlName="password">
+              </mat-form-field>
+              <br>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" formControlName="email">
+              </mat-form-field>
+            </form>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <div class="pt-3">
+              <button mat-raised-button (click)="addAdmin()">Add User</button>
+            </div>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+
+      <div class="container" *ngIf="noLegend">
         <form [formGroup]="legend" (ngSubmit)="addLegend(legend)" autocomplete="off">
           <div class="row align-items-start">
             <div class="col">

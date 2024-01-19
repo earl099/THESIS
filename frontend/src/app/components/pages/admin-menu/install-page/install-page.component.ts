@@ -5,6 +5,7 @@ import { VariableService } from 'src/app/services/variable.service';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { first } from 'rxjs';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-install-page',
@@ -18,16 +19,17 @@ import { first } from 'rxjs';
   ]
 })
 export class InstallPageComponent implements OnInit {
+  noUser: boolean = false
+  noLegend: boolean = false
   legend: any;
+  addForm: any
   // ksemester: any = '';
   // kschoolyear: any = [];
-
-
-
 
   constructor(
     private router: Router,
     private varService: VariableService,
+    private userService: UserService,
     private toastr: ToastrService,
     private fb: FormBuilder
   ) { }
@@ -47,9 +49,54 @@ export class InstallPageComponent implements OnInit {
       kschoolyear: new FormControl('')
     })
 
+    this.addForm = this.fb.group({
+      collegeSelection: new FormControl(''),
+      collegeID: new FormControl('UNIV'),
+      username: new FormControl(''),
+      email: new FormControl('', Validators.email),
+      password: new FormControl(''),
+      isAdmin: new FormControl('')
+    })
 
+    this.userService.getAllUsers().subscribe((res) => {
+      if(res) {
+        let tmpData = res.users
+        if(tmpData.length < 1) {
+          this.noUser = true
+        }
+      }
+    })
   }
 
+
+  addAdmin() {
+    if(confirm('Are you sure you want to add this account?')) {
+      if(
+        this.addForm.get('collegeID').value == '' ||
+        this.addForm.get('username').value == '' ||
+        this.addForm.get('password').value == '' ||
+        this.addForm.get('email').value == ''
+      )
+      {
+        this.toastr.error('Please fill out all fields.')
+      }
+      else {
+        this.userService.addUser(this.addForm.value).subscribe((res) => {
+          if(res) {
+            this.varService.getLegend().subscribe((res) => {
+              if(res) {
+                let tmpData = res.legend
+                if(tmpData.length < 1) {
+                  this.noLegend = true
+                  this.noUser = false
+                }
+              }
+            })
+          }
+        })
+      }
+    }
+  }
 
   addLegend(legend: any) {
     //FOR GETTING THE PREVIOUS SEMESTER
@@ -84,11 +131,9 @@ export class InstallPageComponent implements OnInit {
       this.varService.addLegend(legend.value).pipe(first()).subscribe((res) => {
         if(res) {
           this.toastr.success(res.message);
+          this.router.navigate(['/login'])
         }
       })
-      console.log(legend.value)
-      alert('Redirecting to Admin Account Creation');
-      window.location.href = 'account/add';
     }
   }
 }
