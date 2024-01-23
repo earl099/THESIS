@@ -111,7 +111,7 @@ const adminGetLoa = async (req, res) => {
         res.status(200).send({ message: 'Students with LOA found.', studsWithLoa: studsWithLoa })
     }
     else {
-        res.status(404).send({ message: 'Students with LOA not found' })
+        res.status(200).send({ message: 'Students with LOA not found', studsWithLoa: studsWithLoa })
     }
 }
 
@@ -155,7 +155,7 @@ const userGetLoa = async (req, res) => {
         res.status(200).send({ message: 'Students with LOA found.', studsWithLoa: studsWithLoa })
     }
     else {
-        res.status(500).send({ message: 'Students with LOA not found', studsWithLoa: studsWithLoa })
+        res.status(200).send({ message: 'Students with LOA not found', studsWithLoa: studsWithLoa })
     }
 }
 
@@ -310,6 +310,24 @@ const advLoaSearch = async (req, res) => {
 
     for(let i = 0; i < courseList.length; i++) {
         finalCourseList.push(courseList[i].courseCode) 
+    }
+
+    let checkerData = await loaModel.findAll({
+        attributes: [
+            'studentnumber',
+            'dateencoded',
+            'semester',
+            'schoolyear'
+        ],
+        where: { 
+            semester: semester, 
+            schoolyear: schoolyear,
+            course: courseCode
+        }
+    })
+
+    if(checkerData.length < 1) {
+        objRes = checkerData
     }
 
     //specific college
@@ -758,7 +776,7 @@ const advLoaSearch = async (req, res) => {
         res.status(200).send({ message: 'Students loa found.', result: objRes, infoResult: studInfoResult })
     }
     else {
-        res.status(500).send({ message: 'No Result.' })
+        res.status(200).send({ message: 'No Result.', result: objRes, infoResult: studInfoResult })
     }
 }
 

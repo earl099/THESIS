@@ -81,7 +81,7 @@ export class CurriculumService {
   //--- ERROR HANDLING ---//
   private handleError<T>(operation = 'operation', result?: T) {
     return (): Observable<T> => {
-      this.toastr.error(`${operation} failed !`);
+      //this.toastr.error(`${operation} failed !`);
       return of(result as T);
     }
   }

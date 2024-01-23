@@ -1886,7 +1886,8 @@ const searchEnrolled = async (req, res) => {
                         attributes: [
                             'studentnumber',
                             'semester',
-                            'schoolyear'
+                            'schoolyear',
+                            'scholarship'
                         ],
                         where: { 
                             semester: semester, 
@@ -1900,7 +1901,8 @@ const searchEnrolled = async (req, res) => {
                         attributes: [
                             'studentnumber',
                             'semester',
-                            'schoolyear'
+                            'schoolyear',
+                            'scholarship'
                         ],
                         where: {
                             coursenow: courseCode
@@ -2099,7 +2101,8 @@ const searchEnrolled = async (req, res) => {
                         attributes: [
                             'studentnumber',
                             'semester',
-                            'schoolyear'
+                            'schoolyear',
+                            'scholarship'
                         ],
                         where: { 
                             semester: semester, 
@@ -2113,7 +2116,8 @@ const searchEnrolled = async (req, res) => {
                         attributes: [
                             'studentnumber',
                             'semester',
-                            'schoolyear'
+                            'schoolyear',
+                            'scholarship'
                         ],
                         where: {
                             coursenow: finalCourseList
@@ -2157,7 +2161,8 @@ const searchEnrolled = async (req, res) => {
                         attributes: [
                             'studentnumber',
                             'semester',
-                            'schoolyear'
+                            'schoolyear',
+                            'scholarship'
                         ],
                         where: { 
                             semester: semester, 
@@ -2170,7 +2175,8 @@ const searchEnrolled = async (req, res) => {
                         attributes: [
                             'studentnumber',
                             'semester',
-                            'schoolyear'
+                            'schoolyear',
+                            'scholarship'
                         ]
                     })
                 }
@@ -2207,7 +2213,8 @@ const searchEnrolled = async (req, res) => {
                         attributes: [
                             'studentnumber',
                             'semester',
-                            'schoolyear'
+                            'schoolyear',
+                            'scholarship'
                         ],
                         where: { 
                             semester: semester, 
@@ -2220,7 +2227,8 @@ const searchEnrolled = async (req, res) => {
                         attributes: [
                             'studentnumber',
                             'semester',
-                            'schoolyear'
+                            'schoolyear',
+                            'scholarship'
                         ]
                     })
                 }
@@ -2259,7 +2267,8 @@ const searchEnrolled = async (req, res) => {
                         attributes: [
                             'studentnumber',
                             'semester',
-                            'schoolyear'
+                            'schoolyear',
+                            'scholarship'
                         ],
                         where: { 
                             semester: semester, 
@@ -2308,7 +2317,8 @@ const searchEnrolled = async (req, res) => {
                         attributes: [
                             'studentnumber',
                             'semester',
-                            'schoolyear'
+                            'schoolyear',
+                            'scholarship'
                         ],
                         where: { 
                             semester: semester, 
@@ -2321,7 +2331,8 @@ const searchEnrolled = async (req, res) => {
                         attributes: [
                             'studentnumber',
                             'semester',
-                            'schoolyear'
+                            'schoolyear',
+                            'scholarship'
                         ]
                     })
                 }

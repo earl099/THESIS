@@ -55,7 +55,7 @@ export class InstallPageComponent implements OnInit {
       username: new FormControl(''),
       email: new FormControl('', Validators.email),
       password: new FormControl(''),
-      isAdmin: new FormControl('')
+      isAdmin: new FormControl(true)
     })
 
     this.userService.getAllUsers().subscribe((res) => {
@@ -89,6 +89,9 @@ export class InstallPageComponent implements OnInit {
                 if(tmpData.length < 1) {
                   this.noLegend = true
                   this.noUser = false
+                }
+                else {
+                  this.router.navigate(['/login'])
                 }
               }
             })

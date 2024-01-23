@@ -65,7 +65,7 @@ const getLegend = async (req, res) => {
         res.status(200).send({ message: 'Global Variables found.', legend: legend })
     }
     else {
-        res.status(404).send({ message: 'Global Variables not found.' })
+        res.status(200).send({ message: 'Global Variables not found.', legend: legend })
     }
 }
 

@@ -148,7 +148,7 @@ const getUsers = async (req, res) => {
         res.status(200).send({ message: 'Users found.', users: users })
     }
     else {
-        res.status(404).send({ message: 'Users not found.' });
+        res.status(200).send({ message: 'Users not found.', users: users });
     }
 }
 

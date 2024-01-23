@@ -14,6 +14,7 @@ import { EnrollmentService } from 'src/app/services/enrollment.service';
 import { StudentService } from 'src/app/services/student.service';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { UserService } from 'src/app/services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-generate-report',
@@ -147,6 +148,7 @@ export class GenerateReportComponent implements OnInit {
     private variableService: VariableService,
     private fb: FormBuilder,
     private toastr: ToastrService,
+    private router: Router,
     private _liveAnnouncer: LiveAnnouncer,
     private dialog: MatDialog
   ) { }
@@ -353,161 +355,537 @@ export class GenerateReportComponent implements OnInit {
         this.reportForm.get('semester').setValue(this.globalVar[0].semester)
         this.reportForm.get('schoolyear').setValue(this.globalVar[0].schoolyear)
 
-        this.reportService.advSearchByReportType(this.reportForm.get('reportType').value, this.reportForm.value).subscribe((res) => {
+        this.enrollmentService.getAllAssessed(this.globalVar[0].semester, this.globalVar[0].schoolyear).subscribe((res) => {
           if(res) {
-            let tmpData = res.result
-            let tmpData2 = res.infoResult
-
-            //console.log(tmpData)
-            //console.log(tmpData2)
-            //console.log(this.reportForm.value)
-
-            //data for different report types
-            let enrolledData = []
-            let shifteeData = []
-            let loaData = []
-            let assessedData = []
-            let checker = { studentNumber: undefined }
-
-            for (let i = 0; i < tmpData.length; i++) {
-              Object.assign(tmpData[i], tmpData2[i])
-              switch (this.reportForm.get('reportType').value) {
-                case 'stud_enroll':
-                  if(this.courseCheck(tmpData2.course)) {
-                    enrolledData.push(tmpData[i])
-                    enrolledData.forEach(item => delete item.studentnumber)
-                    if(i == tmpData.length - 1) {
-                      shifteeData.push(checker)
-                      assessedData.push(checker)
-                      loaData.push(checker)
-                    }
-                  }
-                  break
-
-                case 'shiftee':
-                  if(this.courseCheck(tmpData2.course)) {
-                    shifteeData.push(tmpData[i])
-                    shifteeData.forEach(item => delete item.studentnumber)
-                    if(i == tmpData.length - 1) {
-                      enrolledData.push(checker)
-                      assessedData.push(checker)
-                      loaData.push(checker)
-                    }
-                  }
-                  break
-
-                case 'assessed':
-                  if(this.courseCheck(tmpData2.course)) {
-                    assessedData.push(tmpData[i])
-                    assessedData.forEach(item => delete item.studentnumber)
-                    if(i == tmpData.length - 1) {
-                      enrolledData.push(checker)
-                      shifteeData.push(checker)
-                      loaData.push(checker)
-                    }
-                  }
-                  break
-
-                case 'tor':
-                  break
-
-                default:
-                  loaData.push(tmpData[i])
-                  loaData.forEach(item => delete item.studentnumber)
-                  if(i == tmpData.length - 1) {
-                    enrolledData.push(checker)
-                    assessedData.push(checker)
-                    shifteeData.push(checker)
-                  }
-                  break
-              }
-            }
-
-
-            if(
-              enrolledData[0].studentNumber == undefined &&
-              shifteeData[0].studentNumber == undefined &&
-              loaData[0].studentNumber == undefined &&
-              assessedData[0].studentNumber == undefined
-            ) {
-              this.toastr.error('No result found.')
-            }
-            else {
-              //refreshing the array
-              if(this.dataResult.length > 0) {
-                this.dataResult.splice(0, this.dataResult.length)
-              }
-
-              //adding data to data result
-              switch (this.reportForm.get('reportType').value) {
-                case 'stud_enroll':
-                  for (let i = 0; i < enrolledData.length; i++) {
-                    this.dataResult.push(enrolledData[i])
-                  }
-                  //console.log(this.dataResult)
-
-                  this.title = 'Students Enrolled'
-                  this.isEnrolledReport = true
-                  this.dataSource = new MatTableDataSource(this.dataResult)
-                  this.dataSource.paginator = this.enrollPaginator
-                  this.dataSource.sort = this.enrollSort
-                  break
-
-                case 'shiftee':
-                  for (let i = 0; i < shifteeData.length; i++) {
-                    this.dataResult.push(shifteeData[i])
-                  }
-
-                  for (let i = 0; i < this.dataResult.length; i++) {
-                    if(this.dataResult[i].course == this.dataResult[i].coursefrom) {
-                      this.dataResult.splice(i, 1)
-                    }
-                  }
-
-                  this.title = 'Shiftees'
-                  this.isShifteeReport = true
-                  this.dataSource1 = new MatTableDataSource(this.dataResult)
-                  this.dataSource1.paginator = this.shifteePaginator
-                  this.dataSource1.sort = this.shifteeSort
-                  break
-
-                case 'assessed':
-                  //console.log(assessedData)
-
-                  for (let i = 0; i < assessedData.length; i++) {
-                    if(this.userService.getToken() == 'UNIV') {
-                      this.dataResult.push(assessedData[i])
-                    }
-                    else {
-                      if(!this.courseCheck(assessedData[i].course)) {
-                        this.dataResult.push(assessedData[i])
+            this.enrollmentService.getStudsEnroll(this.globalVar[0].semester, this.globalVar[0].schoolyear).subscribe((res) => {
+              if(res) {
+                this.studentService.getShiftees().subscribe((res) => {
+                  if(res) {
+                    let tstData = res.shiftees
+                    if(tstData.length < 1) {
+                      if(confirm('There is no data for this report. Would you like to add an entry?')) {
+                        this.router.navigate(['/student/list'])
+                        this.toastr.info('Redirected to student list for shifting.')
+                      }
+                      else {
+                        this.router.navigate(['/dashboard'])
+                        this.toastr.info('Redirected to dashboard.')
                       }
                     }
+                    else {
+                      this.reportService.advSearchByReportType(this.reportForm.get('reportType').value, this.reportForm.value).subscribe((res) => {
+                        if(res) {
+                          let tmpData = res.result
+                          let tmpData2 = res.infoResult
 
+                          //console.log(tmpData)
+                          //console.log(tmpData2)
+                          //console.log(this.reportForm.value)
+
+                          //data for different report types
+                          let enrolledData = []
+                          let shifteeData = []
+                          let loaData = []
+                          let assessedData = []
+                          let checker = { studentNumber: undefined }
+
+                          for (let i = 0; i < tmpData.length; i++) {
+                            Object.assign(tmpData[i], tmpData2[i])
+                            switch (this.reportForm.get('reportType').value) {
+                              case 'stud_enroll':
+                                if(this.courseCheck(tmpData2.course)) {
+                                  enrolledData.push(tmpData[i])
+                                  enrolledData.forEach(item => delete item.studentnumber)
+                                  if(i == tmpData.length - 1) {
+                                    shifteeData.push(checker)
+                                    assessedData.push(checker)
+                                    loaData.push(checker)
+                                  }
+                                }
+                                break
+
+                              case 'shiftee':
+                                if(this.courseCheck(tmpData2.course)) {
+                                  shifteeData.push(tmpData[i])
+                                  shifteeData.forEach(item => delete item.studentnumber)
+                                  if(i == tmpData.length - 1) {
+                                    enrolledData.push(checker)
+                                    assessedData.push(checker)
+                                    loaData.push(checker)
+                                  }
+                                }
+                                break
+
+                              case 'assessed':
+                                if(this.courseCheck(tmpData2.course)) {
+                                  assessedData.push(tmpData[i])
+                                  assessedData.forEach(item => delete item.studentnumber)
+                                  if(i == tmpData.length - 1) {
+                                    enrolledData.push(checker)
+                                    shifteeData.push(checker)
+                                    loaData.push(checker)
+                                  }
+                                }
+                                break
+
+                              case 'tor':
+                                break
+
+                              default:
+                                loaData.push(tmpData[i])
+                                loaData.forEach(item => delete item.studentnumber)
+                                if(i == tmpData.length - 1) {
+                                  enrolledData.push(checker)
+                                  assessedData.push(checker)
+                                  shifteeData.push(checker)
+                                }
+                                break
+                            }
+                          }
+
+
+                          if(
+                            enrolledData[0].studentNumber == undefined &&
+                            shifteeData[0].studentNumber == undefined &&
+                            loaData[0].studentNumber == undefined &&
+                            assessedData[0].studentNumber == undefined
+                          ) {
+                            this.toastr.error('No result found.')
+                          }
+                          else {
+                            //refreshing the array
+                            if(this.dataResult.length > 0) {
+                              this.dataResult.splice(0, this.dataResult.length)
+                            }
+
+                            //adding data to data result
+                            switch (this.reportForm.get('reportType').value) {
+                              case 'stud_enroll':
+                                for (let i = 0; i < enrolledData.length; i++) {
+                                  this.dataResult.push(enrolledData[i])
+                                }
+                                //console.log(this.dataResult)
+
+                                this.title = 'Students Enrolled'
+                                this.isEnrolledReport = true
+                                this.dataSource = new MatTableDataSource(this.dataResult)
+                                this.dataSource.paginator = this.enrollPaginator
+                                this.dataSource.sort = this.enrollSort
+                                break
+
+                              case 'shiftee':
+                                for (let i = 0; i < shifteeData.length; i++) {
+                                  this.dataResult.push(shifteeData[i])
+                                }
+
+                                for (let i = 0; i < this.dataResult.length; i++) {
+                                  if(this.dataResult[i].course == this.dataResult[i].coursefrom) {
+                                    this.dataResult.splice(i, 1)
+                                  }
+                                }
+
+                                this.title = 'Shiftees'
+                                this.isShifteeReport = true
+                                this.dataSource1 = new MatTableDataSource(this.dataResult)
+                                this.dataSource1.paginator = this.shifteePaginator
+                                this.dataSource1.sort = this.shifteeSort
+                                break
+
+                              case 'assessed':
+                                //console.log(assessedData)
+
+                                for (let i = 0; i < assessedData.length; i++) {
+                                  if(this.userService.getToken() == 'UNIV') {
+                                    this.dataResult.push(assessedData[i])
+                                  }
+                                  else {
+                                    if(!this.courseCheck(assessedData[i].course)) {
+                                      this.dataResult.push(assessedData[i])
+                                    }
+                                  }
+
+                                }
+
+                                //console.log(this.dataResult)
+
+                                this.title = 'Assessed Students'
+                                this.isAssessedReport = true
+                                this.dataSource3 = new MatTableDataSource(this.dataResult)
+                                this.dataSource3.paginator = this.assessedPaginator
+                                this.dataSource3.sort = this.assessedSort
+                                break
+
+                              default:
+                                for (let i = 0; i < loaData.length; i++) {
+                                  this.dataResult.push(loaData[i])
+                                }
+                                this.title = 'Leave of Absence'
+                                this.isLoaReport = true
+                                this.dataSource2 = new MatTableDataSource(this.dataResult)
+                                this.dataSource2.paginator = this.loaPaginator
+                                this.dataSource2.sort = this.loaSort
+                                break;
+                            }
+                            this.isReportGenerated = true
+                          }
+                        }
+                      })
+                    }
+
+                    if(this.userService.getToken() == 'UNIV') {
+                      this.studentService.adminSearch().subscribe((res) => {
+                        if(res) {
+                          let tstData = res.studsWithLoa
+                          if(tstData.length < 1) {
+                            if(confirm('There is no data for this report. Would you like to add an entry?')) {
+                              this.openAddLoaDialog()
+                            }
+                            else {
+                              this.reportForm.get('reportType').reset()
+                              this.toastr.info('Redirected to dashboard')
+                              this.router.navigate(['/dashboard'])
+                            }
+                          }
+                          else {
+                            this.reportService.advSearchByReportType(this.reportForm.get('reportType').value, this.reportForm.value).subscribe((res) => {
+                              if(res) {
+                                let tmpData = res.result
+                                let tmpData2 = res.infoResult
+
+                                //console.log(tmpData)
+                                //console.log(tmpData2)
+                                //console.log(this.reportForm.value)
+
+                                //data for different report types
+                                let enrolledData = []
+                                let shifteeData = []
+                                let loaData = []
+                                let assessedData = []
+                                let checker = { studentNumber: undefined }
+
+                                for (let i = 0; i < tmpData.length; i++) {
+                                  Object.assign(tmpData[i], tmpData2[i])
+                                  switch (this.reportForm.get('reportType').value) {
+                                    case 'stud_enroll':
+                                      if(this.courseCheck(tmpData2.course)) {
+                                        enrolledData.push(tmpData[i])
+                                        enrolledData.forEach(item => delete item.studentnumber)
+                                        if(i == tmpData.length - 1) {
+                                          shifteeData.push(checker)
+                                          assessedData.push(checker)
+                                          loaData.push(checker)
+                                        }
+                                      }
+                                      break
+
+                                    case 'shiftee':
+                                      if(this.courseCheck(tmpData2.course)) {
+                                        shifteeData.push(tmpData[i])
+                                        shifteeData.forEach(item => delete item.studentnumber)
+                                        if(i == tmpData.length - 1) {
+                                          enrolledData.push(checker)
+                                          assessedData.push(checker)
+                                          loaData.push(checker)
+                                        }
+                                      }
+                                      break
+
+                                    case 'assessed':
+                                      if(this.courseCheck(tmpData2.course)) {
+                                        assessedData.push(tmpData[i])
+                                        assessedData.forEach(item => delete item.studentnumber)
+                                        if(i == tmpData.length - 1) {
+                                          enrolledData.push(checker)
+                                          shifteeData.push(checker)
+                                          loaData.push(checker)
+                                        }
+                                      }
+                                      break
+
+                                    case 'tor':
+                                      break
+
+                                    default:
+                                      loaData.push(tmpData[i])
+                                      loaData.forEach(item => delete item.studentnumber)
+                                      if(i == tmpData.length - 1) {
+                                        enrolledData.push(checker)
+                                        assessedData.push(checker)
+                                        shifteeData.push(checker)
+                                      }
+                                      break
+                                  }
+                                }
+
+
+                                if(
+                                  enrolledData[0].studentNumber == undefined &&
+                                  shifteeData[0].studentNumber == undefined &&
+                                  loaData[0].studentNumber == undefined &&
+                                  assessedData[0].studentNumber == undefined
+                                ) {
+                                  this.toastr.error('No result found.')
+                                }
+                                else {
+                                  //refreshing the array
+                                  if(this.dataResult.length > 0) {
+                                    this.dataResult.splice(0, this.dataResult.length)
+                                  }
+
+                                  //adding data to data result
+                                  switch (this.reportForm.get('reportType').value) {
+                                    case 'stud_enroll':
+                                      for (let i = 0; i < enrolledData.length; i++) {
+                                        this.dataResult.push(enrolledData[i])
+                                      }
+                                      //console.log(this.dataResult)
+
+                                      this.title = 'Students Enrolled'
+                                      this.isEnrolledReport = true
+                                      this.dataSource = new MatTableDataSource(this.dataResult)
+                                      this.dataSource.paginator = this.enrollPaginator
+                                      this.dataSource.sort = this.enrollSort
+                                      break
+
+                                    case 'shiftee':
+                                      for (let i = 0; i < shifteeData.length; i++) {
+                                        this.dataResult.push(shifteeData[i])
+                                      }
+
+                                      for (let i = 0; i < this.dataResult.length; i++) {
+                                        if(this.dataResult[i].course == this.dataResult[i].coursefrom) {
+                                          this.dataResult.splice(i, 1)
+                                        }
+                                      }
+
+                                      this.title = 'Shiftees'
+                                      this.isShifteeReport = true
+                                      this.dataSource1 = new MatTableDataSource(this.dataResult)
+                                      this.dataSource1.paginator = this.shifteePaginator
+                                      this.dataSource1.sort = this.shifteeSort
+                                      break
+
+                                    case 'assessed':
+                                      //console.log(assessedData)
+
+                                      for (let i = 0; i < assessedData.length; i++) {
+                                        if(this.userService.getToken() == 'UNIV') {
+                                          this.dataResult.push(assessedData[i])
+                                        }
+                                        else {
+                                          if(!this.courseCheck(assessedData[i].course)) {
+                                            this.dataResult.push(assessedData[i])
+                                          }
+                                        }
+
+                                      }
+
+                                      //console.log(this.dataResult)
+
+                                      this.title = 'Assessed Students'
+                                      this.isAssessedReport = true
+                                      this.dataSource3 = new MatTableDataSource(this.dataResult)
+                                      this.dataSource3.paginator = this.assessedPaginator
+                                      this.dataSource3.sort = this.assessedSort
+                                      break
+
+                                    default:
+                                      for (let i = 0; i < loaData.length; i++) {
+                                        this.dataResult.push(loaData[i])
+                                      }
+                                      this.title = 'Leave of Absence'
+                                      this.isLoaReport = true
+                                      this.dataSource2 = new MatTableDataSource(this.dataResult)
+                                      this.dataSource2.paginator = this.loaPaginator
+                                      this.dataSource2.sort = this.loaSort
+                                      break;
+                                  }
+                                  this.isReportGenerated = true
+                                }
+                              }
+                            })
+                          }
+                        }
+                      })
+                    }
+                    else {
+                      this.studentService.userSearch(this.userService.getToken()).subscribe((res) => {
+                        if(res) {
+                          let tstData = res.studsWithLoa
+                          if(tstData.length < 1) {
+                            if(confirm('There is no data for this report. Would you like to add an entry?')) {
+                              this.openAddLoaDialog()
+                            }
+                            else {
+                              this.reportService.advSearchByReportType(this.reportForm.get('reportType').value, this.reportForm.value).subscribe((res) => {
+                                if(res) {
+                                  let tmpData = res.result
+                                  let tmpData2 = res.infoResult
+
+                                  //console.log(tmpData)
+                                  //console.log(tmpData2)
+                                  //console.log(this.reportForm.value)
+
+                                  //data for different report types
+                                  let enrolledData = []
+                                  let shifteeData = []
+                                  let loaData = []
+                                  let assessedData = []
+                                  let checker = { studentNumber: undefined }
+
+                                  for (let i = 0; i < tmpData.length; i++) {
+                                    Object.assign(tmpData[i], tmpData2[i])
+                                    switch (this.reportForm.get('reportType').value) {
+                                      case 'stud_enroll':
+                                        if(this.courseCheck(tmpData2.course)) {
+                                          enrolledData.push(tmpData[i])
+                                          enrolledData.forEach(item => delete item.studentnumber)
+                                          if(i == tmpData.length - 1) {
+                                            shifteeData.push(checker)
+                                            assessedData.push(checker)
+                                            loaData.push(checker)
+                                          }
+                                        }
+                                        break
+
+                                      case 'shiftee':
+                                        if(this.courseCheck(tmpData2.course)) {
+                                          shifteeData.push(tmpData[i])
+                                          shifteeData.forEach(item => delete item.studentnumber)
+                                          if(i == tmpData.length - 1) {
+                                            enrolledData.push(checker)
+                                            assessedData.push(checker)
+                                            loaData.push(checker)
+                                          }
+                                        }
+                                        break
+
+                                      case 'assessed':
+                                        if(this.courseCheck(tmpData2.course)) {
+                                          assessedData.push(tmpData[i])
+                                          assessedData.forEach(item => delete item.studentnumber)
+                                          if(i == tmpData.length - 1) {
+                                            enrolledData.push(checker)
+                                            shifteeData.push(checker)
+                                            loaData.push(checker)
+                                          }
+                                        }
+                                        break
+
+                                      case 'tor':
+                                        break
+
+                                      default:
+                                        loaData.push(tmpData[i])
+                                        loaData.forEach(item => delete item.studentnumber)
+                                        if(i == tmpData.length - 1) {
+                                          enrolledData.push(checker)
+                                          assessedData.push(checker)
+                                          shifteeData.push(checker)
+                                        }
+                                        break
+                                    }
+                                  }
+
+
+                                  if(
+                                    enrolledData[0].studentNumber == undefined &&
+                                    shifteeData[0].studentNumber == undefined &&
+                                    loaData[0].studentNumber == undefined &&
+                                    assessedData[0].studentNumber == undefined
+                                  ) {
+                                    this.toastr.error('No result found.')
+                                  }
+                                  else {
+                                    //refreshing the array
+                                    if(this.dataResult.length > 0) {
+                                      this.dataResult.splice(0, this.dataResult.length)
+                                    }
+
+                                    //adding data to data result
+                                    switch (this.reportForm.get('reportType').value) {
+                                      case 'stud_enroll':
+                                        for (let i = 0; i < enrolledData.length; i++) {
+                                          this.dataResult.push(enrolledData[i])
+                                        }
+                                        //console.log(this.dataResult)
+
+                                        this.title = 'Students Enrolled'
+                                        this.isEnrolledReport = true
+                                        this.dataSource = new MatTableDataSource(this.dataResult)
+                                        this.dataSource.paginator = this.enrollPaginator
+                                        this.dataSource.sort = this.enrollSort
+                                        break
+
+                                      case 'shiftee':
+                                        for (let i = 0; i < shifteeData.length; i++) {
+                                          this.dataResult.push(shifteeData[i])
+                                        }
+
+                                        for (let i = 0; i < this.dataResult.length; i++) {
+                                          if(this.dataResult[i].course == this.dataResult[i].coursefrom) {
+                                            this.dataResult.splice(i, 1)
+                                          }
+                                        }
+
+                                        this.title = 'Shiftees'
+                                        this.isShifteeReport = true
+                                        this.dataSource1 = new MatTableDataSource(this.dataResult)
+                                        this.dataSource1.paginator = this.shifteePaginator
+                                        this.dataSource1.sort = this.shifteeSort
+                                        break
+
+                                      case 'assessed':
+                                        //console.log(assessedData)
+
+                                        for (let i = 0; i < assessedData.length; i++) {
+                                          if(this.userService.getToken() == 'UNIV') {
+                                            this.dataResult.push(assessedData[i])
+                                          }
+                                          else {
+                                            if(!this.courseCheck(assessedData[i].course)) {
+                                              this.dataResult.push(assessedData[i])
+                                            }
+                                          }
+
+                                        }
+
+                                        //console.log(this.dataResult)
+
+                                        this.title = 'Assessed Students'
+                                        this.isAssessedReport = true
+                                        this.dataSource3 = new MatTableDataSource(this.dataResult)
+                                        this.dataSource3.paginator = this.assessedPaginator
+                                        this.dataSource3.sort = this.assessedSort
+                                        break
+
+                                      default:
+                                        for (let i = 0; i < loaData.length; i++) {
+                                          this.dataResult.push(loaData[i])
+                                        }
+                                        this.title = 'Leave of Absence'
+                                        this.isLoaReport = true
+                                        this.dataSource2 = new MatTableDataSource(this.dataResult)
+                                        this.dataSource2.paginator = this.loaPaginator
+                                        this.dataSource2.sort = this.loaSort
+                                        break;
+                                    }
+                                    this.isReportGenerated = true
+                                  }
+                                }
+                              })
+                            }
+                          }
+                          else {
+
+                          }
+                        }
+                      })
+                    }
                   }
-
-                  //console.log(this.dataResult)
-
-                  this.title = 'Assessed Students'
-                  this.isAssessedReport = true
-                  this.dataSource3 = new MatTableDataSource(this.dataResult)
-                  this.dataSource3.paginator = this.assessedPaginator
-                  this.dataSource3.sort = this.assessedSort
-                  break
-
-                default:
-                  for (let i = 0; i < loaData.length; i++) {
-                    this.dataResult.push(loaData[i])
-                  }
-                  this.title = 'Leave of Absence'
-                  this.isLoaReport = true
-                  this.dataSource2 = new MatTableDataSource(this.dataResult)
-                  this.dataSource2.paginator = this.loaPaginator
-                  this.dataSource2.sort = this.loaSort
-                  break;
+                })
               }
-              this.isReportGenerated = true
-            }
+            })
           }
         })
       }
