@@ -470,6 +470,18 @@ const addTransaction = async (req, res) => {
             default:
                 break
         }
+
+        slots = Number(schedcodeList.slots--)
+        let slotsObj = { slots: slots }
+        const newSched = await scheduleModel.update(
+            slotsObj, 
+            {
+                where: {
+                    schedcode: assessSubj[i].schedcode
+                }
+            }
+            
+        )
     }
 
     //OTHER FEES CHECKER AND CALCULATION OF TOTAL UNITS
@@ -545,6 +557,8 @@ const addTransaction = async (req, res) => {
 
         //TOTAL UNITS
         totalUnits += Number(schedcodeList.units) + Number(schedcodeList.labunits)
+    
+        
     }
 
     //FOREIGN STUDENT CHECKER
@@ -602,7 +616,7 @@ const addTransaction = async (req, res) => {
         trm: labFeeMultiplier[16] * feesBase.trm,
         fishery: labFeeMultiplier[17] * feesBase.fishery,
     }
-
+    
     //TRANSACTION
     let transaction
     try {
@@ -625,7 +639,7 @@ const addTransaction = async (req, res) => {
                 evaluate: 'N'
             }
 
-            slots = Number(schedcodeList.slots)--
+            
             await scheduleModel.update({ slots: slots }, {
                 where: {
                     schedcode: assessSubj[i].schedcode
@@ -725,11 +739,11 @@ const addTransaction = async (req, res) => {
             res.status(500).send({ error: error, message: 'Error Validating Student.' })
         }
 
-        transaction.commit()
+        await transaction.commit()
     }
     catch (error) {
         if(transaction){
-            transaction.rollback()
+            await transaction.rollback()
             res.status(500).send({ message: 'Internal Server Error', error: error })
         }
     }

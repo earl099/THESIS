@@ -97,7 +97,7 @@
 
                   <div class="row">
                     <div class="col">
-                      <h2>Gender: </h2>
+                      <h2>Sex: </h2>
                     </div>
                     <div class="col">
                       <input class="profile" matInput type="text" formControlName="gender" readonly>
@@ -174,7 +174,7 @@
 
           <ng-container matColumnDef="mygrade">
             <th mat-header-cell *matHeaderCellDef> Current Grade </th>
-            <td mat-cell *matCellDef="let grade"> {{grade.mygrade}} </td>
+            <td mat-cell *matCellDef="let grade"> {{ grade.makeupgrade === '-' ? grade.mygrade : grade.makeupgrade }} </td>
           </ng-container>
 
           <ng-container matColumnDef="newGrade">
@@ -251,7 +251,7 @@
 
 
       <div class="container" *ngIf="schedSearch">
-        <mat-card class="search">
+        <mat-card class="search-2">
           <mat-card-header>
             <h1>Schedule Search</h1>
           </mat-card-header>
@@ -264,16 +264,40 @@
               </mat-form-field>
               <br>
             </ng-container>
+
+            <ng-container>
+              <div class="row">
+                <div class="col">
+                  <p class="fs-6" *ngIf="schedData.schedcode != ''">Subject Code: {{schedData.subjectcode}}</p>
+                </div>
+
+                <div class="col">
+                  <p class="fs-6" *ngIf="schedData.schedcode != ''">Section: {{schedData.section}}</p>
+                </div>
+              </div>
+            </ng-container>
           </mat-card-content>
 
-          <mat-card-actions class="mb-3 align-self-center">
+          <mat-card-actions class="mb-3 mx-auto align-self-center">
             <button mat-raised-button (click)="backToSearchType()">Search Type</button>
+            &nbsp;
+            <button mat-raised-button (click)="generateSchedProfile(schedSearchForm.get('schedcode').value)">Generate Schedule</button>
             &nbsp;
             <button mat-raised-button (click)="generateSchedData(true, schedSearchForm.get('schedcode').value)">Update</button>
             &nbsp;
             <button mat-raised-button *ngIf="isAdmin" (click)="generateSchedData(false, schedSearchForm.get('schedcode').value)">Completion</button>
           </mat-card-actions>
         </mat-card>
+      </div>
+
+      <div class="row" *ngIf="schedChangeVisibility || schedCompVisibility">
+        <div class="col">
+          <p class="fs-6">Subject Code: {{schedData.subjectcode}}</p>
+        </div>
+
+        <div class="col">
+          <p class="fs-6">Subject Code: {{schedData.section}}</p>
+        </div>
       </div>
 
       <div class="container" *ngIf="schedChangeVisibility">
@@ -400,6 +424,11 @@
             <td class="mat-cell" colspan="4">No grades to change.</td>
           </tr>
         </table>
+      </div>
+
+      <br>
+      <div class="container" *ngIf="schedChangeVisibility || schedCompVisibility">
+        <button mat-raised-button type="submit" class="btn btn-success" (click)="backToSchedSearch()" >Back to Schedule Search</button>
       </div>
     </div>
   </div>

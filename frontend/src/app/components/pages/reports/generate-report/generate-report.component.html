@@ -55,10 +55,17 @@
                   </div>
                 </div>
 
+
+                <div class="col" *ngIf="reportForm.get('reportType').value == 'tor' && isTorProfileGenerated">
+                  <p class="fs-6">Name: {{studProfile.lastName}}, {{studProfile.firstName}} {{studProfile.middleName}} {{studProfile.suffix}}</p>
+                  <p class="fs-6">Course: {{studProfile.course}}</p>
+                </div>
+
+
                 <div class="row align-items-start" *ngIf="isAdvClicked && getReportType() != 'assessed' && getReportType() != 'loa'">
                   <div class="col">
                     <mat-form-field>
-                      <mat-label>Gender</mat-label>
+                      <mat-label>Sex</mat-label>
                       <mat-select formControlName="gender">
                         <mat-option value="MALE">MALE</mat-option>
                         <mat-option value="FEMALE">FEMALE</mat-option>
@@ -120,7 +127,15 @@
                   <button
                     mat-raised-button type="submit"
                     class="btn btn-success" (click)="onAdvClick()"
-                    *ngIf="reportForm.get('reportType').value != 'loa' && reportForm.get('reportType').value != 'assessed' && reportForm.get('reportType').value != 'tor' && baseDisplay">Advanced</button>
+                    *ngIf="reportForm.get('reportType').value != 'loa' && reportForm.get('reportType').value != 'assessed' && reportForm.get('reportType').value != 'tor' && baseDisplay">
+                    Advanced
+                  </button>
+                </div>
+
+                <div class="col">
+                  <button mat-raised-button type="submit" class="btn btn-success" (click)="generateStudProfile(reportForm.get('studentnumber').value)" *ngIf="reportForm.get('reportType').value == 'tor'">
+                    Generate Student Profile
+                  </button>
                 </div>
 
                 <div class="col">
@@ -166,7 +181,7 @@
             </ng-container>
 
             <ng-container matColumnDef="gender">
-              <th mat-header-cell *matHeaderCellDef> Gender </th>
+              <th mat-header-cell *matHeaderCellDef> Sex </th>
               <td mat-cell *matCellDef="let enrolled"> {{enrolled.gender}} </td>
             </ng-container>
 
@@ -229,7 +244,7 @@
             </ng-container>
 
             <ng-container matColumnDef="gender">
-              <th mat-header-cell *matHeaderCellDef> Gender </th>
+              <th mat-header-cell *matHeaderCellDef> Sex </th>
               <td mat-cell *matCellDef="let shiftee"> {{shiftee.gender}} </td>
             </ng-container>
 
@@ -305,7 +320,7 @@
                   <div class="row align-items-start">
                     <div class="col">
                       <mat-form-field>
-                        <mat-label>Gender</mat-label>
+                        <mat-label>Sex</mat-label>
                         <mat-select formControlName="gender" (selectionChange)="filterLoa()">
                           <mat-option value="MALE">MALE</mat-option>
                           <mat-option value="FEMALE">FEMALE</mat-option>
@@ -368,7 +383,7 @@
             </ng-container>
 
             <ng-container matColumnDef="gender">
-              <th mat-header-cell *matHeaderCellDef> Gender </th>
+              <th mat-header-cell *matHeaderCellDef> Sex </th>
               <td mat-cell *matCellDef="let loa"> {{loa.gender}} </td>
             </ng-container>
 
@@ -444,7 +459,7 @@
 
                     <div class="col">
                       <mat-form-field>
-                        <mat-label>Gender</mat-label>
+                        <mat-label>Sex</mat-label>
                         <mat-select formControlName="gender" (selectionChange)="filterAssessed()">
                           <mat-option value="MALE">MALE</mat-option>
                           <mat-option value="FEMALE">FEMALE</mat-option>
@@ -521,7 +536,7 @@
             </ng-container>
 
             <ng-container matColumnDef="gender">
-              <th mat-header-cell *matHeaderCellDef> Gender </th>
+              <th mat-header-cell *matHeaderCellDef> Sex </th>
               <td mat-cell *matCellDef="let assessed"> {{assessed.gender}} </td>
             </ng-container>
 

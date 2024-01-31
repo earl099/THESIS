@@ -16,9 +16,16 @@ import { VariableService } from 'src/app/services/variable.service';
   styleUrls: ['./grades.component.scss']
 })
 export class GradesComponent implements OnInit {
+  globalVar: any
   date = new Date()
   studSearchForm: any
   schedSearchForm: any
+
+  schedData = {
+    schedcode: '',
+    subjectcode: '',
+    section: ''
+  }
 
   filteredSched!: Observable<any>
   schoolyear: any
@@ -28,6 +35,7 @@ export class GradesComponent implements OnInit {
   studSearch: boolean = false
   //sched search
   schedSearch: boolean = false
+  isSchedGenerated: boolean = false
   schedControl = new FormControl('0')
   isAdmin!: boolean
 
@@ -147,6 +155,18 @@ export class GradesComponent implements OnInit {
       if(res) {
         this.courseList = res.course
         console.log(this.courseList)
+      }
+    })
+
+    this.variableService.getLegend().subscribe((res) => {
+      if(res) {
+        this.globalVar = res.legend
+        //console.log(this.globalVar)
+        this.scheduleService.getSchedulesBySemSY(this.globalVar[0].semester, this.globalVar[0].schoolyear).subscribe((res) => {
+          if(res) {
+            this.schedList = res.schedules
+          }
+        })
       }
     })
   }
@@ -393,54 +413,71 @@ export class GradesComponent implements OnInit {
   //-- STUDENT SEARCH FUNCTIONS ENDS HERE --//
 
   //--- SCHEDCODE SEARCH FUNCTION STARTS HERE ---//
+  generateSchedProfile(schedcode: string) {
+    this.scheduleService.getSchedule(schedcode).subscribe((res) => {
+      if(res) {
+        this.schedData.schedcode = res.schedule.schedcode
+        this.schedData.subjectcode = res.schedule.subjectCode
+        this.schedData.section = res.schedule.section
+        this.isSchedGenerated = true
+        //console.log(this.schedData)
+      }
+    })
+  }
+
   generateSchedData(isUpdate: boolean, schedcode: any) {
-    if(isUpdate) {
-      let data: any[] = []
-      this.schedChangeVisibility = true
-      this.schedSearch = false
-      this.gradeService.getGradesBySchedcode(schedcode).subscribe((res) => {
-        if(res) {
-          let tmpData = res.grades
-          for(let i = 0; i < tmpData.length; i++) {
-            this.studentService.getStudent(tmpData[i].studentnumber).subscribe((res) => {
-              if(res) {
-                let tmpData2 = res.student
-                data.push(Object.assign(tmpData[i], tmpData2))
-                delete data[i].studentNumber
-                if(i == tmpData.length - 1) {
-                  this.schedGradesDataSource = new MatTableDataSource(data)
-                }
-              }
-            })
-          }
-          console.log(data)
-        }
-      })
+    if(!this.isSchedGenerated) {
+      this.toastr.error('Schedule Code Profile must be generated first.')
     }
     else {
-      let data: any[] = []
-      this.schedCompVisibility = true
-      this.schedSearch = false
-      this.gradeService.getGradesBySchedcode(schedcode).subscribe((res) => {
-        if(res) {
-          let tmpData = res.grades
-          for(let i = 0; i < tmpData.length; i++) {
-            this.studentService.getStudent(tmpData[i].studentnumber).subscribe((res) => {
-              if(res) {
-                let tmpData2 = res.student
-                if(tmpData[i].mygrade == 'INC' || tmpData[i].mygrade == '4.00') {
+      if(isUpdate) {
+        let data: any[] = []
+        this.schedChangeVisibility = true
+        this.schedSearch = false
+        this.gradeService.getGradesBySchedcode(schedcode).subscribe((res) => {
+          if(res) {
+            let tmpData = res.grades
+            for(let i = 0; i < tmpData.length; i++) {
+              this.studentService.getStudent(tmpData[i].studentnumber).subscribe((res) => {
+                if(res) {
+                  let tmpData2 = res.student
                   data.push(Object.assign(tmpData[i], tmpData2))
                   delete data[i].studentNumber
                   if(i == tmpData.length - 1) {
                     this.schedGradesDataSource = new MatTableDataSource(data)
                   }
                 }
-              }
-            })
+              })
+            }
+            console.log(data)
           }
-          console.log(data)
-        }
-      })
+        })
+      }
+      else {
+        let data: any[] = []
+        this.schedCompVisibility = true
+        this.schedSearch = false
+        this.gradeService.getGradesBySchedcode(schedcode).subscribe((res) => {
+          if(res) {
+            let tmpData = res.grades
+            for(let i = 0; i < tmpData.length; i++) {
+              this.studentService.getStudent(tmpData[i].studentnumber).subscribe((res) => {
+                if(res) {
+                  let tmpData2 = res.student
+                  if(tmpData[i].mygrade == 'INC' || tmpData[i].mygrade == '4.00') {
+                    data.push(Object.assign(tmpData[i], tmpData2))
+                    delete data[i].studentNumber
+                    if(i == tmpData.length - 1) {
+                      this.schedGradesDataSource = new MatTableDataSource(data)
+                    }
+                  }
+                }
+              })
+            }
+            console.log(data)
+          }
+        })
+      }
     }
   }
 
@@ -449,6 +486,9 @@ export class GradesComponent implements OnInit {
     this.schedChangeVisibility = false
     this.schedCompVisibility = false
     this.schedSearchForm.get('schedcode').setValue('')
+    this.schedData.schedcode = ''
+    this.schedData.subjectcode = ''
+    this.schedData.section = ''
   }
   //--- SCHEDCODE SEARCH FUNCTION ENDS HERE ---//
 

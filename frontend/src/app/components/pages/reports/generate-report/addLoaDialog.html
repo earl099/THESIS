@@ -20,10 +20,22 @@
     </div>
     <br>
 
+    <div class="row" [hidden]="isProfileHidden">
+      <div class="col">
+        <p class="fs-6">Name: {{studProfile.lastName}}, {{studProfile.firstName}} {{studProfile.middleName}} {{studProfile.suffix}}</p>
+      </div>
+    </div>
+
+    <br>
     <div class="row align-items-start">
       <div class="col">
         <button mat-raised-button type="submit" class="btn btn-success" (click)="confirmAdd()">Confirm Add</button>
       </div>
+
+      <div class="col">
+        <button mat-raised-button type="submit" class="btn btn-success" (click)="generateData(studnum.value)">Generate Student Data</button>
+      </div>
+
       <div class="col">
         <button mat-raised-button (click)="closeDialog()">Close Dialog</button>
       </div>

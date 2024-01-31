@@ -25,6 +25,15 @@ export class GenerateReportComponent implements OnInit {
   //global variable for setting current sem and schoolyear
   globalVar: any
 
+  studProfile = {
+    studentnumber: 0,
+    firstName: '',
+    middleName: '',
+    lastName: '',
+    suffix: '',
+    course: ''
+  }
+
   //report search parameters
   reportForm: any
 
@@ -44,6 +53,7 @@ export class GenerateReportComponent implements OnInit {
   isShifteeReport!: boolean
   isLoaReport!: boolean
   isAssessedReport!: boolean
+  isTorProfileGenerated: boolean = false
   baseDisplay: boolean = false
 
   //table title
@@ -279,7 +289,7 @@ export class GenerateReportComponent implements OnInit {
     if(this.reportForm.get('reportType').value == 'enrolled' || this.reportForm.get('reportType').value == 'shiftee') {
       this.baseDisplay = true
     }
-    
+
     if(this.reportForm.get('reportType').value != 'tor') {
       this.reportService.getSchoolYearbyReportType(type).subscribe((res) => {
         if(res) {
@@ -988,20 +998,23 @@ export class GenerateReportComponent implements OnInit {
           showLabels: true
         }
         //console.log(this.reportForm.get('reportType').value + this.reportForm.get('studentnumber').value )
+        if(!this.isTorProfileGenerated) {
+          this.toastr.error('')
+        }
+        else {
+          this.reportService.advSearchByReportType(this.reportForm.get('reportType').value, this.reportForm.value, this.reportForm.get('studentnumber').value).subscribe((res) => {
+            if(res) {
+              let tmpData = res.tor
 
-        this.reportService.advSearchByReportType(this.reportForm.get('reportType').value, this.reportForm.value, this.reportForm.get('studentnumber').value).subscribe((res) => {
-          if(res) {
-            let tmpData = res.tor
+              for (let i = 0; i < tmpData.length; i++) {
+                this.dataResult.push(tmpData[i])
+              }
 
-            for (let i = 0; i < tmpData.length; i++) {
-              this.dataResult.push(tmpData[i])
+              console.log(this.dataResult)
+              new ngxCsv(this.dataResult, 'TOR-' + this.reportForm.get('studentnumber').value, options)
             }
-
-            console.log(this.dataResult)
-            new ngxCsv(this.dataResult, 'TOR-' + this.reportForm.get('studentnumber').value, options)
-          }
-        })
-
+          })
+        }
         break
 
       default:
@@ -1236,6 +1249,26 @@ export class GenerateReportComponent implements OnInit {
     }
   }
 
+  generateStudProfile(studentnumber: number) {
+    let data: Array<any>
+
+    this.studentService.getAllStudents().subscribe((res) => {
+      if(res) {
+        data = res.students
+        //console.log(data)
+        let tmpData = data.find(stud => stud.studentNumber == studentnumber)
+        //console.log(tmpData)
+        this.studProfile.studentnumber = tmpData.studentNumber
+        this.studProfile.firstName = tmpData.firstName
+        this.studProfile.middleName = tmpData.middleName
+        this.studProfile.lastName = tmpData.lastName
+        this.studProfile.suffix = tmpData.suffix
+        this.studProfile.course = tmpData.course
+        this.isTorProfileGenerated = true
+      }
+    })
+  }
+
   openAddLoaDialog() {
     const dialogRef = this.dialog.open(AddLoaDialog)
     dialogRef.afterClosed().subscribe(() => {
@@ -1295,6 +1328,13 @@ export class AddLoaDialog implements OnInit {
   addLoaForm: any
   studList!: Array<any>
   enrolledStuds: any
+  isProfileHidden: boolean = true
+  studProfile = {
+    firstName: '',
+    middleName: '',
+    lastName: '',
+    suffix: ''
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -1341,46 +1381,72 @@ export class AddLoaDialog implements OnInit {
     })
   }
 
-  confirmAdd() {
-    if(confirm('Are you sure you want to add this record to the list of students with LOA?')) {
-      for (let i = 0; i < this.enrolledStuds.length; i++) {
-        if(this.enrolledStuds[i].studentnumber == this.addLoaForm.get('studentnumber').value) {
-          this.toastr.error('Student is enrolled.')
-          break
-        }
+  generateData(studentnumber: number) {
+    this.studentService.getAllStudents().subscribe((res) => {
+      if(res) {
+        let tmpData: Array<any> = res.students
+        let studData = tmpData.find(student => studentnumber == student.studentNumber)
 
-        if(this.studList != undefined) {
-          for (let j = 0; j < this.studList.length; j++) {
-            if(this.studList[j].studentnumber == this.addLoaForm.get('studentnumber').value) {
-              this.toastr.error('Student Already Added.')
-              break
-            }
-          }
-        }
-
-
-        if(this.toastr.previousToastMessage != null) {
-          break
+        //console.log(studData)
+        if(studData == undefined) {
+          this.toastr.error('Student does not exist')
         }
         else {
-          if(i == this.enrolledStuds.length - 1) {
-            this.variableService.getIpAddress().subscribe((res) => {
-              if(res) {
+          this.studProfile.firstName = studData.firstName
+          this.studProfile.middleName = studData.middleName
+          this.studProfile.lastName = studData.lastName
+          this.studProfile.suffix = studData.suffix
+          this.isProfileHidden = false
+        }
+      }
+    })
+  }
 
-                this.addLoaForm.get('semester').setValue(this.globalVar.semester)
-                this.addLoaForm.get('schoolyear').setValue(this.globalVar.schoolyear)
-                this.addLoaForm.get('encoder').setValue(window.location.hostname)
-                this.addLoaForm.get('username').setValue(localStorage.getItem('user'))
-                this.addLoaForm.get('ipaddress').setValue(res.clientIp)
+  confirmAdd() {
+    if(confirm('Are you sure you want to add this record to the list of students with LOA?')) {
+      if(this.isProfileHidden) {
+        this.toastr.error('Please generate the student profile before adding the record.')
+      }
+      else {
+        for (let i = 0; i < this.enrolledStuds.length; i++) {
+          if(this.enrolledStuds[i].studentnumber == this.addLoaForm.get('studentnumber').value) {
+            this.toastr.error('Student is enrolled.')
+            break
+          }
 
-                this.studentService.addLoa(this.addLoaForm.value).subscribe((res) => {
-                  if(res) {
-                    this.toastr.success('Added LOA Record')
-                    this.closeDialog()
-                  }
-                })
+          if(this.studList != undefined) {
+            for (let j = 0; j < this.studList.length; j++) {
+              if(this.studList[j].studentnumber == this.addLoaForm.get('studentnumber').value) {
+                this.toastr.error('Student Already Added.')
+                break
               }
-            })
+            }
+          }
+
+
+          if(this.toastr.previousToastMessage != null) {
+            break
+          }
+          else {
+            if(i == this.enrolledStuds.length - 1) {
+              this.variableService.getIpAddress().subscribe((res) => {
+                if(res) {
+
+                  this.addLoaForm.get('semester').setValue(this.globalVar.semester)
+                  this.addLoaForm.get('schoolyear').setValue(this.globalVar.schoolyear)
+                  this.addLoaForm.get('encoder').setValue(window.location.hostname)
+                  this.addLoaForm.get('username').setValue(localStorage.getItem('user'))
+                  this.addLoaForm.get('ipaddress').setValue(res.clientIp)
+
+                  this.studentService.addLoa(this.addLoaForm.value).subscribe((res) => {
+                    if(res) {
+                      this.toastr.success('Added LOA Record')
+                      this.closeDialog()
+                    }
+                  })
+                }
+              })
+            }
           }
         }
       }

@@ -39,7 +39,7 @@ export class StudentListComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   //--- DATA FOR DISPLAYING IN THE LIST ---//
-  courseList: any = [];
+  courseList!: Array<string>;
   students: any = [];
   globalVars: any;
   courseChecker: any = []
@@ -118,7 +118,7 @@ export class StudentListComponent implements OnInit {
 
   getCourseChecker() {
     let check = this.userService.getToken()
-    
+
     if(check == 'UNIV') {
       this.reportService.getCourses('ALL').subscribe((res) => {
         if(res) {
@@ -145,6 +145,7 @@ export class StudentListComponent implements OnInit {
     this.reportService.getCourses('ALL').subscribe((res) => {
       if(res) {
         this.courseList = res.course;
+        this.courseList.sort((a, b) => b.localeCompare(a))
       }
     })
   }

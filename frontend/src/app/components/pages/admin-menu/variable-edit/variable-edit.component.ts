@@ -38,6 +38,7 @@ export class VariableEditComponent implements OnInit {
   }
 
   newSemester(angForm: any) {
+    let kschoolyear: any
     const semIdentifiers = [
       'FIRST',
       'SECOND',
@@ -51,6 +52,18 @@ export class VariableEditComponent implements OnInit {
         case 'FIRST':
           angForm.get('semester').setValue(semIdentifiers[1]);
           angForm.get('ksemester').setValue(semIdentifiers[0]);
+
+          kschoolyear = [
+            parseInt(
+              angForm.get('kschoolyear').value.toString().split('-')[0]
+            ) + 1,
+
+            parseInt(
+              angForm.get('kschoolyear').value.toString().split('-')[1]
+            ) + 1
+          ]
+
+          angForm.get('kschoolyear').setValue(kschoolyear[0] + '-' + kschoolyear[1])
           break;
         case 'SECOND':
           angForm.get('semester').setValue(semIdentifiers[2]);
@@ -71,18 +84,8 @@ export class VariableEditComponent implements OnInit {
             ) + 1
           ]
 
-          let kschoolyear = [
-            parseInt(
-              angForm.get('kschoolyear').value.toString().split('-')[0]
-            ) + 1,
-
-            parseInt(
-              angForm.get('kschoolyear').value.toString().split('-')[1]
-            ) + 1
-          ]
-
           angForm.get('schoolyear').setValue(schoolyear[0] + '-' + schoolyear[1])
-          angForm.get('kschoolyear').setValue(kschoolyear[0] + '-' + kschoolyear[1])
+
           break;
       }
 
@@ -109,7 +112,7 @@ export class VariableEditComponent implements OnInit {
       this.varService.editLegend(angForm.value).subscribe((res) => {
         if(res) {
           this.toastr.success(res.message)
-          alert('Global Variables updated successfully');
+          alert('Settings updated successfully');
           this.router.navigate(['dashboard'])
         }
       })
